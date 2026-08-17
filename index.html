@@ -55,7 +55,6 @@
             word-break: break-all;
         }
 
-        /* 반응형 Zone 필터 탭 */
         .zone-nav {
             display: flex;
             gap: 6px;
@@ -129,7 +128,7 @@
         .archive-item .date { color: #88ffaa; font-size: 16px; }
         .archive-item:hover .date { color: #000; }
 
-        /* 모달 팝업 */
+        /* 문서 모달 팝업 */
         .modal {
             display: none;
             position: fixed;
@@ -173,32 +172,71 @@
             font-weight: bold;
         }
 
-        /* 팝업 내부 첨부 링크 버튼 */
-        .link-container {
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px dashed rgba(255, 51, 51, 0.4);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .action-link {
-            display: inline-block;
-            background: rgba(255, 51, 51, 0.15);
+        .btn-video {
+            display: block;
+            width: 100%;
+            margin-top: 14px;
+            background: rgba(255, 51, 51, 0.2);
             border: 1px solid #ff3333;
             color: #ff8888;
-            padding: 8px 12px;
-            text-decoration: none;
-            font-size: 16px;
+            padding: 10px;
             text-align: center;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 18px;
+            font-weight: bold;
             transition: all 0.2s;
         }
 
-        .action-link:hover, .action-link:active {
+        .btn-video:hover {
             background: #ff3333;
             color: #000;
-            font-weight: bold;
+        }
+
+        /* 🎥 다크웹 CCTV / 비디오 전용 팝업창 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 30;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .video-box {
+            background: #000;
+            border: 2px solid #ff3333;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.6);
+            width: 100%;
+            max-width: 480px; /* 숏폼 영상 세로 비율에 최적화 */
+            position: relative;
+            padding: 10px;
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            color: #ff3333;
+            font-size: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #ff3333;
+            padding-bottom: 4px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 177.77%; /* 9:16 세로 숏폼 비율 */
+            background: #050505;
+            overflow: hidden;
+        }
+
+        .video-container iframe, .video-container video {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
         }
 
         .blink { animation: blinker 1s linear infinite; }
@@ -235,14 +273,29 @@
     </footer>
 </div>
 
-<!-- 팝업창 -->
+<!-- 1. 문서 팝업창 -->
 <div id="archiveModal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal()">[X]</span>
         <div id="modalTitle" class="modal-header"></div>
         <div id="modalBody" style="font-size: 17px; line-height: 1.5;"></div>
-        <!-- 링크 버튼이 들어가는 영역 -->
-        <div id="modalLinks" class="link-container"></div>
+        <!-- 비디오 재생 버튼 -->
+        <button id="videoPlayBtn" class="btn-video" style="display:none;" onclick="openVideoPlayer()">
+            ▶ [SURVEILLANCE FEED: 복구 영상 열람]
+        </button>
+    </div>
+</div>
+
+<!-- 2. 다크웹 전용 내부 비디오 플레이어 팝업창 -->
+<div id="videoModal" class="video-modal" onclick="closeVideoPlayer()">
+    <div class="video-box" onclick="event.stopPropagation()">
+        <div class="video-header">
+            <span>REC_FEED // <span class="blink" style="color:#ff3333;">LIVE_DECRYPT</span></span>
+            <span style="cursor:pointer; font-weight:bold;" onclick="closeVideoPlayer()">[X 닫기]</span>
+        </div>
+        <div class="video-container">
+            <iframe id="videoPlayerFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
     </div>
 </div>
 
@@ -256,7 +309,8 @@
     };
 
     /* ==========================================================
-       📁 [데이터 영역] : links 배열 안에 원하는 연결 주소 추가
+       📁 [데이터 영역] : videoUrl 에 유튜브 임베드 주소 입력
+       (유튜브 영상 ID가 abc1234라면 -> https://www.youtube.com/embed/abc1234)
     ========================================================== */
     const caseDatabase = [
         {
@@ -272,11 +326,8 @@
                 <b>[녹취 기록]</b><br>
                 “창밖에서 부르는 소리에 절대 응답하지 마십시오...”
             `,
-            // 💡 클릭 시 이동할 외부 링크 (유튜브 영상, 추가 문서 등)
-            links: [
-                { text: "▶ [비디오 재생] 복구된 탐사 로봇 푸티지 (유튜브)", url: "https://www.youtube.com" },
-                { text: "📄 [문서 열람] 2004 청하공고 교직원 명단 및 상세 보고서", url: "https://www.google.com" }
-            ]
+            // 💡 여기에 영상 주소를 넣으면 팝업 내부에서 바로 재생됩니다!
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" 
         },
         {
             zone: "ZONE-3",
@@ -289,13 +340,12 @@
                 <b>[사건 개요]</b><br>
                 가로등 점멸 구간마다 동일 체격의 인영이 100m 간격으로 반복 포착됨. 차량 운전자 실종.
             `,
-            links: [
-                { text: "▶ [블랙박스 영상] 44호선 주행 녹화본 확인", url: "#" }
-            ]
+            videoUrl: "" // 영상이 없는 문서는 버튼 자동 숨김
         }
     ];
 
     let currentZone = 'ALL';
+    let currentVideoUrl = '';
 
     function switchZone(zoneKey) {
         currentZone = zoneKey;
@@ -347,21 +397,13 @@
         document.getElementById('modalTitle').innerHTML = item.modalHeader;
         document.getElementById('modalBody').innerHTML = item.content;
 
-        const linksContainer = document.getElementById('modalLinks');
-        linksContainer.innerHTML = '';
-
-        if (item.links && item.links.length > 0) {
-            item.links.forEach(link => {
-                const a = document.createElement('a');
-                a.className = 'action-link';
-                a.href = link.url;
-                a.target = '_blank';
-                a.innerHTML = link.text;
-                linksContainer.appendChild(a);
-            });
-            linksContainer.style.display = 'flex';
+        const vBtn = document.getElementById('videoPlayBtn');
+        if (item.videoUrl && item.videoUrl.trim() !== '') {
+            currentVideoUrl = item.videoUrl;
+            vBtn.style.display = 'block';
         } else {
-            linksContainer.style.display = 'none';
+            currentVideoUrl = '';
+            vBtn.style.display = 'none';
         }
 
         document.getElementById('archiveModal').style.display = 'flex';
@@ -369,6 +411,21 @@
 
     function closeModal() {
         document.getElementById('archiveModal').style.display = 'none';
+    }
+
+    // 🎥 내부 플레이어 열기 / 닫기
+    function openVideoPlayer() {
+        if (!currentVideoUrl) return;
+        const frame = document.getElementById('videoPlayerFrame');
+        // 자동 재생 및 음산한 UI 적용
+        frame.src = currentVideoUrl + (currentVideoUrl.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
+        document.getElementById('videoModal').style.display = 'flex';
+    }
+
+    function closeVideoPlayer() {
+        const frame = document.getElementById('videoPlayerFrame');
+        frame.src = ''; // 닫을 때 영상 중지
+        document.getElementById('videoModal').style.display = 'none';
     }
 
     renderList();
