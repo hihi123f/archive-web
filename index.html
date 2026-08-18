@@ -18,7 +18,7 @@
             text-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
             line-height: 1.4;
             overflow-x: hidden;
-            cursor: crosshair; /* 기본 마우스를 조준선으로 변경 */
+            cursor: crosshair;
         }
 
         /* 1. CRT 스캔라인 */
@@ -33,7 +33,7 @@
             pointer-events: none;
         }
 
-        /* 2. 인트로 (접속 인터랙티브) 애니메이션 */
+        /* 2. 인트로 (부팅 화면) */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
@@ -46,7 +46,6 @@
             transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1);
         }
         .intro-text { margin-top: 20px; color: #00ff66; font-weight: bold; animation: blinker 1s infinite; }
-        
         .expand-x { width: 100vw !important; height: 5px !important; }
         .expand-y { height: 100vh !important; }
         .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
@@ -63,7 +62,7 @@
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 12px; margin-bottom: 16px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 22px; }
 
-        /* 언어 버튼 */
+        /* 다국어 변환 버튼 */
         #lang-btn {
             position: absolute; top: -35px; right: 0;
             background: #000; color: #00ff66; border: 1px dashed #00ff66;
@@ -89,11 +88,10 @@
         /* 모달 공통 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.88); z-index: 20; justify-content: center; align-items: center; padding: 12px; }
         .modal-content { background: #0b120c; border: 2px solid #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); padding: 18px; max-width: 650px; width: 100%; color: #e0e0e0; position: relative; max-height: 88vh; overflow-y: auto; }
-        
         .close-btn { position: absolute; top: 14px; right: 14px; color: #ff3333; cursor: pointer; font-size: 22px; font-weight: bold; }
         .modal-header { color: #ff3333; font-size: 21px; border-bottom: 1px solid #ff3333; margin-bottom: 12px; padding-bottom: 4px; }
         
-        /* 암호 입력 모달 전용 */
+        /* 암호 입력 모달 */
         .pw-input { background: #000; border: 1px solid #ff3333; color: #ff3333; padding: 10px; text-align: center; font-size: 18px; font-family: inherit; width: 60%; margin: 10px 0; }
         .pw-btn { background: #ff3333; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 16px; }
 
@@ -102,58 +100,58 @@
 
         .video-box { background: #000; border: 2px solid #ff3333; width: 100%; max-width: 480px; padding: 10px; }
         .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:none; }
 
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
         
-        /* 글리치(언어변경) 효과 */
+        /* 글리치(언어변경/해제) 효과 */
         .glitch-effect { filter: invert(1) hue-rotate(180deg); transform: skewX(5deg); }
     </style>
 </head>
 <body>
 
-    <!-- 🏆 업적 달성 알림창 (화면 아래에서 슥 올라옴) -->
+<!-- 🏆 업적 달성 알림창 (Toast) -->
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:15px 30px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; box-shadow:0 0 20px rgba(255,204,0,0.4); text-align:center;">
     <div style="font-size:12px; color:#fff; margin-bottom:5px;">[SYSTEM: 새로운 권한 획득]</div>
     <div id="toast-title" style="font-size:18px;">업적 이름</div>
 </div>
 
-<!-- 💳 조사관 ID 카드 열기 버튼 -->
-<button onclick="openProfile()" style="position: absolute; top: 15px; left: 20px; background: rgba(0,20,10,0.8); color: #00ff66; border: 1px dashed #00ff66; padding: 5px 10px; cursor: pointer; z-index: 100;">
+<!-- 💳 조사관 ID 카드 열람 버튼 -->
+<button onclick="openProfile()" style="position: absolute; top: 15px; left: 20px; background: rgba(0,20,10,0.8); color: #00ff66; border: 1px dashed #00ff66; padding: 5px 10px; cursor: pointer; z-index: 100; font-family:inherit; font-size:16px;">
     [📁 조사관 ID 카드]
 </button>
 
-<!-- 💳 ID 카드 (업적 현황판) 모달 -->
+<!-- 💳 프로필(ID 카드) 모달 -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
-    <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation()">
-        <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:2px solid #00ff66; padding-bottom:10px;">[조사관 프로필] ID: UNKNOWN</h2>
+    <div class="modal-content" style="max-width: 600px; border-color:#00ff66; box-shadow:0 0 20px rgba(0,255,102,0.4);" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#00ff66;" onclick="closeModal('profileModal')">[X]</span>
+        <h2 style="color:#00ff66; border-bottom:2px solid #00ff66; padding-bottom:10px; margin-bottom:15px;">[조사관 프로필] ID: UNKNOWN</h2>
         
-        <div style="display:flex; justify-content:space-between; margin-bottom: 20px; color:#aaa; font-size:15px;">
-            <span>인가 등급: <span id="user-level" style="color:#fff;">LEVEL 1</span></span>
-            <span>수집한 기밀 배지: <span id="badge-count" style="color:#00ff66;">0</span> / 37</span>
+        <div style="display:flex; justify-content:space-between; margin-bottom: 20px; color:#aaa; font-size:16px;">
+            <span>인가 등급: <span id="user-level" style="color:#fff; font-weight:bold;">LEVEL 1</span></span>
+            <span>수집한 기밀 배지: <span id="badge-count" style="color:#00ff66; font-weight:bold;">0</span> / 37</span>
         </div>
 
         <div style="height: 400px; overflow-y: auto; padding-right:10px;">
             <ul id="achievement-list" style="list-style:none; padding:0;">
-                <!-- 업적 리스트가 자바스크립트로 여기에 그려집니다 -->
+                <!-- JS에서 업적 리스트를 렌더링 -->
             </ul>
         </div>
     </div>
 </div>
 
-<!-- 🎵 배경 소음 (본인 mp3 파일 링크로 교체하세요) -->
+<!-- 🎵 배경 소음 -->
 <audio id="bg-audio" loop src="YOUR_AUDIO_FILE_URL.mp3"></audio>
 
-<!-- 0. 인트로 (부팅 화면) -->
+<!-- 0. 인트로 부팅 화면 -->
 <div id="intro-screen" onclick="startSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text">AWAITING AUTHORIZATION... [CLICK TO INITIATE]</div>
 </div>
 
+<!-- 메인 UI -->
 <div class="container" id="main-ui" style="opacity: 0;">
-    <!-- 🌐 다국어 변환 버튼 -->
     <button id="lang-btn" onclick="changeLanguage()">[SYS_LANG : KR]</button>
 
     <header>
@@ -168,16 +166,14 @@
         <button class="zone-btn" onclick="switchZone('ZONE-3')">ZONE-3</button>
     </div>
 
-    <div>
-        <ul id="archiveList" class="archive-list"></ul>
-    </div>
+    <ul id="archiveList" class="archive-list"></ul>
 
     <footer id="ui-footer" style="margin-top: 24px; font-size: 14px; color: #558866; border-top: 1px dashed #558866; padding-top: 8px;">
         WARNING: 비인가 데이터 무단 유출 시 조치됩니다.
     </footer>
 </div>
 
-<!-- 1. 일반 문서 열람 모달 (타이핑 효과) -->
+<!-- 1. 문서 열람 모달 -->
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
@@ -192,15 +188,15 @@
     <div class="modal-content" style="text-align:center; max-width:400px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
         <h3 style="color:#ff3333;">⚠️ [접근 인가 필요]</h3>
-        <p style="color:#888; font-size:14px; margin-bottom: 20px;">인가된 4자리 보안 코드를 입력하십시오.</p>
-        <input type="password" id="pw-input" class="pw-input" maxlength="4" placeholder="CODE">
+        <p style="color:#888; font-size:14px; margin-bottom: 20px;">인가된 보안 코드를 입력하십시오.</p>
+        <input type="text" id="pw-input" class="pw-input" placeholder="CODE">
         <br>
         <button class="pw-btn" onclick="checkPassword()">DECRYPT</button>
         <p id="pw-error" style="color:#ff3333; margin-top:10px; display:none;" class="blink">ACCESS DENIED</p>
     </div>
 </div>
 
-<!-- 3. 내부 비디오 플레이어 -->
+<!-- 3. 비디오 플레이어 모달 -->
 <div id="videoModal" class="modal" style="z-index:30;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; margin-bottom:8px; border-bottom:1px dashed #ff3333;">
@@ -214,46 +210,43 @@
 </div>
 
 <script>
-
-
-    // ==========================================
-// 🏆 업적 데이터베이스 (기본/희귀/전설/히든)
+// ==========================================
+// 🏆 1. 업적 데이터베이스 (확장 가능)
 // ==========================================
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[인가 1등급] 첫 사건 열람", desc: "CASE-01 문서를 열람했습니다.", color: "#00ff66" },
-    { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 언어를 변경했습니다.", color: "#00ff66" },
-    { id: "ach_rare_1", type: "희귀", name: "[과부하] 보안 경고", desc: "비밀번호를 연속 5회 틀렸습니다.", color: "#3388ff" },
+    { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
+    { id: "ach_rare_1", type: "희귀", name: "[과부하] 보안 경고", desc: "비밀번호를 연속으로 틀렸습니다.", color: "#3388ff" },
     { id: "ach_rare_2", type: "희귀", name: "[올빼미] 심야의 목격자", desc: "새벽 3시~4시 사이에 접속했습니다.", color: "#3388ff" },
-    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "마스터 비밀번호를 해독했습니다.", color: "#ffcc00" },
-    { id: "ach_hidden_1", type: "히든", name: "공허 응시", desc: "어둠 속을 10번 두드렸습니다.", color: "#ff3333", isHidden: true }
+    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "해독 불가 코드를 해제했습니다.", color: "#ffcc00" },
+    { id: "ach_hidden_1", type: "히든", name: "공허 응시", desc: "어둠 속(빈 배경)을 10번 두드렸습니다.", color: "#ff3333", isHidden: true },
+    { id: "ach_hidden_2", type: "히든", name: "구조 거부", desc: "HELP / SOS 신호를 보냈으나 거절당했습니다.", color: "#ff3333", isHidden: true }
 ];
 
-// 업적 달성 함수 (조건이 맞을 때 이 함수를 호출)
-function unlockAchievement(achId) {
-    // 이미 깬 업적인지 확인
-    if (localStorage.getItem(achId) === 'true') return;
+let pwFailCount = 0; // 비밀번호 틀린 횟수 기록용
 
-    // 로컬스토리지에 저장
+// 업적 해금 함수
+function unlockAchievement(achId) {
+    if (localStorage.getItem(achId) === 'true') return; // 이미 깼으면 패스
     localStorage.setItem(achId, 'true');
     
-    // 업적 정보 찾기
     const ach = achievementsDB.find(a => a.id === achId);
     if (!ach) return;
 
-    // 🚀 알림창(Toast) 띄우기
+    // Toast 알림 띄우기
     const toast = document.getElementById('achievement-toast');
     document.getElementById('toast-title').innerText = `🏆 [${ach.type}] ${ach.name}`;
     document.getElementById('toast-title').style.color = ach.color;
     
-    toast.style.bottom = "20px"; // 화면 위로 올라옴
-    setTimeout(() => { toast.style.bottom = "-100px"; }, 4000); // 4초 뒤 내려감
+    toast.style.bottom = "20px";
+    setTimeout(() => { toast.style.bottom = "-100px"; }, 4000);
     
-    // 글리치 효과 덤
+    // 시각적 효과
     document.body.classList.add('glitch-effect');
     setTimeout(() => document.body.classList.remove('glitch-effect'), 200);
 }
 
-// 💳 프로필 모달 열기 & 업적 리스트 그리기
+// 프로필(ID 카드) 모달 렌더링
 function openProfile() {
     const list = document.getElementById('achievement-list');
     list.innerHTML = '';
@@ -264,258 +257,253 @@ function openProfile() {
         if (isUnlocked) unlockCount++;
 
         const li = document.createElement('li');
-        li.style.padding = "10px";
-        li.style.marginBottom = "8px";
+        li.style.padding = "10px"; li.style.marginBottom = "8px";
         li.style.border = `1px solid ${isUnlocked ? ach.color : '#333'}`;
         li.style.background = isUnlocked ? "rgba(0,0,0,0.5)" : "#050505";
         li.style.color = isUnlocked ? "#fff" : "#444";
 
         if (isUnlocked) {
-            // 🔓 해금된 업적
             li.innerHTML = `<b style="color:${ach.color};">[${ach.type}] ${ach.name}</b><br><span style="font-size:14px; color:#aaa;">${ach.desc}</span>`;
         } else {
-            // 🔒 잠긴 업적 (히든은 이름도 가림)
-            if (ach.isHidden) {
-                li.innerHTML = `<b>🔒 [히든] ?????????</b><br><span style="font-size:14px;">조건이 숨겨져 있습니다.</span>`;
-            } else {
-                li.innerHTML = `<b>🔒 [${ach.type}] ${ach.name}</b><br><span style="font-size:14px;">조건: ${ach.desc}</span>`;
-            }
+            if (ach.isHidden) li.innerHTML = `<b>🔒 [히든] ?????????</b><br><span style="font-size:14px;">조건이 숨겨져 있습니다.</span>`;
+            else li.innerHTML = `<b>🔒 [${ach.type}] ${ach.name}</b><br><span style="font-size:14px;">조건: ${ach.desc}</span>`;
         }
         list.appendChild(li);
     });
 
     document.getElementById('badge-count').innerText = unlockCount;
-    // 배지 개수에 따라 등급명 변경 (예: 5개 이상이면 LEVEL 2)
     if(unlockCount >= 10) document.getElementById('user-level').innerText = "LEVEL 3 (숙련된 조사관)";
     else if(unlockCount >= 5) document.getElementById('user-level').innerText = "LEVEL 2 (정규 조사관)";
 
     document.getElementById('profileModal').style.display = 'flex';
 }
+
+// ==========================================
+// 💻 2. 시스템 부팅 & 베이스 로직
+// ==========================================
+function startSystem() {
+    const bgAudio = document.getElementById('bg-audio');
+    bgAudio.volume = 0.3;
+    bgAudio.play().catch(e => console.log("Audio not set or blocked"));
+
+    // 새벽 3시 접속 체크 -> 히든 업적 달성!
+    if(new Date().getHours() === 3) unlockAchievement('ach_rare_2'); 
+
+    const box = document.getElementById('intro-box');
+    document.getElementById('intro-text').style.display = "none";
+    box.classList.add("expand-x");
     
-    // ==========================================
-    // 0. 인트로 애니메이션 & 오디오 재생 로직
-    // ==========================================
-    function startSystem() {
-        // 배경 오디오 재생 (브라우저 정책상 클릭 시점에 재생해야 함)
-        const bgAudio = document.getElementById('bg-audio');
-        bgAudio.volume = 0.3; // 소음 볼륨 설정
-        bgAudio.play().catch(e => console.log("Audio not set or blocked"));
+    setTimeout(() => { box.classList.add("expand-y"); }, 400);
+    setTimeout(() => { 
+        document.getElementById('intro-screen').classList.add("fade-out"); 
+        document.getElementById('main-ui').style.transition = "opacity 1s";
+        document.getElementById('main-ui').style.opacity = 1;
+    }, 800);
+    setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1200);
+}
 
-        const box = document.getElementById('intro-box');
-        const text = document.getElementById('intro-text');
-        
-        text.style.display = "none";
-        box.classList.add("expand-x");
-        
-        setTimeout(() => { box.classList.add("expand-y"); }, 400);
-        setTimeout(() => { 
-            document.getElementById('intro-screen').classList.add("fade-out"); 
-            document.getElementById('main-ui').style.transition = "opacity 1s";
-            document.getElementById('main-ui').style.opacity = 1;
-        }, 800);
-        setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1200);
-    }
+// 다국어 시스템
+const langs = ['KR', 'EN', 'JP', 'CN'];
+let currentLangIdx = 0;
+const uiDict = {
+    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과", warn: "WARNING: 무단 유출 금지" },
+    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORD DEPT: SEC-04", warn: "WARNING: UNAUTHORIZED LEAK PROHIBITED" }
+};
+function changeLanguage() {
+    unlockAchievement('ach_basic_2'); // 다국어 버튼 업적 달성!
+    
+    document.body.classList.add('glitch-effect');
+    setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
 
-
-    // ==========================================
-    // 1. 다국어 시스템 & 데이터베이스
-    // ==========================================
-    const langs = ['KR', 'EN', 'JP', 'CN'];
-    let currentLangIdx = 0;
-
-    const uiDict = {
-        'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과", warn: "WARNING: 무단 유출 금지" },
-        'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORD DEPT: SEC-04", warn: "WARNING: UNAUTHORIZED LEAK PROHIBITED" },
-        'JP': { title: "[機密情報網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局: 第4特殊調査課", warn: "警告: 無断流出を禁ず" },
-        'CN': { title: "[机密网络] NATIONAL ANOMALY ARCHIVE", sub: "记录局: 第4特殊调查科", warn: "警告: 严禁未经授权的数据泄露" }
-    };
-
-    function changeLanguage() {
-        unlockAchievement('ach_basic_2');
-        // 글리치 효과
-        document.body.classList.add('glitch-effect');
-        setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
-
-        currentLangIdx = (currentLangIdx + 1) % langs.length;
-        const lang = langs[currentLangIdx];
-        
-        document.getElementById('lang-btn').innerText = `[SYS_LANG : ${lang}]`;
+    currentLangIdx = (currentLangIdx + 1) % langs.length;
+    const lang = langs[currentLangIdx];
+    
+    document.getElementById('lang-btn').innerText = `[SYS_LANG : ${lang}]`;
+    if(uiDict[lang]) {
         document.getElementById('ui-header-title').innerText = uiDict[lang].title;
         document.getElementById('ui-header-sub').innerText = uiDict[lang].sub;
         document.getElementById('ui-footer').innerText = uiDict[lang].warn;
-        renderList();
     }
+}
 
-    // 사건 데이터베이스 (비밀번호 설정 포함)
-    const caseDatabase = [
-        {
-            zone: "ZONE-1", level: "1급", id: "CASE-01",
-            title: "청하공고 폐교 수색 푸티지",
-            date: "2004-10-14",
-            isLocked: false, // 🔓 기본 해제
-            content: "<b>[사건 개요]</b><br>2004.10.14 수색 투입. 기형 인영 포착 후 통신 두절...<br><i>'창밖에서 부르는 소리에 응답하지 마십시오'</i>",
-            videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o"
-        },
-        {
-            zone: "ZONE-3", level: "3급", id: "CASE-02",
-            title: "홍대 모 방탈출 카페 '미퇴장' 사건",
-            date: "2016-11-03",
-            isLocked: true, password: "1103", // 🔒 비밀번호 설정
-            content: "<b>[시스템 보안 해제됨]</b><br>1층 매장 하부에서 지하 15m 수직 계단 구조 발견. 복구된 실종자의 스마트폰 비디오 데이터 열람 가능.",
-            videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o" // 임시로 같은 영상 둠
-        }
-    ];
-
-    let currentZone = 'ALL';
-    let currentVideoUrl = '';
-    let selectedItemIndex = -1; // 암호창에서 사용하기 위해 선택한 사건 번호 기억
-
-    // ==========================================
-    // 2. 리스트 렌더링 & 업적 시스템 (배지)
-    // ==========================================
-    function switchZone(zoneKey) {
-        currentZone = zoneKey;
-        document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        renderList();
+// 사건 데이터베이스 (비밀번호 설정)
+const caseDatabase = [
+    {
+        zone: "ZONE-1", level: "1급", id: "CASE-01",
+        title: "청하공고 폐교 수색 푸티지",
+        date: "2004-10-14", isLocked: false, 
+        content: "<b>[사건 개요]</b><br>2004.10.14 수색 투입. 기형 인영 포착 후 통신 두절...<br><i>'창밖에서 부르는 소리에 응답하지 마십시오'</i>",
+        videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o"
+    },
+    {
+        zone: "ZONE-3", level: "3급", id: "CASE-02",
+        title: "홍대 모 방탈출 카페 '미퇴장' 사건",
+        date: "2016-11-03", isLocked: true, password: "1103", 
+        content: "<b>[시스템 보안 해제됨]</b><br>1층 매장 하부에서 지하 15m 수직 계단 구조 발견. 복구된 실종자의 스마트폰 비디오 열람 가능.",
+        videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o"
     }
+];
 
-    function renderList() {
-        const list = document.getElementById('archiveList');
-        list.innerHTML = '';
-        const filtered = caseDatabase.filter(item => currentZone === 'ALL' || item.zone === currentZone);
+let currentZone = 'ALL';
+let currentVideoUrl = '';
+let selectedItemIndex = -1;
 
-        filtered.forEach(item => {
-            const originalIndex = caseDatabase.indexOf(item);
-            
-            // 로컬스토리지(업적) 확인: 암호를 풀었는지?
-            const isCleared = localStorage.getItem(`cleared_${item.id}`) === 'true';
-            const currentlyLocked = item.isLocked && !isCleared;
-            
-            const lockIcon = currentlyLocked ? "🔒" : "🔓";
-            const lockClass = currentlyLocked ? "locked" : "";
-
-            const li = document.createElement('li');
-            li.className = `archive-item ${lockClass}`;
-            li.onclick = () => handleItemClick(originalIndex, currentlyLocked);
-            li.innerHTML = `
-                <div>
-                    <span class="badge ${item.level === '1급' ? 'badge-lv1' : 'badge-lv2'}">${item.level}</span>
-                    <span>${lockIcon} [${item.zone}] ${item.title}</span>
-                </div>
-                <span class="date">${item.date}</span>
-            `;
-            list.appendChild(li);
-        });
-    }
-
-    // ==========================================
-    // 3. 열람 로직 (비밀번호 확인 or 문서 열람)
-    // ==========================================
-    function handleItemClick(index, isLocked) {
-        if (isLocked) {
-            selectedItemIndex = index;
-            document.getElementById('pw-error').style.display = 'none';
-            document.getElementById('pw-input').value = '';
-            document.getElementById('passwordModal').style.display = 'flex';
-        } else {
-            openDocumentModal(index);
-        }
-    }
-
-    function checkPassword() {
-        const input = document.getElementById('pw-input').value;
-        const item = caseDatabase[selectedItemIndex];
-
-        if (input === item.password) {
-            // 업적 달성! 로컬스토리지에 영구 저장
-            localStorage.setItem(`cleared_${item.id}`, 'true');
-            closeModal('passwordModal');
-            renderList(); // 리스트 새로고침 (자물쇠 풀림 🔓)
-            
-            // 글리치 효과 주면서 문서 열기
-            document.body.classList.add('glitch-effect');
-            setTimeout(() => {
-                document.body.classList.remove('glitch-effect');
-                openDocumentModal(selectedItemIndex);
-            }, 300);
-        } else {
-            document.getElementById('pw-error').style.display = 'block';
-            document.getElementById('pw-input').value = '';
-        }
-    }
-
-    // ==========================================
-    // 4. 타이핑 효과 적용된 문서 모달 열기
-    // ==========================================
-    let typeInterval; // 진행 중인 타이핑 중지용
-
-    function openDocumentModal(index) {
-        const item = caseDatabase[index];
-        document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
-        document.getElementById('videoPlayBtn').style.display = 'none'; // 영상 버튼 숨김
-        document.getElementById('archiveModal').style.display = 'flex';
-        
-        currentVideoUrl = item.videoUrl;
-        
-        // 타이핑 효과 실행
-        const bodyBox = document.getElementById('modalBody');
-        bodyBox.innerHTML = '';
-        clearInterval(typeInterval); // 이전 타이핑 중지
-
-        const htmlString = item.content;
-        let i = 0;
-        let isTag = false;
-        let currentHTML = "";
-
-        // 한 글자씩 출력하는 로직
-        typeInterval = setInterval(() => {
-            if (i < htmlString.length) {
-                let char = htmlString.charAt(i);
-                currentHTML += char;
-                bodyBox.innerHTML = currentHTML + "<span class='blink'>_</span>";
-                
-                // HTML 태그(<br>, <b> 등)는 딜레이 없이 한 번에 넘기기 위해 체크
-                if (char === '<') isTag = true;
-                if (char === '>') isTag = false;
-                
-                i++;
-                if (isTag) {
-                    while (htmlString.charAt(i) !== '>' && i < htmlString.length) {
-                        currentHTML += htmlString.charAt(i);
-                        i++;
-                    }
-                }
-            } else {
-                clearInterval(typeInterval);
-                bodyBox.innerHTML = currentHTML; // 깜빡이 커서 제거
-                if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; // 버튼 짠!
-            }
-        }, 30); // 30ms 간격으로 타자 침 (속도 조절 가능)
-    }
-
-    // ==========================================
-    // 5. 모달 및 영상 컨트롤
-    // ==========================================
-    function closeModal(id) {
-        document.getElementById(id).style.display = 'none';
-        clearInterval(typeInterval); // 창 닫으면 타이핑 중지
-    }
-
-    function openVideoPlayer() {
-        const frame = document.getElementById('videoPlayerFrame');
-        frame.src = currentVideoUrl + '?autoplay=1';
-        document.getElementById('videoModal').style.display = 'flex';
-    }
-
-    function closeVideoPlayer() {
-        document.getElementById('videoPlayerFrame').src = '';
-        document.getElementById('videoModal').style.display = 'none';
-    }
-
-    // 최초 렌더링
+function switchZone(zoneKey) {
+    currentZone = zoneKey;
+    document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
     renderList();
+}
 
+function renderList() {
+    const list = document.getElementById('archiveList');
+    list.innerHTML = '';
+    const filtered = caseDatabase.filter(item => currentZone === 'ALL' || item.zone === currentZone);
+
+    filtered.forEach(item => {
+        const originalIndex = caseDatabase.indexOf(item);
+        const isCleared = localStorage.getItem(`cleared_${item.id}`) === 'true';
+        const currentlyLocked = item.isLocked && !isCleared;
+        
+        const lockIcon = currentlyLocked ? "🔒" : "🔓";
+        const lockClass = currentlyLocked ? "locked" : "";
+
+        const li = document.createElement('li');
+        li.className = `archive-item ${lockClass}`;
+        li.onclick = () => handleItemClick(originalIndex, currentlyLocked);
+        li.innerHTML = `
+            <div>
+                <span class="badge ${item.level === '1급' ? 'badge-lv1' : 'badge-lv2'}">${item.level}</span>
+                <span>${lockIcon} [${item.zone}] ${item.title}</span>
+            </div>
+            <span class="date">${item.date}</span>
+        `;
+        list.appendChild(li);
+    });
+}
+
+// ==========================================
+// 🔓 3. 문서 열람 & 암호 해제 
+// ==========================================
+function handleItemClick(index, isLocked) {
+    if (isLocked) {
+        selectedItemIndex = index;
+        document.getElementById('pw-error').style.display = 'none';
+        document.getElementById('pw-input').value = '';
+        document.getElementById('passwordModal').style.display = 'flex';
+    } else {
+        if(index === 0) unlockAchievement('ach_basic_1'); // 1번 문서 열면 기본 업적 달성!
+        openDocumentModal(index);
+    }
+}
+
+// ⚠️ 수정된 checkPassword 함수 (에러 해결!)
+function checkPassword() {
+    const input = document.getElementById('pw-input').value.toUpperCase().trim();
+    const item = caseDatabase[selectedItemIndex];
+
+    // 히든 업적 체크 (도움 요청 시)
+    if (input === "HELP" || input === "SOS") {
+        unlockAchievement('ach_hidden_2');
+        alert("[SYSTEM] 당신의 구조 신호는 전송되지 않았습니다. 아무도 오지 않습니다.");
+        document.getElementById('pw-input').value = '';
+        return; 
+    }
+
+    if (input === item.password) {
+        localStorage.setItem(`cleared_${item.id}`, 'true');
+        closeModal('passwordModal');
+        renderList(); 
+        
+        document.body.classList.add('glitch-effect');
+        setTimeout(() => {
+            document.body.classList.remove('glitch-effect');
+            openDocumentModal(selectedItemIndex);
+        }, 300);
+    } else {
+        // 비번 틀림 처리
+        pwFailCount++;
+        if(pwFailCount >= 5) unlockAchievement('ach_rare_1'); // 5번 틀리면 희귀 업적!
+        
+        document.getElementById('pw-error').style.display = 'block';
+        document.getElementById('pw-input').value = '';
+    }
+}
+
+// ==========================================
+// 🖋️ 4. 타이핑 효과 & 비디오 컨트롤
+// ==========================================
+let typeInterval;
+
+function openDocumentModal(index) {
+    const item = caseDatabase[index];
+    document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
+    document.getElementById('videoPlayBtn').style.display = 'none'; 
+    document.getElementById('archiveModal').style.display = 'flex';
+    
+    currentVideoUrl = item.videoUrl;
+    const bodyBox = document.getElementById('modalBody');
+    bodyBox.innerHTML = '';
+    clearInterval(typeInterval); 
+
+    const htmlString = item.content;
+    let i = 0; let isTag = false; let currentHTML = "";
+
+    typeInterval = setInterval(() => {
+        if (i < htmlString.length) {
+            let char = htmlString.charAt(i);
+            currentHTML += char;
+            bodyBox.innerHTML = currentHTML + "<span class='blink'>_</span>";
+            
+            if (char === '<') isTag = true;
+            if (char === '>') isTag = false;
+            
+            i++;
+            if (isTag) {
+                while (htmlString.charAt(i) !== '>' && i < htmlString.length) {
+                    currentHTML += htmlString.charAt(i); i++;
+                }
+            }
+        } else {
+            clearInterval(typeInterval);
+            bodyBox.innerHTML = currentHTML; 
+            if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; 
+        }
+    }, 30); 
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+    clearInterval(typeInterval); 
+}
+
+function openVideoPlayer() {
+    const frame = document.getElementById('videoPlayerFrame');
+    frame.src = currentVideoUrl + '?autoplay=1';
+    document.getElementById('videoModal').style.display = 'flex';
+}
+
+function closeVideoPlayer() {
+    document.getElementById('videoPlayerFrame').src = '';
+    document.getElementById('videoModal').style.display = 'none';
+}
+
+// ==========================================
+// 👻 5. 배경 광클 히든 이벤트
+// ==========================================
+let clickCount = 0;
+document.body.addEventListener('click', function(e) {
+    // 아무것도 없는 검은 배경 영역을 눌렀을 때만 카운트
+    if (e.target.tagName === 'BODY' || e.target.className === 'container') {
+        clickCount++;
+        if (clickCount >= 10) {
+            unlockAchievement('ach_hidden_1'); // 빈 배경 10번 광클 업적!
+        }
+    }
+});
+
+// 초기화
+renderList();
 </script>
 </body>
 </html>
