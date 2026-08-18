@@ -24,7 +24,7 @@
             cursor: crosshair;
         }
 
-        /* 1. CRT 스캔라인 */
+        /* 1. CRT 스캔라인 오버레이 */
         body::before {
             content: " ";
             display: block;
@@ -63,7 +63,7 @@
             position: relative;
         }
 
-        /* 상단 툴바 */
+        /* 모바일 상단 툴바 */
         .top-toolbar {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 6px;
@@ -85,21 +85,20 @@
         /* 아카이브 목록 */
         .archive-list { list-style: none; }
         .archive-item {
-            border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 8px; padding: 10px 12px;
+            border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 8px; padding: 12px 14px;
             background: rgba(0, 30, 10, 0.25); cursor: pointer; display: flex; justify-content: space-between; align-items: center;
         }
         .archive-item:hover { background: #00ff66; color: #000; }
         .archive-item.locked { border-color: #ff3333; color: #ff3333; }
         .archive-item.locked:hover { background: #ff3333; color: #000; }
 
-        .badge { padding: 1px 6px; font-size: 13px; margin-right: 6px; font-weight: bold; }
+        .badge { padding: 1px 6px; font-size: 14px; margin-right: 8px; font-weight: bold; }
         .badge-lv1 { background: #ff3333; color: #fff; }
         .badge-lv2 { background: #ff9900; color: #000; }
-        .badge-info { background: #00ff66; color: #000; }
 
-        /* 📑 기밀 위키 인포박스 */
+        /* 📑 위키형 인포박스 UI */
         .wiki-infobox {
-            border: 2px solid #00ff66; background: rgba(0, 15, 5, 0.8);
+            border: 2px solid #00ff66; background: rgba(0, 15, 5, 0.85);
             margin: 12px 0 16px; font-size: 17px;
         }
         .wiki-infobox-title {
@@ -122,12 +121,12 @@
         /* 모달 레이아웃 */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
-            background: rgba(0, 0, 0, 0.9); z-index: 50; justify-content: center; align-items: center; padding: 12px;
+            background: rgba(0, 0, 0, 0.92); z-index: 50; justify-content: center; align-items: center; padding: 10px;
         }
         .modal-content {
             background: #060c07; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3);
             padding: 16px; max-width: 620px; width: 100%; color: #d0d0d0; position: relative;
-            max-height: 85vh; max-height: 85dvh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+            max-height: 86vh; max-height: 86dvh; overflow-y: auto; -webkit-overflow-scrolling: touch;
         }
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; }
 
@@ -135,7 +134,7 @@
         .btn-video {
             display: none; width: 100%; margin: 14px 0 6px;
             background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333;
-            color: #ff8888; padding: 10px; cursor: pointer; font-family: inherit; font-size: 18px; font-weight: bold; text-align: center;
+            color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 18px; font-weight: bold; text-align: center;
         }
         .btn-video:hover { background: #ff3333; color: #000; }
 
@@ -154,13 +153,11 @@
 </head>
 <body>
 
-<!-- 🏆 업적 알림 토스트 -->
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center;">
     <div style="font-size:14px; color:#fff;">[SYSTEM: 인가 권한 획득]</div>
     <div id="toast-title" style="font-size:18px;">업적 이름</div>
 </div>
 
-<!-- 💳 조사관 ID 카드 모달 -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
@@ -175,7 +172,6 @@
     </div>
 </div>
 
-<!-- 0. 인트로 부팅 화면 -->
 <div id="intro-screen" onclick="startSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
@@ -184,7 +180,6 @@
     </div>
 </div>
 
-<!-- 메인 터미널 -->
 <div class="container" id="main-ui" style="opacity: 0;">
     
     <div class="top-toolbar">
@@ -199,9 +194,9 @@
     </header>
 
     <div class="zone-nav">
-        <button class="zone-btn active" onclick="switchZone('ALL', event)">ALL</button>
+        <button class="zone-btn active" onclick="switchZone('ALL', event)">전체 사건</button>
         <button class="zone-btn" onclick="switchZone('청하공고', event)">청하공고</button>
-        <button class="zone-btn" onclick="switchZone('기타구역', event)">ZONE-3</button>
+        <button class="zone-btn" onclick="switchZone('홍대', event)">홍대 구역</button>
     </div>
 
     <ul id="archiveList" class="archive-list"></ul>
@@ -211,17 +206,15 @@
     </footer>
 </div>
 
-<!-- 1. 기밀 문서 타이핑 뷰어 모달 -->
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
         <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px;"></div>
         <div id="modalBody" style="font-size: 18px; line-height: 1.4; min-height: 120px;"></div>
-        <button id="videoPlayBtn" class="btn-video" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED: 복원 영상 재생]</button>
+        <button id="videoPlayBtn" class="btn-video" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED: 현장 회수 영상 재생]</button>
     </div>
 </div>
 
-<!-- 2. 비밀번호 입력 모달 -->
 <div id="passwordModal" class="modal" onclick="closeModal('passwordModal')">
     <div class="modal-content" style="text-align:center; max-width:360px; border-color:#ff3333;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
@@ -234,7 +227,6 @@
     </div>
 </div>
 
-<!-- 3. 비디오 뷰어 모달 -->
 <div id="videoModal" class="modal" style="z-index:60;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; font-size:14px; margin-bottom:6px; border-bottom:1px dashed #ff3333;">
@@ -249,10 +241,10 @@
 
 <script>
 // ==========================================
-// 🏆 1. 업적 데이터베이스
+// 🏆 1. 업적 시스템
 // ==========================================
 const achievementsDB = [
-    { id: "ach_basic_1", type: "기본", name: "[인가 1등급] 첫 사건 열람", desc: "기밀 문서를 열람했습니다.", color: "#00ff66" },
+    { id: "ach_basic_1", type: "기본", name: "[인가 1등급] 사건 파일 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
     { id: "ach_rare_1", type: "희귀", name: "[과부하] 보안 경고", desc: "비밀번호를 연속 5회 틀렸습니다.", color: "#3388ff" },
     { id: "ach_rare_2", type: "희귀", name: "[올빼미] 심야의 목격자", desc: "새벽 3시~4시 사이에 접속했습니다.", color: "#3388ff" },
@@ -314,75 +306,63 @@ function openProfile() {
 }
 
 // ==========================================
-// 📚 2. 기밀 위키 데이터베이스
+// 📚 2. 통합형 사건 아카이브 데이터베이스
 // ==========================================
 const caseDatabase = [
-    {
-        id: "ARCHIVE-CH-00",
-        zone: "청하공고",
-        level: "개요",
-        title: "시설 도감: 사립 청하공업고등학교",
-        date: "1983-2004",
-        isLocked: false,
-        videoUrl: "",
-        content: `
-            <div class="wiki-infobox">
-                <div class="wiki-infobox-title">사립 청하공업고등학교 (靑夏工高)</div>
-                <div class="wiki-row"><div class="wiki-label">현 상태</div><div class="wiki-value">2004.10 영구 폐쇄 및 통제</div></div>
-                <div class="wiki-row"><div class="wiki-label">위치</div><div class="wiki-value">강원도 산간 통제구역</div></div>
-                <div class="wiki-row"><div class="wiki-label">피해 현황</div><div class="wiki-value" style="color:#ff6666;">교직원 4명, 학생 11명 행방불명</div></div>
-            </div>
-            <div class="wiki-h2">[1. 시설 연혁 및 개요]</div>
-            1983년 개교 이후 다수의 원인 불명 실종 사건이 누적 보고됨. 2004년 10월 14일 심야 특별점검 도중 발생한 '교내 방송 사고' 직후 전면 폐쇄 조치됨.<br><br>
-            <div class="wiki-h2">[2. 주요 변칙 구역]</div>
-            • <b>본관 3층 교실:</b> 어둠 속에서 책상 밑 뒤틀린 인영 관측.<br>
-            • <b>지하 수영장:</b> 수온이 급격히 변화하며 수면 중심부에서 미확인 발광체 포착.<br>
-            • <b>방송실:</b> 전원이 끊겨도 심야 02시 14분에 자동 방송 송출.<br>
-            <div class="wiki-warning">
-                ⚠️ <b>교내 수칙:</b> 창밖에서 들려오는 호명 소리에 응답하지 마십시오.
-            </div>
-        `
-    },
     {
         id: "CASE-01",
         zone: "청하공고",
         level: "1급",
-        title: "청하공고 수색 푸티지 (REC_17680)",
+        title: "사립 청하공업고등학교 집단 실종 사건",
         date: "2004-10-14",
         isLocked: false,
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
         content: `
             <div class="wiki-infobox">
-                <div class="wiki-infobox-title">제4수색팀 야간 현장 수색 푸티지</div>
-                <div class="wiki-row"><div class="wiki-label">회수 일자</div><div class="wiki-value">2004-10-14 02:30</div></div>
-                <div class="wiki-row"><div class="wiki-label">기록 매체</div><div class="wiki-value">카세트 비디오 테이프 1점</div></div>
-                <div class="wiki-row"><div class="wiki-label">현장 대원</div><div class="wiki-value" style="color:#ff6666;">조사관 2명 통신 두절 (실종)</div></div>
+                <div class="wiki-infobox-title">사립 청하공업고등학교 (靑夏工高) 변칙 사태</div>
+                <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2004.10.14 심야</div></div>
+                <div class="wiki-row"><div class="wiki-label">위치/소재</div><div class="wiki-value">강원도 산간 통제구역</div></div>
+                <div class="wiki-row"><div class="wiki-label">피해/실종</div><div class="wiki-value" style="color:#ff6666;">교직원 4명, 학생 11명, 수색조사원 2명 실종</div></div>
+                <div class="wiki-row"><div class="wiki-label">현재 조치</div><div class="wiki-value">무기한 폐교 및 외부 철책선 통제</div></div>
             </div>
-            <div class="wiki-h2">[1. 수색 경과]</div>
-            대원 2명이 정문 통제 체인을 절단하고 진입. 02시경 교내 스피커를 통해 안내 방송이 송출됨.<br>
-            영상 후반부 문 상단에 거꾸로 매달린 변칙 인영과 접촉 후 신호가 소실됨.<br><br>
+
+            <div class="wiki-h2">[1. 시설 배경 및 역사]</div>
+            1983년 설립된 공업계 사립 고등학교. 1990년대 후반부터 야간 자율학습 도중 '창밖에서 이름을 부르는 소리'를 듣고 복도로 나간 학생들이 실종되는 기괴한 사고가 빈발함.<br><br>
+
+            <div class="wiki-h2">[2. 주요 변칙 구역]</div>
+            • <b>본관 3층 교실:</b> 칠흑 같은 어둠 속에서 책상 밑에 웅크린 기형적 인영 다수 관측.<br>
+            • <b>지하 수영장:</b> 1998년 폐쇄되었으나 여전히 안개가 가득 차며 수면 중앙에 정체불명의 푸른 발광체 포착.<br>
+            • <b>방송실:</b> 주전원이 완전히 차단되었음에도 매일 02시 14분 교내 스피커로 자동 방송이 송출됨.<br><br>
+
+            <div class="wiki-h2">[3. 수색대 회수 푸티지 기록 (REC_17680)]</div>
+            2004년 10월 14일 심야 01시 40분, 실종 학생 수색을 위해 투입된 제4조사팀의 1인칭 캠코더 테이프. 영상 후반 문틀 상단에 거꾸로 매달린 변칙체와 접촉한 직후 신호가 두절됨.<br>
+
             <div class="wiki-warning">
-                ⚠️ 하단 버튼을 통해 복원된 1인칭 현장 감시 피드를 직접 시청할 수 있습니다.
+                ⚠️ <b>교내 생존 수칙:</b> 방송에서 "창밖의 소리에 응답하지 마십시오"라는 멘트가 나오면 즉시 바닥에 엎드려 귀를 막으십시오.<br>
+                하단 버튼을 누르면 회수된 현장 비디오 피드를 직접 시청할 수 있습니다.
             </div>
         `
     },
     {
         id: "CASE-02",
-        zone: "기타구역",
+        zone: "홍대",
         level: "3급",
-        title: "홍대 모 방탈출 카페 '미퇴장' 사건",
+        title: "홍대 모 방탈출 카페 '미퇴장' 지하 확장 사건",
         date: "2016-11-03",
         isLocked: true,
         password: "1103",
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
         content: `
             <div class="wiki-infobox">
-                <div class="wiki-infobox-title">방탈출 매장 지하 공간 변칙 확장</div>
-                <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2016-11-03</div></div>
-                <div class="wiki-row"><div class="wiki-label">실종자</div><div class="wiki-value" style="color:#ff6666;">입장객 3명 행방불명</div></div>
+                <div class="wiki-infobox-title">홍대 번화가 지하 공간 비정상 확장 사태</div>
+                <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2016.11.03</div></div>
+                <div class="wiki-row"><div class="wiki-label">피해 현황</div><div class="wiki-value" style="color:#ff6666;">입장객 3명 행방불명</div></div>
+                <div class="wiki-row"><div class="wiki-label">조치 상황</div><div class="wiki-value">지하 1층 진입로 콘크리트 봉인</div></div>
             </div>
+
             <div class="wiki-h2">[1. 사건 개요]</div>
-            제한 시간이 지나도 손님이 나오지 않아 직원이 확인했으나, 도면에 없는 지하 15m 수직 통로가 발견됨. 콘크리트 봉인 처리 완료.
+            제한 시간 60분이 지난 후에도 입장객이 퇴장하지 않아 직원이 진입했으나, 기존 건축 도면에 없던 지하 15m 깊이의 수직 계단이 발견됨.<br>
+            CCTV 확인 결과 마지막 방 벽장을 열고 들어간 세 명의 실종자는 영구 미확인 상태로 분류됨.
         `
     }
 ];
@@ -409,7 +389,7 @@ function startSystem() {
     setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1000);
 }
 
-// 탭 전환
+// 구역 필터
 function switchZone(zone, e) {
     currentZone = zone;
     document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active'));
@@ -417,7 +397,7 @@ function switchZone(zone, e) {
     renderList();
 }
 
-// 목록 렌더링
+// 리스트 렌더링
 function renderList() {
     const list = document.getElementById('archiveList');
     list.innerHTML = '';
@@ -429,9 +409,7 @@ function renderList() {
         const currentlyLocked = item.isLocked && !isCleared;
 
         const lockIcon = currentlyLocked ? "🔒" : "📄";
-        let badgeClass = "badge-lv1";
-        if (item.level === '개요') badgeClass = "badge-info";
-        else if (item.level === '3급') badgeClass = "badge-lv2";
+        let badgeClass = item.level === '1급' ? "badge-lv1" : "badge-lv2";
 
         const li = document.createElement('li');
         li.className = `archive-item ${currentlyLocked ? 'locked' : ''}`;
@@ -439,9 +417,9 @@ function renderList() {
         li.innerHTML = `
             <div>
                 <span class="badge ${badgeClass}">${item.level}</span>
-                <span>${lockIcon} ${item.title}</span>
+                <span>${lockIcon} [${item.zone}] ${item.title}</span>
             </div>
-            <span style="font-size:14px; color:#888;">${item.date}</span>
+            <span style="font-size:15px; color:#888;">${item.date}</span>
         `;
         list.appendChild(li);
     });
@@ -460,7 +438,7 @@ function handleItemClick(index, isLocked) {
     }
 }
 
-// 🖋️ 실시간 타자기 타이핑 효과 (HTML 태그 안전 파싱)
+// 실시간 타자기 타이핑 출력기
 function openDocumentModal(index) {
     const item = caseDatabase[index];
     document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
@@ -495,7 +473,7 @@ function openDocumentModal(index) {
             bodyBox.innerHTML = currentHTML; 
             if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; 
         }
-    }, 12); 
+    }, 10); 
 }
 
 // 비밀번호 검증
@@ -567,7 +545,7 @@ function closeModal(id) {
     clearInterval(typeInterval);
 }
 
-// 엔터키 및 ESC 이벤트
+// 이벤트 리스너
 document.getElementById('pw-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') checkPassword();
 });
@@ -580,7 +558,6 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// 히든 클릭 업적
 let clickCount = 0;
 document.body.addEventListener('click', function(e) {
     if (e.target.tagName === 'BODY' || e.target.className === 'container') {
@@ -589,7 +566,7 @@ document.body.addEventListener('click', function(e) {
     }
 });
 
-// 초기화
+// 시작
 renderList();
 </script>
 </body>
