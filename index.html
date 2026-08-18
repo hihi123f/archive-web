@@ -24,14 +24,14 @@
             cursor: crosshair;
         }
 
-        /* 📺 CRT 스캔라인 */
+        /* 📺 CRT 스캔라인 오버레이 */
         body::before {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
             z-index: 10; background-size: 100% 3px, 6px 100%; pointer-events: none;
         }
 
-        /* 🔌 인트로 부팅 */
+        /* 🔌 인트로 부팅 화면 */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
             background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
@@ -52,21 +52,13 @@
             background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative;
         }
 
-        /* 툴바 */
-        .top-toolbar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px;
-        }
-        .tool-btn {
-            background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66;
-            padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold;
-        }
+        /* 툴바 및 버튼 */
+        .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; }
+        .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; }
         .tool-btn:hover { background: #00ff66; color: #000; }
-
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 10px; margin-bottom: 14px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 20px; }
 
-        /* 신규 액션 버튼 (제보, 맵, 심사) */
         .action-group { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
         .action-btn { flex: 1 1 30%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; }
         .action-btn:hover { background: #00ff66; color: #000; }
@@ -75,17 +67,12 @@
         .action-btn.safe { background: rgba(0, 50, 100, 0.5); color: #88ccff; border-color: #3388ff; }
         .action-btn.safe:hover { background: #3388ff; color: #000; }
 
-        /* ZONE 탭 */
         .zone-nav { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 8px; flex-wrap: wrap; }
         .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 4px; font-family: inherit; font-size: 14px; cursor: pointer; flex: 1; text-align: center; }
         .zone-btn.active { background: #00ff66; color: #000; font-weight: bold; }
 
-        /* 아카이브 목록 */
         .archive-list { list-style: none; }
-        .archive-item {
-            border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 10px; padding: 12px 14px;
-            background: rgba(0, 30, 10, 0.3); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
-        }
+        .archive-item { border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 10px; padding: 12px 14px; background: rgba(0, 30, 10, 0.3); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
         .archive-item:hover { background: #00ff66; color: #000; }
         .archive-item.locked { border-color: #ff3333; color: #ff5555; background: rgba(50, 0, 0, 0.3); text-shadow: 0 0 4px rgba(255, 51, 51, 0.5); }
         .archive-item.locked:hover { background: #ff3333; color: #000; }
@@ -103,41 +90,80 @@
         .wiki-row:last-child { border-bottom: none; }
         .wiki-label { width: 34%; background: rgba(0, 255, 102, 0.15); color: #00ff66; padding: 6px 8px; font-weight: bold; border-right: 1px dashed rgba(0, 255, 102, 0.4); }
         .wiki-value { width: 66%; padding: 6px 8px; color: #eee; }
-
         .wiki-h2 { color: #00ff66; border-bottom: 1px dashed #00ff66; font-size: 18px; padding-bottom: 2px; margin: 24px 0 8px; font-weight: bold; }
         .wiki-h3 { color: #88ffaa; font-size: 15px; margin: 14px 0 6px; font-weight: bold; border-left: 3px solid #00ff66; padding-left: 8px; }
         .wiki-warning { background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333; padding: 10px; color: #ff8888; font-size: 14px; margin: 16px 0; }
         .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
-        
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
         /* 🔥 숨은 암호 텍스트 기믹 */
         .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
 
-        /* 🗺️ 네온 와이어프레임 맵 요소 */
-        .neon-map-container {
-            position: relative; width: 100%; height: 350px; margin-top: 15px;
-            background: repeating-linear-gradient(rgba(0,255,102,0.15) 0, rgba(0,255,102,0.15) 1px, transparent 1px, transparent 30px),
-                        repeating-linear-gradient(90deg, rgba(0,255,102,0.15) 0, rgba(0,255,102,0.15) 1px, transparent 1px, transparent 30px);
-            border: 2px solid #00ff66; box-shadow: inset 0 0 20px rgba(0,255,102,0.2);
-            overflow: hidden;
+        /* =========================================
+           ✨ 신규: 완벽한 3D 홀로그램 건물 모델링 맵
+           ========================================= */
+        .map-3d-container {
+            position: relative; width: 100%; height: 400px; margin-top: 10px;
+            background: #020503; border: 1px solid #00ff66;
+            box-shadow: inset 0 0 40px rgba(0,255,102,0.15);
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; perspective: 1000px; /* 3D 원근감 부여 */
         }
-        .map-node {
-            position: absolute; width: 14px; height: 14px; background: #00ff66; border-radius: 50%;
-            box-shadow: 0 0 10px #00ff66; cursor: pointer; transform: translate(-50%, -50%);
-            transition: transform 0.2s;
+        .map-overlay {
+            position: absolute; top: 10px; left: 10px; z-index: 10;
+            color: #00ff66; font-size: 13px; pointer-events: none;
+            text-shadow: 0 0 5px #000; line-height: 1.4;
         }
-        .map-node:hover { transform: translate(-50%, -50%) scale(1.5); }
-        .map-node.danger { background: #ff3333; box-shadow: 0 0 15px #ff3333; animation: blinker 0.8s infinite; }
-        .map-label {
-            position: absolute; color: #00ff66; font-size: 13px; font-weight: bold;
-            text-shadow: 0 0 5px #000, 0 0 2px #00ff66; pointer-events: none;
-            background: rgba(0,0,0,0.7); padding: 2px 4px; border: 1px solid rgba(0,255,102,0.5);
+        /* 허공에 떠서 회전하는 건물 전체 래퍼 */
+        .building-3d {
+            position: relative; width: 160px; height: 220px;
+            transform-style: preserve-3d;
+            transform: rotateX(65deg) rotateZ(45deg); /* 아이소메트릭 각도 */
+            animation: rotateMap 15s linear infinite; /* 빙글빙글 회전 */
         }
-        .map-line {
-            position: absolute; background: #00ff66; box-shadow: 0 0 5px #00ff66; transform-origin: 0 0;
+        @keyframes rotateMap {
+            0% { transform: rotateX(65deg) rotateZ(0deg); }
+            100% { transform: rotateX(65deg) rotateZ(360deg); }
         }
+        /* 각 층(그리드 판) 모델링 */
+        .floor {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 2px solid rgba(0, 255, 102, 0.7);
+            /* 네온 모눈종이 와이어프레임 텍스처 */
+            background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px),
+                        repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px);
+            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2);
+            transform-style: preserve-3d;
+        }
+        /* Z축을 띄워서 건물 층을 쌓음 */
+        .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } /* 지하 */
+        .f-1 { transform: translateZ(0px); }    /* 1층 */
+        .f-2 { transform: translateZ(70px); }   /* 2층 */
+        .f-3 { transform: translateZ(140px); }  /* 3층 */
+
+        /* 각 층 바닥에 적힌 라벨 */
+        .floor-label {
+            position: absolute; top: 5px; left: 5px;
+            color: #00ff66; font-size: 14px; font-weight: bold;
+            text-shadow: 0 0 5px #000; pointer-events: none;
+        }
+        .f-b1 .floor-label { color: #ff3333; }
+
+        /* 심장 박동처럼 점멸하는 붉은 변칙 노드 */
+        .anomaly-node {
+            position: absolute; width: 12px; height: 12px;
+            background: #ff3333; border-radius: 50%;
+            transform: translate(-50%, -50%) translateZ(1px);
+            box-shadow: 0 0 15px #ff3333; cursor: pointer;
+            animation: pulseRed 1s infinite;
+        }
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 51, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
+        }
+        .anomaly-node:hover { background: #fff; box-shadow: 0 0 25px #fff; }
 
         /* 폼 입력 (제보/퀴즈) */
         .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
@@ -151,6 +177,7 @@
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10; }
 
         .btn-video { display: none; width: 100%; margin: 14px 0 6px; background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333; color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: bold; text-align: center; }
+        .btn-video:hover { background: #ff3333; color: #000; }
         .video-box { background: #000; border: 2px solid #ff3333; width: 92vw; max-width: 380px; padding: 8px; }
         .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
@@ -195,7 +222,8 @@
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
         <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
-        <button class="tool-btn" id="btn-lang" onclick="changeLanguage()" style="background:#000; color:#00ff66;">[SYS: KR]</button>
+        <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
+        <button id="lang-btn" class="tool-btn" onclick="changeLanguage()" style="background:#000; color:#00ff66;">[SYS: KR]</button>
     </div>
 
     <header>
@@ -205,7 +233,7 @@
 
     <div class="action-group">
         <button class="action-btn danger" id="btn-report" onclick="document.getElementById('reportModal').style.display='flex'">⚠️ 이상 현상 제보</button>
-        <button class="action-btn" id="btn-map" onclick="openMapModal()">🗺️ 위성 관제 맵</button>
+        <button class="action-btn" id="btn-map" onclick="openMapModal()">🗺️ 3D 위성 관제 맵</button>
         <button class="action-btn safe" id="btn-quiz" onclick="openQuizModal()">🎓 승급 심사</button>
     </div>
 
@@ -223,27 +251,37 @@
 </div>
 
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
-    <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px;">[위성 관제 맵: 청하구역]</h2>
-        <p style="font-size:13px; color:#aaa; margin-top:5px;">점멸하는 붉은 노드는 활성화된 변칙 구역입니다.</p>
+        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제 모델링: 청하구역]</h2>
         
-        <div class="neon-map-container">
-            <div class="map-line" style="width: 150px; height: 2px; top: 100px; left: 100px; transform: rotate(20deg);"></div>
-            <div class="map-line" style="width: 120px; height: 2px; top: 151px; left: 240px; transform: rotate(-45deg);"></div>
-            <div class="map-line" style="width: 180px; height: 2px; top: 151px; left: 240px; transform: rotate(10deg);"></div>
-
-            <div class="map-node" style="top: 100px; left: 100px;" onclick="alert('[SYSTEM] 정문 구역: 특이사항 없음')"></div>
-            <div class="map-label" style="top: 110px; left: 80px;">MAIN GATE</div>
-
-            <div class="map-node danger" style="top: 151px; left: 240px;" onclick="openSpecificDocument('CASE-01')"></div>
-            <div class="map-label" style="top: 165px; left: 210px; color:#ff3333; border-color:#ff3333;">MAIN BLDG (3F)</div>
-
-            <div class="map-node" style="top: 65px; left: 325px;" onclick="alert('[SYSTEM] 기숙사 구역: 접근 불가')"></div>
-            <div class="map-label" style="top: 45px; left: 300px;">DORMITORY</div>
-
-            <div class="map-node danger" style="top: 183px; left: 417px;" onclick="alert('[SYSTEM] 수영장 관제 카메라 손상. 해제 코드 단서 탐지됨.')"></div>
-            <div class="map-label" style="top: 195px; left: 380px; color:#ff3333; border-color:#ff3333;">POOL (DANGER)</div>
+        <div class="map-3d-container">
+            <div class="map-overlay">
+                > FACILITY: 청하공고<br>
+                > DEPTH: -15m to 20m<br>
+                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span><br><br>
+                <span style="font-size:11px; color:#888;">※ 점멸하는 붉은 노드를 탭하여 문서 열람</span>
+            </div>
+            
+            <div class="building-3d">
+                <div class="floor f-b1">
+                    <span class="floor-label">B1: POOL</span>
+                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="openSpecificDocument('CASE-01')"></div>
+                </div>
+                
+                <div class="floor f-1">
+                    <span class="floor-label">1F: LOBBY</span>
+                </div>
+                
+                <div class="floor f-2">
+                    <span class="floor-label">2F: LAB</span>
+                </div>
+                
+                <div class="floor f-3">
+                    <span class="floor-label">3F: CLASS</span>
+                    <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="openSpecificDocument('CASE-01')"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -423,6 +461,7 @@ function submitQuiz() {
     }
 }
 
+// 🗺️ 맵 열기 함수
 function openMapModal() {
     document.getElementById('mapModal').style.display = 'flex';
 }
@@ -571,7 +610,7 @@ function openDocumentModal(index) {
         } else {
             finishTyping();
         }
-    }, 3); 
+    }, 2); // 텍스트가 많으므로 타이핑 속도 최상
 }
 
 function skipTyping() {
@@ -620,19 +659,19 @@ let langIdx = 0;
 const uiDict = {
     'KR': { 
         title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 위성 관제 맵", btnQuiz: "🎓 승급 심사",
+        btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사",
         tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
         footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다."
     },
     'EN': { 
         title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM",
+        btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM",
         tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
         footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED. VIOLATORS WILL BE TERMINATED."
     },
     'JP': { 
         title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 衛星管制マップ", btnQuiz: "🎓 昇級審査",
+        btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査",
         tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
         footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。"
     }
