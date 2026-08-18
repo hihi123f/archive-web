@@ -113,6 +113,36 @@
 </head>
 <body>
 
+    <!-- 🏆 업적 달성 알림창 (화면 아래에서 슥 올라옴) -->
+<div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:15px 30px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; box-shadow:0 0 20px rgba(255,204,0,0.4); text-align:center;">
+    <div style="font-size:12px; color:#fff; margin-bottom:5px;">[SYSTEM: 새로운 권한 획득]</div>
+    <div id="toast-title" style="font-size:18px;">업적 이름</div>
+</div>
+
+<!-- 💳 조사관 ID 카드 열기 버튼 -->
+<button onclick="openProfile()" style="position: absolute; top: 15px; left: 20px; background: rgba(0,20,10,0.8); color: #00ff66; border: 1px dashed #00ff66; padding: 5px 10px; cursor: pointer; z-index: 100;">
+    [📁 조사관 ID 카드]
+</button>
+
+<!-- 💳 ID 카드 (업적 현황판) 모달 -->
+<div id="profileModal" class="modal" onclick="closeModal('profileModal')">
+    <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
+        <h2 style="color:#00ff66; border-bottom:2px solid #00ff66; padding-bottom:10px;">[조사관 프로필] ID: UNKNOWN</h2>
+        
+        <div style="display:flex; justify-content:space-between; margin-bottom: 20px; color:#aaa; font-size:15px;">
+            <span>인가 등급: <span id="user-level" style="color:#fff;">LEVEL 1</span></span>
+            <span>수집한 기밀 배지: <span id="badge-count" style="color:#00ff66;">0</span> / 37</span>
+        </div>
+
+        <div style="height: 400px; overflow-y: auto; padding-right:10px;">
+            <ul id="achievement-list" style="list-style:none; padding:0;">
+                <!-- 업적 리스트가 자바스크립트로 여기에 그려집니다 -->
+            </ul>
+        </div>
+    </div>
+</div>
+
 <!-- 🎵 배경 소음 (본인 mp3 파일 링크로 교체하세요) -->
 <audio id="bg-audio" loop src="YOUR_AUDIO_FILE_URL.mp3"></audio>
 
@@ -184,6 +214,84 @@
 </div>
 
 <script>
+
+
+    // ==========================================
+// 🏆 업적 데이터베이스 (기본/희귀/전설/히든)
+// ==========================================
+const achievementsDB = [
+    { id: "ach_basic_1", type: "기본", name: "[인가 1등급] 첫 사건 열람", desc: "CASE-01 문서를 열람했습니다.", color: "#00ff66" },
+    { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 언어를 변경했습니다.", color: "#00ff66" },
+    { id: "ach_rare_1", type: "희귀", name: "[과부하] 보안 경고", desc: "비밀번호를 연속 5회 틀렸습니다.", color: "#3388ff" },
+    { id: "ach_rare_2", type: "희귀", name: "[올빼미] 심야의 목격자", desc: "새벽 3시~4시 사이에 접속했습니다.", color: "#3388ff" },
+    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "마스터 비밀번호를 해독했습니다.", color: "#ffcc00" },
+    { id: "ach_hidden_1", type: "히든", name: "공허 응시", desc: "어둠 속을 10번 두드렸습니다.", color: "#ff3333", isHidden: true }
+];
+
+// 업적 달성 함수 (조건이 맞을 때 이 함수를 호출)
+function unlockAchievement(achId) {
+    // 이미 깬 업적인지 확인
+    if (localStorage.getItem(achId) === 'true') return;
+
+    // 로컬스토리지에 저장
+    localStorage.setItem(achId, 'true');
+    
+    // 업적 정보 찾기
+    const ach = achievementsDB.find(a => a.id === achId);
+    if (!ach) return;
+
+    // 🚀 알림창(Toast) 띄우기
+    const toast = document.getElementById('achievement-toast');
+    document.getElementById('toast-title').innerText = `🏆 [${ach.type}] ${ach.name}`;
+    document.getElementById('toast-title').style.color = ach.color;
+    
+    toast.style.bottom = "20px"; // 화면 위로 올라옴
+    setTimeout(() => { toast.style.bottom = "-100px"; }, 4000); // 4초 뒤 내려감
+    
+    // 글리치 효과 덤
+    document.body.classList.add('glitch-effect');
+    setTimeout(() => document.body.classList.remove('glitch-effect'), 200);
+}
+
+// 💳 프로필 모달 열기 & 업적 리스트 그리기
+function openProfile() {
+    const list = document.getElementById('achievement-list');
+    list.innerHTML = '';
+    let unlockCount = 0;
+
+    achievementsDB.forEach(ach => {
+        const isUnlocked = localStorage.getItem(ach.id) === 'true';
+        if (isUnlocked) unlockCount++;
+
+        const li = document.createElement('li');
+        li.style.padding = "10px";
+        li.style.marginBottom = "8px";
+        li.style.border = `1px solid ${isUnlocked ? ach.color : '#333'}`;
+        li.style.background = isUnlocked ? "rgba(0,0,0,0.5)" : "#050505";
+        li.style.color = isUnlocked ? "#fff" : "#444";
+
+        if (isUnlocked) {
+            // 🔓 해금된 업적
+            li.innerHTML = `<b style="color:${ach.color};">[${ach.type}] ${ach.name}</b><br><span style="font-size:14px; color:#aaa;">${ach.desc}</span>`;
+        } else {
+            // 🔒 잠긴 업적 (히든은 이름도 가림)
+            if (ach.isHidden) {
+                li.innerHTML = `<b>🔒 [히든] ?????????</b><br><span style="font-size:14px;">조건이 숨겨져 있습니다.</span>`;
+            } else {
+                li.innerHTML = `<b>🔒 [${ach.type}] ${ach.name}</b><br><span style="font-size:14px;">조건: ${ach.desc}</span>`;
+            }
+        }
+        list.appendChild(li);
+    });
+
+    document.getElementById('badge-count').innerText = unlockCount;
+    // 배지 개수에 따라 등급명 변경 (예: 5개 이상이면 LEVEL 2)
+    if(unlockCount >= 10) document.getElementById('user-level').innerText = "LEVEL 3 (숙련된 조사관)";
+    else if(unlockCount >= 5) document.getElementById('user-level').innerText = "LEVEL 2 (정규 조사관)";
+
+    document.getElementById('profileModal').style.display = 'flex';
+}
+    
     // ==========================================
     // 0. 인트로 애니메이션 & 오디오 재생 로직
     // ==========================================
@@ -223,6 +331,7 @@
     };
 
     function changeLanguage() {
+        unlockAchievement('ach_basic_2');
         // 글리치 효과
         document.body.classList.add('glitch-effect');
         setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
