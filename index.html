@@ -24,7 +24,7 @@
             cursor: crosshair;
         }
 
-        /* 1. CRT 스캔라인 오버레이 */
+        /* CRT 스캔라인 오버레이 */
         body::before {
             content: " ";
             display: block;
@@ -36,7 +36,7 @@
             pointer-events: none;
         }
 
-        /* 2. 인트로 부팅 화면 */
+        /* 인트로 부팅 화면 */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
             background: #000; z-index: 9999;
@@ -77,24 +77,28 @@
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 10px; margin-bottom: 14px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 22px; }
 
-        /* 구역 탭 */
-        .zone-nav { display: flex; gap: 6px; margin-bottom: 12px; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 8px; }
-        .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 18px; cursor: pointer; flex: 1; text-align: center; }
+        /* ZONE 구역 탭 */
+        .zone-nav { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 8px; flex-wrap: wrap; }
+        .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 4px; font-family: inherit; font-size: 16px; cursor: pointer; flex: 1; text-align: center; }
         .zone-btn.active { background: #00ff66; color: #000; font-weight: bold; }
 
         /* 아카이브 목록 */
         .archive-list { list-style: none; }
         .archive-item {
-            border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 8px; padding: 12px 14px;
+            border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 10px; padding: 12px 14px;
             background: rgba(0, 30, 10, 0.25); cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.2s;
         }
         .archive-item:hover { background: #00ff66; color: #000; }
-        .archive-item.locked { border-color: #ff3333; color: #ff3333; }
+        
+        /* 🔒 잠긴 문서 전용 스타일 */
+        .archive-item.locked { border-color: #ff3333; color: #ff5555; background: rgba(50, 0, 0, 0.3); text-shadow: 0 0 4px rgba(255, 51, 51, 0.5); }
         .archive-item.locked:hover { background: #ff3333; color: #000; }
 
-        .badge { padding: 1px 6px; font-size: 14px; margin-right: 8px; font-weight: bold; }
+        .badge { padding: 2px 6px; font-size: 14px; margin-right: 8px; font-weight: bold; }
         .badge-lv1 { background: #ff3333; color: #fff; }
         .badge-lv2 { background: #ff9900; color: #000; }
+        .badge-lv3 { background: #9900ff; color: #fff; }
 
         /* 📑 위키형 인포박스 UI */
         .wiki-infobox {
@@ -111,11 +115,18 @@
 
         .wiki-h2 {
             color: #00ff66; border-bottom: 1px dashed #00ff66; font-size: 20px;
-            padding-bottom: 2px; margin: 16px 0 8px; font-weight: bold;
+            padding-bottom: 2px; margin: 20px 0 8px; font-weight: bold;
         }
         .wiki-warning {
             background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333;
             padding: 8px 10px; color: #ff8888; font-size: 16px; margin: 12px 0;
+        }
+
+        /* GIF 삽입용 스타일 */
+        .creepy-gif {
+            width: 100%; max-width: 400px; display: block;
+            margin: 15px auto; border: 2px dashed #ff3333;
+            filter: grayscale(80%) contrast(150%);
         }
 
         /* 모달 레이아웃 */
@@ -148,7 +159,7 @@
 
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
-        .glitch-effect { filter: invert(1) hue-rotate(180deg); }
+        .glitch-effect { filter: invert(1) hue-rotate(180deg) skewX(2deg); }
     </style>
 </head>
 <body>
@@ -185,7 +196,7 @@
     <div class="top-toolbar">
         <button class="tool-btn" onclick="openProfile()">[📁 조사관 ID]</button>
         <span style="font-size: 14px;">STATUS: <span class="blink" style="color:#00ff66;">ONLINE</span></span>
-        <button id="lang-btn" class="tool-btn" onclick="changeLanguage()">[SYS_LANG : KR]</button>
+        <button id="lang-btn" class="tool-btn" onclick="changeLanguage()">[SYS: KR]</button>
     </div>
 
     <header>
@@ -194,9 +205,11 @@
     </header>
 
     <div class="zone-nav">
-        <button class="zone-btn active" onclick="switchZone('ALL', event)">전체 사건</button>
-        <button class="zone-btn" onclick="switchZone('청하공고', event)">청하공고</button>
-        <button class="zone-btn" onclick="switchZone('홍대', event)">홍대 구역</button>
+        <button class="zone-btn active" onclick="switchZone('ALL', event)">ALL</button>
+        <button class="zone-btn" onclick="switchZone('ZONE-0', event)">ZONE-0</button>
+        <button class="zone-btn" onclick="switchZone('ZONE-1', event)">ZONE-1</button>
+        <button class="zone-btn" onclick="switchZone('ZONE-2', event)">ZONE-2</button>
+        <button class="zone-btn" onclick="switchZone('ZONE-3', event)">ZONE-3</button>
     </div>
 
     <ul id="archiveList" class="archive-list"></ul>
@@ -209,25 +222,25 @@
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
-        <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px;"></div>
+        <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div>
         <div id="modalBody" style="font-size: 18px; line-height: 1.4; min-height: 120px;"></div>
         <button id="videoPlayBtn" class="btn-video" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED: 현장 회수 영상 재생]</button>
     </div>
 </div>
 
-<div id="passwordModal" class="modal" onclick="closeModal('passwordModal')">
-    <div class="modal-content" style="text-align:center; max-width:360px; border-color:#ff3333;" onclick="event.stopPropagation()">
+<div id="passwordModal" class="modal" style="z-index: 60;" onclick="closeModal('passwordModal')">
+    <div class="modal-content" style="text-align:center; max-width:360px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
-        <h3 style="color:#ff3333; font-size:18px;">⚠️ [접근 인가 필요]</h3>
-        <p style="color:#888; font-size:14px; margin-top:4px;">기밀 보안 코드를 입력하십시오.</p>
-        <input type="text" id="pw-input" class="pw-input" placeholder="CODE">
+        <h3 style="color:#ff3333; font-size:22px; margin-bottom: 10px;">⚠️ [접근 인가 필요]</h3>
+        <p style="color:#ff9999; font-size:16px;">해당 문서는 열람이 통제되어 있습니다.<br>기밀 보안 코드를 입력하십시오.</p>
+        <input type="text" id="pw-input" class="pw-input" placeholder="ACCESS CODE">
         <br>
-        <button class="pw-btn" onclick="checkPassword()">DECRYPT</button>
-        <p id="pw-error" style="color:#ff3333; margin-top:8px; font-size:14px; display:none;" class="blink">ACCESS DENIED</p>
+        <button class="pw-btn" onclick="checkPassword()">DECRYPT (해독)</button>
+        <p id="pw-error" style="color:#ff3333; margin-top:12px; font-size:16px; font-weight:bold; display:none;" class="blink">인증 실패: 접근이 거부되었습니다.</p>
     </div>
 </div>
 
-<div id="videoModal" class="modal" style="z-index:60;" onclick="closeVideoPlayer()">
+<div id="videoModal" class="modal" style="z-index:70;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; font-size:14px; margin-bottom:6px; border-bottom:1px dashed #ff3333;">
             <span>REC_FEED // <span class="blink">LIVE</span></span>
@@ -306,63 +319,66 @@ function openProfile() {
 }
 
 // ==========================================
-// 📚 2. 통합형 사건 아카이브 데이터베이스
+// 📚 2. 통합형 사건 아카이브 데이터베이스 (ZONE 0~3)
 // ==========================================
 const caseDatabase = [
     {
         id: "CASE-01",
-        zone: "청하공고",
-        level: "1급",
-        title: "사립 청하공업고등학교 집단 실종 사건",
+        zone: "ZONE-1",
+        level: "1급 기밀",
+        title: "사립 청하공업고등학교 집단 실종 사태",
         date: "2004-10-14",
         isLocked: false,
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
+        // 🔥 GIF 삽입 예시: 여기에 원하는 GIF 주소를 넣으면 됩니다.
         content: `
             <div class="wiki-infobox">
-                <div class="wiki-infobox-title">사립 청하공업고등학교 (靑夏工高) 변칙 사태</div>
+                <div class="wiki-infobox-title">사립 청하공업고등학교 (靑夏工高)</div>
+                <div class="wiki-row"><div class="wiki-label">분류 등급</div><div class="wiki-value">ZONE-1 (접근 제한구역)</div></div>
                 <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2004.10.14 심야</div></div>
-                <div class="wiki-row"><div class="wiki-label">위치/소재</div><div class="wiki-value">강원도 산간 통제구역</div></div>
-                <div class="wiki-row"><div class="wiki-label">피해/실종</div><div class="wiki-value" style="color:#ff6666;">교직원 4명, 학생 11명, 수색조사원 2명 실종</div></div>
-                <div class="wiki-row"><div class="wiki-label">현재 조치</div><div class="wiki-value">무기한 폐교 및 외부 철책선 통제</div></div>
+                <div class="wiki-row"><div class="wiki-label">피해/실종</div><div class="wiki-value" style="color:#ff6666; font-weight:bold;">교직원 4명, 학생 11명, 수색대원 2명 영구 실종</div></div>
+                <div class="wiki-row"><div class="wiki-label">현재 상태</div><div class="wiki-value">무기한 폐교 및 반경 2km 통제</div></div>
             </div>
 
-            <div class="wiki-h2">[1. 시설 배경 및 역사]</div>
-            1983년 설립된 공업계 사립 고등학교. 1990년대 후반부터 야간 자율학습 도중 '창밖에서 이름을 부르는 소리'를 듣고 복도로 나간 학생들이 실종되는 기괴한 사고가 빈발함.<br><br>
+            <div class="wiki-h2">[1. 시설 배경 및 붕괴 타임라인]</div>
+            <b>• 1983년 개교:</b> 국가 주도 산간 공업인력 육성 사업의 일환으로 강원도 [검열삭제] 지역에 설립됨. 초기 10년간은 특이사항 없이 정상 운영됨.<br><br>
+            <b>• 1998년 첫 징조:</b> 기숙사생 3명이 야간 자율학습 도중 <i>"창밖에서 엄마가 내 이름을 부른다"</i>며 야밤에 뒷산으로 향한 뒤 행방불명됨. 경찰 수색 결과, 학생들의 교복이 지하 실내수영장 바닥에서 발견되었으나 육신은 흔적도 없이 사라짐. 이후 지하 수영장 전면 폐쇄 조치.<br><br>
+            <b>• 2003년 징후 악화:</b> 칠흑 같은 어둠 속 본관 3층 교실에서, 책상 밑에 웅크린 채 기형적으로 뒤틀린 인영들이 다수 관측되기 시작함. 해당 층을 순찰하던 경비원 1명이 발작을 일으키며 사망.<br><br>
+            <b>• 2004년 폐교 결의 (사태의 정점):</b> 주전원이 완전히 차단되었음에도, 매일 밤 02시 14분이 되면 교내 스피커를 통해 정체불명의 안내 방송이 자동 송출됨. 이를 조사하던 교직원 3명이 방송실에서 연기처럼 사라지며 즉각적인 폐교와 전면 통제가 이루어짐.<br>
 
-            <div class="wiki-h2">[2. 주요 변칙 구역]</div>
-            • <b>본관 3층 교실:</b> 칠흑 같은 어둠 속에서 책상 밑에 웅크린 기형적 인영 다수 관측.<br>
-            • <b>지하 수영장:</b> 1998년 폐쇄되었으나 여전히 안개가 가득 차며 수면 중앙에 정체불명의 푸른 발광체 포착.<br>
-            • <b>방송실:</b> 주전원이 완전히 차단되었음에도 매일 02시 14분 교내 스피커로 자동 방송이 송출됨.<br><br>
+            <img src="https://media.giphy.com/media/3o7WTqjG4O9N4H0nWU/giphy.gif" class="creepy-gif" alt="SIGNAL LOST">
 
-            <div class="wiki-h2">[3. 수색대 회수 푸티지 기록 (REC_17680)]</div>
-            2004년 10월 14일 심야 01시 40분, 실종 학생 수색을 위해 투입된 제4조사팀의 1인칭 캠코더 테이프. 영상 후반 문틀 상단에 거꾸로 매달린 변칙체와 접촉한 직후 신호가 두절됨.<br>
+            <div class="wiki-h2">[2. 수색대 회수 푸티지 (REC_17680)]</div>
+            2004년 10월 14일 심야 01시 40분. 실종 학생 수색을 위해 투입된 제4조사팀의 1인칭 캠코더 테이프가 교문 앞 덤불에서 회수됨.<br>
+            영상 후반부, 수영장 인근 문틀 상단에 <b>'거꾸로 매달린 변칙체'</b>와 마주한 직후 촬영자의 비명과 함께 통신이 영구 두절됨.<br>
 
             <div class="wiki-warning">
-                ⚠️ <b>교내 생존 수칙:</b> 방송에서 "창밖의 소리에 응답하지 마십시오"라는 멘트가 나오면 즉시 바닥에 엎드려 귀를 막으십시오.<br>
-                하단 버튼을 누르면 회수된 현장 비디오 피드를 직접 시청할 수 있습니다.
+                ⚠️ <b>[통제구역 생존 수칙 제1항]</b><br>
+                교내 방송에서 <i>"창밖의 소리에 응답하지 마십시오"</i>라는 멘트가 흘러나오면 즉시 바닥에 엎드려 귀를 막고 10분간 이동을 멈추십시오.<br><br>
+                하단 버튼을 누르면, 기적적으로 복원된 수색팀의 마지막 시야(비디오 피드)를 열람할 수 있습니다.
             </div>
         `
     },
     {
         id: "CASE-02",
-        zone: "홍대",
-        level: "3급",
-        title: "홍대 모 방탈출 카페 '미퇴장' 지하 확장 사건",
+        zone: "ZONE-3",
+        level: "3급 기밀",
+        title: "홍대 M 방탈출 카페 지하 무한 확장 사건",
         date: "2016-11-03",
-        isLocked: true,
-        password: "1103",
+        isLocked: true,    // 🔒 잠금 시스템 ON
+        password: "1103",  // 비밀번호
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
         content: `
             <div class="wiki-infobox">
                 <div class="wiki-infobox-title">홍대 번화가 지하 공간 비정상 확장 사태</div>
+                <div class="wiki-row"><div class="wiki-label">분류 등급</div><div class="wiki-value">ZONE-3 (도심 내 변칙구역)</div></div>
                 <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2016.11.03</div></div>
                 <div class="wiki-row"><div class="wiki-label">피해 현황</div><div class="wiki-value" style="color:#ff6666;">입장객 3명 행방불명</div></div>
-                <div class="wiki-row"><div class="wiki-label">조치 상황</div><div class="wiki-value">지하 1층 진입로 콘크리트 봉인</div></div>
             </div>
 
             <div class="wiki-h2">[1. 사건 개요]</div>
-            제한 시간 60분이 지난 후에도 입장객이 퇴장하지 않아 직원이 진입했으나, 기존 건축 도면에 없던 지하 15m 깊이의 수직 계단이 발견됨.<br>
-            CCTV 확인 결과 마지막 방 벽장을 열고 들어간 세 명의 실종자는 영구 미확인 상태로 분류됨.
+            제한 시간 60분이 지난 후에도 입장객이 퇴장하지 않아 직원이 강제로 문을 개방함. 그러나 기존 건축 도면에 존재하지 않던 <b>지하 15m 깊이의 수직 계단</b>이 발견됨.<br>
+            CCTV 확인 결과 마지막 방 벽장을 열고 들어간 세 명의 실종자는 영구 미확인 상태로 분류되었으며, 현재 해당 구역은 콘크리트로 완전 봉인 조치됨.
         `
     }
 ];
@@ -409,36 +425,40 @@ function renderList() {
         const currentlyLocked = item.isLocked && !isCleared;
 
         const lockIcon = currentlyLocked ? "🔒" : "📄";
-        let badgeClass = item.level === '1급' ? "badge-lv1" : "badge-lv2";
+        let badgeClass = item.level.includes('1급') ? "badge-lv1" : "badge-lv2";
+        if(item.zone === 'ZONE-3') badgeClass = "badge-lv3";
 
         const li = document.createElement('li');
         li.className = `archive-item ${currentlyLocked ? 'locked' : ''}`;
         li.onclick = () => handleItemClick(originalIndex, currentlyLocked);
         li.innerHTML = `
-            <div>
-                <span class="badge ${badgeClass}">${item.level}</span>
-                <span>${lockIcon} [${item.zone}] ${item.title}</span>
+            <div style="flex:1;">
+                <span class="badge ${badgeClass}">${item.zone}</span>
+                <span style="font-size:18px;">${lockIcon} ${item.title}</span>
             </div>
-            <span style="font-size:15px; color:#888;">${item.date}</span>
         `;
         list.appendChild(li);
     });
 }
 
-// 문서 클릭
+// 문서 클릭 시 잠금 확인
 function handleItemClick(index, isLocked) {
     selectedItemIndex = index;
     if (isLocked) {
+        // 잠겨있으면 비밀번호 모달 띄우기
         document.getElementById('pw-error').style.display = 'none';
         document.getElementById('pw-input').value = '';
         document.getElementById('passwordModal').style.display = 'flex';
+        // 모달 띄우면서 입력창에 자동 포커스 (모바일 편의성)
+        setTimeout(() => document.getElementById('pw-input').focus(), 100);
     } else {
+        // 열려있으면 문서 바로 읽기
         unlockAchievement('ach_basic_1');
         openDocumentModal(index);
     }
 }
 
-// 실시간 타자기 타이핑 출력기
+// 실시간 타자기 타이핑 출력기 (GIF 등 HTML 태그 완벽 지원)
 function openDocumentModal(index) {
     const item = caseDatabase[index];
     document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
@@ -459,10 +479,13 @@ function openDocumentModal(index) {
             currentHTML += char;
             bodyBox.innerHTML = currentHTML + "<span class='blink'>_</span>";
 
+            // 태그 열림 감지 (img, div, br 등)
             if (char === '<') isTag = true;
+            // 태그 닫힘 감지
             if (char === '>') isTag = false;
 
             i++;
+            // 태그 내부일 경우 잘리지 않게 한 번에 문자열에 추가 (GIF 렌더링을 위해)
             if (isTag) {
                 while (htmlString.charAt(i) !== '>' && i < htmlString.length) {
                     currentHTML += htmlString.charAt(i); i++;
@@ -473,10 +496,10 @@ function openDocumentModal(index) {
             bodyBox.innerHTML = currentHTML; 
             if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; 
         }
-    }, 10); 
+    }, 8); // 8ms 간격으로 빠르게 타이핑
 }
 
-// 비밀번호 검증
+// 비밀번호 검증 시스템
 function checkPassword() {
     const input = document.getElementById('pw-input').value.toUpperCase().trim();
     const item = caseDatabase[selectedItemIndex];
@@ -490,6 +513,7 @@ function checkPassword() {
 
     if (input === item.password) {
         unlockAchievement('ach_epic_1');
+        // 클리어 기록 저장
         localStorage.setItem(`cleared_${item.id}`, 'true');
         closeModal('passwordModal');
         renderList(); 
@@ -507,29 +531,6 @@ function checkPassword() {
     }
 }
 
-// 언어 변경
-const langs = ['KR', 'EN', 'JP'];
-let langIdx = 0;
-const uiDict = {
-    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과", warn: "WARNING: 무단 유출 금지" },
-    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORD DEPT: SEC-04", warn: "WARNING: UNAUTHORIZED LEAK PROHIBITED" },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", warn: "WARNING: 無断流出禁止" }
-};
-function changeLanguage() {
-    unlockAchievement('ach_basic_2');
-    document.body.classList.add('glitch-effect');
-    setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
-
-    langIdx = (langIdx + 1) % langs.length;
-    const lang = langs[langIdx];
-    document.getElementById('lang-btn').innerText = `[SYS_LANG : ${lang}]`;
-    if(uiDict[lang]) {
-        document.getElementById('ui-header-title').innerText = uiDict[lang].title;
-        document.getElementById('ui-header-sub').innerText = uiDict[lang].sub;
-        document.getElementById('ui-footer').innerText = uiDict[lang].warn;
-    }
-}
-
 // 비디오 제어
 function openVideoPlayer() {
     const frame = document.getElementById('videoPlayerFrame');
@@ -542,10 +543,21 @@ function closeVideoPlayer() {
 }
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
-    clearInterval(typeInterval);
+    if(id === 'archiveModal') clearInterval(typeInterval);
 }
 
-// 이벤트 리스너
+// 언어 변경
+const langs = ['KR', 'EN', 'JP'];
+let langIdx = 0;
+function changeLanguage() {
+    unlockAchievement('ach_basic_2');
+    document.body.classList.add('glitch-effect');
+    setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
+    langIdx = (langIdx + 1) % langs.length;
+    document.getElementById('lang-btn').innerText = `[SYS: ${langs[langIdx]}]`;
+}
+
+// 이벤트 리스너 (엔터키 및 ESC)
 document.getElementById('pw-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') checkPassword();
 });
