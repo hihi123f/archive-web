@@ -96,53 +96,59 @@
         .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
-        /* 🔥 숨은 암호 텍스트 기믹 */
         .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
 
         /* =========================================
-           ✨ 신규: 완벽한 3D 홀로그램 건물 모델링 맵
+           🗺️ 유저 조작형 3D 인터랙티브 맵
            ========================================= */
         .map-3d-container {
             position: relative; width: 100%; height: 400px; margin-top: 10px;
             background: #020503; border: 1px solid #00ff66;
             box-shadow: inset 0 0 40px rgba(0,255,102,0.15);
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden; perspective: 1000px; /* 3D 원근감 부여 */
+            overflow: hidden; perspective: 1000px; 
+            cursor: grab; touch-action: none; /* 드래그 중 스크롤 방지 */
         }
+        .map-3d-container:active { cursor: grabbing; }
+        
         .map-overlay {
             position: absolute; top: 10px; left: 10px; z-index: 10;
             color: #00ff66; font-size: 13px; pointer-events: none;
             text-shadow: 0 0 5px #000; line-height: 1.4;
         }
-        /* 허공에 떠서 회전하는 건물 전체 래퍼 */
+
+        /* 컨트롤 패널 (우측 하단) */
+        .map-controls {
+            position: absolute; bottom: 10px; right: 10px; z-index: 10;
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 30px; height: 30px; font-size: 18px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        .map-ctrl-btn:hover { background: #00ff66; color: #000; }
+
+        /* 허공에 뜬 건물 몸체 */
         .building-3d {
             position: relative; width: 160px; height: 220px;
             transform-style: preserve-3d;
-            transform: rotateX(65deg) rotateZ(45deg); /* 아이소메트릭 각도 */
-            animation: rotateMap 15s linear infinite; /* 빙글빙글 회전 */
+            /* 초기 각도 설정, JS로 유저가 드래그하면 변함 */
+            transform: rotateX(65deg) rotateZ(45deg) scale(1); 
+            transition: transform 0.1s ease-out; /* 부드러운 드래그/줌 */
         }
-        @keyframes rotateMap {
-            0% { transform: rotateX(65deg) rotateZ(0deg); }
-            100% { transform: rotateX(65deg) rotateZ(360deg); }
-        }
-        /* 각 층(그리드 판) 모델링 */
+
         .floor {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             border: 2px solid rgba(0, 255, 102, 0.7);
-            /* 네온 모눈종이 와이어프레임 텍스처 */
             background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px),
                         repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px);
             box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2);
-            transform-style: preserve-3d;
+            transform-style: preserve-3d; pointer-events: none;
         }
-        /* Z축을 띄워서 건물 층을 쌓음 */
-        .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } /* 지하 */
-        .f-1 { transform: translateZ(0px); }    /* 1층 */
-        .f-2 { transform: translateZ(70px); }   /* 2층 */
-        .f-3 { transform: translateZ(140px); }  /* 3층 */
+        /* 각 층 높이 */
+        .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
+        .f-1 { transform: translateZ(0px); }    
+        .f-2 { transform: translateZ(70px); }   
+        .f-3 { transform: translateZ(140px); }  
 
-        /* 각 층 바닥에 적힌 라벨 */
         .floor-label {
             position: absolute; top: 5px; left: 5px;
             color: #00ff66; font-size: 14px; font-weight: bold;
@@ -150,17 +156,18 @@
         }
         .f-b1 .floor-label { color: #ff3333; }
 
-        /* 심장 박동처럼 점멸하는 붉은 변칙 노드 */
+        /* 변칙 노드는 클릭 가능해야 하므로 pointer-events: auto */
         .anomaly-node {
-            position: absolute; width: 12px; height: 12px;
+            position: absolute; width: 16px; height: 16px;
             background: #ff3333; border-radius: 50%;
             transform: translate(-50%, -50%) translateZ(1px);
             box-shadow: 0 0 15px #ff3333; cursor: pointer;
+            pointer-events: auto; /* 클릭 허용 */
             animation: pulseRed 1s infinite;
         }
         @keyframes pulseRed {
             0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 51, 51, 0); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
         }
         .anomaly-node:hover { background: #fff; box-shadow: 0 0 25px #fff; }
@@ -253,30 +260,31 @@
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
     <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제 모델링: 청하구역]</h2>
+        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
         
-        <div class="map-3d-container">
+        <div class="map-3d-container" id="map3dArea">
             <div class="map-overlay">
                 > FACILITY: 청하공고<br>
-                > DEPTH: -15m to 20m<br>
-                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span><br><br>
-                <span style="font-size:11px; color:#888;">※ 점멸하는 붉은 노드를 탭하여 문서 열람</span>
+                > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
+                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
+            </div>
+
+            <div class="map-controls">
+                <button class="map-ctrl-btn" onclick="zoomMap(0.2)">+</button>
+                <button class="map-ctrl-btn" onclick="zoomMap(-0.2)">-</button>
             </div>
             
-            <div class="building-3d">
+            <div class="building-3d" id="building3d">
                 <div class="floor f-b1">
                     <span class="floor-label">B1: POOL</span>
                     <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="openSpecificDocument('CASE-01')"></div>
                 </div>
-                
                 <div class="floor f-1">
                     <span class="floor-label">1F: LOBBY</span>
                 </div>
-                
                 <div class="floor f-2">
                     <span class="floor-label">2F: LAB</span>
                 </div>
-                
                 <div class="floor f-3">
                     <span class="floor-label">3F: CLASS</span>
                     <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="openSpecificDocument('CASE-01')"></div>
@@ -290,7 +298,7 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
         <h2 style="color:#ff3333; margin-bottom:10px;">[시민 변칙 제보 채널]</h2>
-        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">이곳에 작성된 데이터는 추적 불가능한 상태로 제4특수조사과에 회수됩니다.</p>
+        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">이곳에 작성된 데이터는 추적 불가능한 상태로 보안망에 전송됩니다.</p>
         <input type="text" id="rep-loc" class="form-input" placeholder="[발생 지역] 예: 서울시 마포구">
         <input type="text" id="rep-date" class="form-input" placeholder="[목격 일자] 예: 2023.10.14">
         <textarea id="rep-desc" class="form-textarea" placeholder="[현상 서술] 기이한 현상에 대해 자세히 적어주십시오..."></textarea>
@@ -359,7 +367,7 @@
 
 <script>
 // ==========================================
-// 🏆 업적 및 시스템 로직
+// 🏆 업적 시스템 로직
 // ==========================================
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
@@ -413,7 +421,7 @@ function openProfile() {
 }
 
 // ==========================================
-// 🚨 신규: 제보 전송 & 🎓 승급 심사 (퀴즈)
+// 🚨 제보 전송 (Discord Webhook 실제 연동)
 // ==========================================
 function submitReport() {
     const loc = document.getElementById('rep-loc').value;
@@ -422,9 +430,23 @@ function submitReport() {
     
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
-    setTimeout(() => { logBox.innerText += "> 서버 연결 시도...\n"; }, 600);
+
+    // 🔥 여기에 본인의 디스코드 웹훅 주소를 넣으세요!
+    const webhookUrl = "YOUR_DISCORD_WEBHOOK_URL_HERE"; 
+
+    if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
+        fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                content: `🚨 **[신규 변칙 제보 접수]**\n- **지역**: ${loc}\n- **내용**: ${desc}`
+            })
+        }).catch(err => console.error("Webhook error:", err));
+    }
+
+    setTimeout(() => { logBox.innerText += "> 보안 서버 연결 시도...\n"; }, 600);
     setTimeout(() => { 
-        logBox.innerText += "> [SUCCESS] 제보가 접수되었습니다. (코드: X-" + Math.floor(Math.random()*9999) + ")"; 
+        logBox.innerText += "> [SUCCESS] 제보가 안전하게 접수되었습니다. (코드: X-" + Math.floor(Math.random()*9999) + ")"; 
         unlockAchievement('ach_report');
         setTimeout(() => {
             closeModal('reportModal');
@@ -436,6 +458,9 @@ function submitReport() {
     }, 1500);
 }
 
+// ==========================================
+// 🎓 승급 심사 (퀴즈)
+// ==========================================
 function openQuizModal() {
     if(localStorage.getItem('ach_quiz') === 'true') {
         document.getElementById('quiz-form').style.display = 'none';
@@ -461,10 +486,90 @@ function submitQuiz() {
     }
 }
 
-// 🗺️ 맵 열기 함수
+// ==========================================
+// 🗺️ 3D 맵 인터랙션 컨트롤 (드래그 회전 / 줌)
+// ==========================================
+let mapRotX = 65, mapRotZ = 45, mapScale = 1;
+let isDraggingMap = false;
+let startMouseX = 0, startMouseY = 0;
+let initialPinchDist = null;
+
+const mapContainer = document.getElementById('map3dArea');
+const building = document.getElementById('building3d');
+
+function updateMapTransform() {
+    building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`;
+}
+function zoomMap(delta) {
+    mapScale += delta;
+    mapScale = Math.max(0.5, Math.min(mapScale, 2.5)); // 줌 한계치
+    updateMapTransform();
+}
+
 function openMapModal() {
     document.getElementById('mapModal').style.display = 'flex';
+    // 모달 열 때마다 정위치 초기화
+    mapRotX = 65; mapRotZ = 45; mapScale = 1;
+    updateMapTransform();
 }
+
+// PC 마우스 드래그
+mapContainer.addEventListener('mousedown', (e) => {
+    isDraggingMap = true;
+    startMouseX = e.clientX; startMouseY = e.clientY;
+    building.style.transition = 'none'; 
+});
+document.addEventListener('mousemove', (e) => {
+    if (!isDraggingMap) return;
+    const deltaX = e.clientX - startMouseX;
+    const deltaY = e.clientY - startMouseY;
+    mapRotZ -= deltaX * 0.6; // 좌우 드래그로 Z축(바닥판) 회전
+    mapRotX -= deltaY * 0.6; // 상하 드래그로 X축(기울기) 조절
+    mapRotX = Math.max(10, Math.min(mapRotX, 85)); // 훌러덩 뒤집어지지 않게 제한
+    startMouseX = e.clientX; startMouseY = e.clientY;
+    updateMapTransform();
+});
+document.addEventListener('mouseup', () => {
+    if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }
+});
+// 마우스 휠 줌
+mapContainer.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    zoomMap(e.deltaY * -0.001);
+}, {passive: false});
+
+// 모바일 터치 드래그 및 핀치 줌
+mapContainer.addEventListener('touchstart', (e) => {
+    if(e.touches.length === 1) {
+        isDraggingMap = true;
+        startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY;
+        building.style.transition = 'none';
+    } else if (e.touches.length === 2) {
+        isDraggingMap = false;
+        initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+});
+mapContainer.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // 화면 스크롤 방지
+    if (isDraggingMap && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - startMouseX;
+        const deltaY = e.touches[0].clientY - startMouseY;
+        mapRotZ -= deltaX * 0.8;
+        mapRotX -= deltaY * 0.8;
+        mapRotX = Math.max(10, Math.min(mapRotX, 85));
+        startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY;
+        updateMapTransform();
+    } else if (e.touches.length === 2 && initialPinchDist !== null) {
+        const currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        const delta = currentDist - initialPinchDist;
+        zoomMap(delta * 0.005);
+        initialPinchDist = currentDist;
+    }
+}, {passive: false});
+document.addEventListener('touchend', (e) => {
+    if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }
+    if(e.touches.length < 2) initialPinchDist = null;
+});
 
 function openSpecificDocument(caseId) {
     closeModal('mapModal');
@@ -473,7 +578,7 @@ function openSpecificDocument(caseId) {
 }
 
 // ==========================================
-// 📚 복구된 초대형 위키 데이터베이스 (숨은 기믹 포함)
+// 📚 복구된 초대형 위키 데이터베이스
 // ==========================================
 const caseDatabase = [
     {
@@ -610,7 +715,7 @@ function openDocumentModal(index) {
         } else {
             finishTyping();
         }
-    }, 2); // 텍스트가 많으므로 타이핑 속도 최상
+    }, 2); // 텍스트가 많으므로 타이핑 속도 빠름
 }
 
 function skipTyping() {
