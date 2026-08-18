@@ -18,9 +18,10 @@
             text-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
             line-height: 1.4;
             overflow-x: hidden;
+            cursor: crosshair; /* 기본 마우스를 조준선으로 변경 */
         }
 
-        /* CRT 화면 스캔라인 효과 */
+        /* 1. CRT 스캔라인 */
         body::before {
             content: " ";
             display: block;
@@ -32,266 +33,149 @@
             pointer-events: none;
         }
 
+        /* 2. 인트로 (접속 인터랙티브) 애니메이션 */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; cursor: pointer;
+        }
+        .intro-box {
+            width: 20px; height: 20px; background: #00ff66;
+            box-shadow: 0 0 15px #00ff66;
+            transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        .intro-text { margin-top: 20px; color: #00ff66; font-weight: bold; animation: blinker 1s infinite; }
+        
+        .expand-x { width: 100vw !important; height: 5px !important; }
+        .expand-y { height: 100vh !important; }
+        .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+
+        /* 메인 컨테이너 */
         .container {
-            max-width: 850px;
-            margin: 0 auto;
-            border: 2px solid #00ff66;
-            padding: 16px;
+            max-width: 850px; margin: 40px auto 0;
+            border: 2px solid #00ff66; padding: 16px;
             background: rgba(0, 20, 10, 0.4);
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+            position: relative;
         }
 
-        header {
-            border-bottom: 2px dashed #00ff66;
-            padding-bottom: 12px;
-            margin-bottom: 16px;
-        }
+        header { border-bottom: 2px dashed #00ff66; padding-bottom: 12px; margin-bottom: 16px; }
+        .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 22px; }
 
-        .classified-tag {
-            color: #ff3333;
-            text-shadow: 0 0 6px rgba(255, 51, 51, 0.8);
-            font-weight: bold;
-            font-size: 22px;
-            word-break: break-all;
+        /* 언어 버튼 */
+        #lang-btn {
+            position: absolute; top: -35px; right: 0;
+            background: #000; color: #00ff66; border: 1px dashed #00ff66;
+            padding: 4px 8px; cursor: pointer; font-family: inherit; font-size: 16px;
+            z-index: 100;
         }
+        #lang-btn:hover { background: #00ff66; color: #000; }
 
-        .zone-nav {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .zone-btn {
-            background: rgba(0, 30, 10, 0.6);
-            color: #00ff66;
-            border: 1px solid #00ff66;
-            padding: 6px 10px;
-            font-family: inherit;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1 1 auto;
-            text-align: center;
-        }
-
-        .zone-btn:hover, .zone-btn.active {
-            background: #00ff66;
-            color: #000;
-            font-weight: bold;
-            box-shadow: 0 0 8px #00ff66;
-        }
-
-        .zone-desc {
-            font-size: 15px;
-            color: #88ffaa;
-            margin-bottom: 14px;
-            padding-left: 6px;
-            border-left: 3px solid #00ff66;
-            line-height: 1.3;
-        }
-
+        .zone-nav { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 10px; }
+        .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; cursor: pointer; flex: 1; }
+        .zone-btn:hover, .zone-btn.active { background: #00ff66; color: #000; font-weight: bold; }
+        
         .archive-list { list-style: none; }
+        .archive-item { border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 10px; padding: 10px 14px; background: rgba(0, 30, 10, 0.2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .archive-item:hover { background: #00ff66; color: #000; }
+        .archive-item.locked { border-color: #ff3333; color: #ff3333; }
+        .archive-item.locked:hover { background: #ff3333; color: #000; }
 
-        .archive-item {
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            margin-bottom: 10px;
-            padding: 10px 14px;
-            background: rgba(0, 30, 10, 0.2);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
+        .badge { padding: 1px 5px; font-size: 14px; margin-right: 6px; font-weight: bold; display: inline-block; }
+        .badge-lv1 { background: #ff3333; color: #fff; }
+        .badge-lv2 { background: #ff9900; color: #000; }
 
-        .archive-item:hover, .archive-item:active {
-            background: #00ff66;
-            color: #000;
-            text-shadow: none;
-            box-shadow: 0 0 10px #00ff66;
-        }
+        /* 모달 공통 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.88); z-index: 20; justify-content: center; align-items: center; padding: 12px; }
+        .modal-content { background: #0b120c; border: 2px solid #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); padding: 18px; max-width: 650px; width: 100%; color: #e0e0e0; position: relative; max-height: 88vh; overflow-y: auto; }
+        
+        .close-btn { position: absolute; top: 14px; right: 14px; color: #ff3333; cursor: pointer; font-size: 22px; font-weight: bold; }
+        .modal-header { color: #ff3333; font-size: 21px; border-bottom: 1px solid #ff3333; margin-bottom: 12px; padding-bottom: 4px; }
+        
+        /* 암호 입력 모달 전용 */
+        .pw-input { background: #000; border: 1px solid #ff3333; color: #ff3333; padding: 10px; text-align: center; font-size: 18px; font-family: inherit; width: 60%; margin: 10px 0; }
+        .pw-btn { background: #ff3333; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 16px; }
 
-        .badge {
-            display: inline-block;
-            padding: 1px 5px;
-            font-size: 14px;
-            margin-right: 6px;
-            font-weight: bold;
-        }
-        .badge-lv1 { background: #ff3333; color: #fff; text-shadow: none; }
-        .badge-lv2 { background: #ff9900; color: #000; text-shadow: none; }
-        .badge-lv3 { background: #3388ff; color: #fff; text-shadow: none; }
+        .btn-video { display: none; width: 100%; margin-top: 14px; background: rgba(255, 51, 51, 0.2); border: 1px solid #ff3333; color: #ff8888; padding: 10px; cursor: pointer; font-family: inherit; font-size: 18px; font-weight: bold; }
+        .btn-video:hover { background: #ff3333; color: #000; }
 
-        .archive-item .date { color: #88ffaa; font-size: 16px; }
-        .archive-item:hover .date { color: #000; }
-
-        /* 문서 모달 팝업 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 20;
-            justify-content: center;
-            align-items: center;
-            padding: 12px;
-        }
-
-        .modal-content {
-            background: #0b120c;
-            border: 2px solid #ff3333;
-            box-shadow: 0 0 20px rgba(255, 51, 51, 0.4);
-            padding: 18px;
-            max-width: 650px;
-            width: 100%;
-            color: #e0e0e0;
-            position: relative;
-            max-height: 88vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            color: #ff3333;
-            font-size: 21px;
-            border-bottom: 1px solid #ff3333;
-            margin-bottom: 12px;
-            padding-bottom: 4px;
-            padding-right: 30px;
-            word-break: break-all;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 14px; right: 14px;
-            color: #ff3333;
-            cursor: pointer;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .btn-video {
-            display: block;
-            width: 100%;
-            margin-top: 14px;
-            background: rgba(255, 51, 51, 0.2);
-            border: 1px solid #ff3333;
-            color: #ff8888;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 18px;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .btn-video:hover {
-            background: #ff3333;
-            color: #000;
-        }
-
-        /* 🎥 다크웹 CCTV / 비디오 전용 팝업창 */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 30;
-            justify-content: center;
-            align-items: center;
-            padding: 12px;
-        }
-
-        .video-box {
-            background: #000;
-            border: 2px solid #ff3333;
-            box-shadow: 0 0 25px rgba(255, 51, 51, 0.6);
-            width: 100%;
-            max-width: 480px; /* 숏폼 영상 세로 비율에 최적화 */
-            position: relative;
-            padding: 10px;
-        }
-
-        .video-header {
-            display: flex;
-            justify-content: space-between;
-            color: #ff3333;
-            font-size: 16px;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed #ff3333;
-            padding-bottom: 4px;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 177.77%; /* 9:16 세로 숏폼 비율 */
-            background: #050505;
-            overflow: hidden;
-        }
-
-        .video-container iframe, .video-container video {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border: none;
-        }
+        .video-box { background: #000; border: 2px solid #ff3333; width: 100%; max-width: 480px; padding: 10px; }
+        .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
+        
+        /* 글리치(언어변경) 효과 */
+        .glitch-effect { filter: invert(1) hue-rotate(180deg); transform: skewX(5deg); }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- 🎵 배경 소음 (본인 mp3 파일 링크로 교체하세요) -->
+<audio id="bg-audio" loop src="YOUR_AUDIO_FILE_URL.mp3"></audio>
+
+<!-- 0. 인트로 (부팅 화면) -->
+<div id="intro-screen" onclick="startSystem()">
+    <div id="intro-box" class="intro-box"></div>
+    <div id="intro-text" class="intro-text">AWAITING AUTHORIZATION... [CLICK TO INITIATE]</div>
+</div>
+
+<div class="container" id="main-ui" style="opacity: 0;">
+    <!-- 🌐 다국어 변환 버튼 -->
+    <button id="lang-btn" onclick="changeLanguage()">[SYS_LANG : KR]</button>
+
     <header>
-        <div class="classified-tag">[기밀 전산망] NATIONAL ANOMALY ARCHIVE</div>
-        <p style="font-size: 16px;">기록 관리국: 제4특수조사과 통제구역 전산실</p>
+        <div id="ui-header-title" class="classified-tag">[기밀 전산망] NATIONAL ANOMALY ARCHIVE</div>
+        <p style="font-size: 16px;" id="ui-header-sub">기록 관리국: 제4특수조사과 통제구역 전산실</p>
         <p style="font-size: 16px;">STATUS: <span class="blink" style="color:#00ff66;">ONLINE</span> / SECURED</p>
     </header>
 
     <div class="zone-nav">
         <button class="zone-btn active" onclick="switchZone('ALL')">ALL</button>
-        <button class="zone-btn" onclick="switchZone('ZONE-3')">ZONE-3</button>
-        <button class="zone-btn" onclick="switchZone('ZONE-2')">ZONE-2</button>
         <button class="zone-btn" onclick="switchZone('ZONE-1')">ZONE-1</button>
-        <button class="zone-btn" onclick="switchZone('ZONE-0')">ZONE-0</button>
-    </div>
-
-    <div id="zoneDescription" class="zone-desc">
-        >> 전체 관할 구역 내 등록된 모든 회수 기록물을 표시 중입니다.
+        <button class="zone-btn" onclick="switchZone('ZONE-3')">ZONE-3</button>
     </div>
 
     <div>
         <ul id="archiveList" class="archive-list"></ul>
     </div>
 
-    <footer style="margin-top: 24px; font-size: 14px; color: #558866; border-top: 1px dashed #558866; padding-top: 8px;">
-        WARNING: 비인가 데이터 무단 유출 시 군사기밀보호법에 의거 조치됩니다.
+    <footer id="ui-footer" style="margin-top: 24px; font-size: 14px; color: #558866; border-top: 1px dashed #558866; padding-top: 8px;">
+        WARNING: 비인가 데이터 무단 유출 시 조치됩니다.
     </footer>
 </div>
 
-<!-- 1. 문서 팝업창 -->
-<div id="archiveModal" class="modal" onclick="closeModal()">
+<!-- 1. 일반 문서 열람 모달 (타이핑 효과) -->
+<div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <span class="close-btn" onclick="closeModal()">[X]</span>
+        <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
         <div id="modalTitle" class="modal-header"></div>
-        <div id="modalBody" style="font-size: 17px; line-height: 1.5;"></div>
-        <!-- 비디오 재생 버튼 -->
-        <button id="videoPlayBtn" class="btn-video" style="display:none;" onclick="openVideoPlayer()">
-            ▶ [SURVEILLANCE FEED: 복구 영상 열람]
-        </button>
+        <div id="modalBody" style="font-size: 17px; line-height: 1.5; min-height: 100px;"></div>
+        <button id="videoPlayBtn" class="btn-video" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED: 열람]</button>
     </div>
 </div>
 
-<!-- 2. 다크웹 전용 내부 비디오 플레이어 팝업창 -->
-<div id="videoModal" class="video-modal" onclick="closeVideoPlayer()">
+<!-- 2. 비밀번호 입력 모달 -->
+<div id="passwordModal" class="modal" onclick="closeModal('passwordModal')">
+    <div class="modal-content" style="text-align:center; max-width:400px;" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
+        <h3 style="color:#ff3333;">⚠️ [접근 인가 필요]</h3>
+        <p style="color:#888; font-size:14px; margin-bottom: 20px;">인가된 4자리 보안 코드를 입력하십시오.</p>
+        <input type="password" id="pw-input" class="pw-input" maxlength="4" placeholder="CODE">
+        <br>
+        <button class="pw-btn" onclick="checkPassword()">DECRYPT</button>
+        <p id="pw-error" style="color:#ff3333; margin-top:10px; display:none;" class="blink">ACCESS DENIED</p>
+    </div>
+</div>
+
+<!-- 3. 내부 비디오 플레이어 -->
+<div id="videoModal" class="modal" style="z-index:30;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
-        <div class="video-header">
-            <span>REC_FEED // <span class="blink" style="color:#ff3333;">LIVE_DECRYPT</span></span>
-            <span style="cursor:pointer; font-weight:bold;" onclick="closeVideoPlayer()">[X 닫기]</span>
+        <div style="display:flex; justify-content:space-between; color:#ff3333; margin-bottom:8px; border-bottom:1px dashed #ff3333;">
+            <span>REC_FEED // <span class="blink">LIVE</span></span>
+            <span style="cursor:pointer;" onclick="closeVideoPlayer()">[X]</span>
         </div>
         <div class="video-container">
             <iframe id="videoPlayerFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -300,136 +184,229 @@
 </div>
 
 <script>
-    const zoneDescriptions = {
-        'ALL': '>> 전체 관할 구역 내 등록된 모든 회수 기록물을 표시 중입니다.',
-        'ZONE-3': '>> ZONE-3: 민간인 접근 차단 및 기초 관측 구역',
-        'ZONE-2': '>> ZONE-2: 생체 변이 및 이상 전자기파 감지 구역',
-        'ZONE-1': '>> ZONE-1: 구조적 침식 진행 구역 (인명 투입 영구 금지)',
-        'ZONE-0': '>> ZONE-0: 현실 붕괴 및 물리적 진입 불가 구역'
+    // ==========================================
+    // 0. 인트로 애니메이션 & 오디오 재생 로직
+    // ==========================================
+    function startSystem() {
+        // 배경 오디오 재생 (브라우저 정책상 클릭 시점에 재생해야 함)
+        const bgAudio = document.getElementById('bg-audio');
+        bgAudio.volume = 0.3; // 소음 볼륨 설정
+        bgAudio.play().catch(e => console.log("Audio not set or blocked"));
+
+        const box = document.getElementById('intro-box');
+        const text = document.getElementById('intro-text');
+        
+        text.style.display = "none";
+        box.classList.add("expand-x");
+        
+        setTimeout(() => { box.classList.add("expand-y"); }, 400);
+        setTimeout(() => { 
+            document.getElementById('intro-screen').classList.add("fade-out"); 
+            document.getElementById('main-ui').style.transition = "opacity 1s";
+            document.getElementById('main-ui').style.opacity = 1;
+        }, 800);
+        setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1200);
+    }
+
+
+    // ==========================================
+    // 1. 다국어 시스템 & 데이터베이스
+    // ==========================================
+    const langs = ['KR', 'EN', 'JP', 'CN'];
+    let currentLangIdx = 0;
+
+    const uiDict = {
+        'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과", warn: "WARNING: 무단 유출 금지" },
+        'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORD DEPT: SEC-04", warn: "WARNING: UNAUTHORIZED LEAK PROHIBITED" },
+        'JP': { title: "[機密情報網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局: 第4特殊調査課", warn: "警告: 無断流出を禁ず" },
+        'CN': { title: "[机密网络] NATIONAL ANOMALY ARCHIVE", sub: "记录局: 第4特殊调查科", warn: "警告: 严禁未经授权的数据泄露" }
     };
 
-    /* ==========================================================
-       📁 [데이터 영역] : videoUrl 에 유튜브 임베드 주소 입력
-       (유튜브 영상 ID가 abc1234라면 -> https://www.youtube.com/embed/abc1234)
-    ========================================================== */
+    function changeLanguage() {
+        // 글리치 효과
+        document.body.classList.add('glitch-effect');
+        setTimeout(() => document.body.classList.remove('glitch-effect'), 150);
+
+        currentLangIdx = (currentLangIdx + 1) % langs.length;
+        const lang = langs[currentLangIdx];
+        
+        document.getElementById('lang-btn').innerText = `[SYS_LANG : ${lang}]`;
+        document.getElementById('ui-header-title').innerText = uiDict[lang].title;
+        document.getElementById('ui-header-sub').innerText = uiDict[lang].sub;
+        document.getElementById('ui-footer').innerText = uiDict[lang].warn;
+        renderList();
+    }
+
+    // 사건 데이터베이스 (비밀번호 설정 포함)
     const caseDatabase = [
         {
-            zone: "ZONE-1",
-            level: "1급",
-            id: "CASE-01",
-            title: "청하공고 폐교 수색 및 피격 푸티지",
+            zone: "ZONE-1", level: "1급", id: "CASE-01",
+            title: "청하공고 폐교 수색 푸티지",
             date: "2004-10-14",
-            modalHeader: "[ZONE-1 / 기밀 1급] 청하공고 내부 탐사 기록",
-            content: `
-                <b>[사건 개요]</b><br>
-                2004.10.14 23:42 수색 투입. 지상 탐사 로봇 ROVER-02 영상 복구본. 3층 교실 미닫이문 상단에서 거꾸로 매달린 기형 인영 포착 후 신호 두절.<br><br>
-                <b>[녹취 기록]</b><br>
-                “창밖에서 부르는 소리에 절대 응답하지 마십시오...”
-            `,
-            // 💡 여기에 영상 주소를 넣으면 팝업 내부에서 바로 재생됩니다!
-            videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o" 
+            isLocked: false, // 🔓 기본 해제
+            content: "<b>[사건 개요]</b><br>2004.10.14 수색 투입. 기형 인영 포착 후 통신 두절...<br><i>'창밖에서 부르는 소리에 응답하지 마십시오'</i>",
+            videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o"
         },
         {
-            zone: "ZONE-3",
-            level: "3급",
-            id: "CASE-02",
-            title: "국도 44호선 심야 블랙박스 복구 기록",
-            date: "2001-07-22",
-            modalHeader: "[ZONE-3 / 기밀 3급] 국도 44호선 인영 반복 포착",
-            content: `
-                <b>[사건 개요]</b><br>
-                가로등 점멸 구간마다 동일 체격의 인영이 100m 간격으로 반복 포착됨. 차량 운전자 실종.
-            `,
-            videoUrl: "" // 영상이 없는 문서는 버튼 자동 숨김
+            zone: "ZONE-3", level: "3급", id: "CASE-02",
+            title: "홍대 모 방탈출 카페 '미퇴장' 사건",
+            date: "2016-11-03",
+            isLocked: true, password: "1103", // 🔒 비밀번호 설정
+            content: "<b>[시스템 보안 해제됨]</b><br>1층 매장 하부에서 지하 15m 수직 계단 구조 발견. 복구된 실종자의 스마트폰 비디오 데이터 열람 가능.",
+            videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o" // 임시로 같은 영상 둠
         }
     ];
 
     let currentZone = 'ALL';
     let currentVideoUrl = '';
+    let selectedItemIndex = -1; // 암호창에서 사용하기 위해 선택한 사건 번호 기억
 
+    // ==========================================
+    // 2. 리스트 렌더링 & 업적 시스템 (배지)
+    // ==========================================
     function switchZone(zoneKey) {
         currentZone = zoneKey;
-        document.querySelectorAll('.zone-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.innerText.includes(zoneKey) || (zoneKey === 'ALL' && btn.innerText === 'ALL')) {
-                btn.classList.add('active');
-            }
-        });
-        document.getElementById('zoneDescription').innerText = zoneDescriptions[zoneKey];
+        document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
         renderList();
     }
 
-    function getBadgeClass(level) {
-        if (level === '1급') return 'badge-lv1';
-        if (level === '2급') return 'badge-lv2';
-        return 'badge-lv3';
-    }
-
     function renderList() {
-        const listElement = document.getElementById('archiveList');
-        listElement.innerHTML = '';
-
+        const list = document.getElementById('archiveList');
+        list.innerHTML = '';
         const filtered = caseDatabase.filter(item => currentZone === 'ALL' || item.zone === currentZone);
-
-        if (filtered.length === 0) {
-            listElement.innerHTML = '<li style="color:#558866; padding:15px;">>> 해당 구역에 등록된 회수 기록이 없습니다.</li>';
-            return;
-        }
 
         filtered.forEach(item => {
             const originalIndex = caseDatabase.indexOf(item);
+            
+            // 로컬스토리지(업적) 확인: 암호를 풀었는지?
+            const isCleared = localStorage.getItem(`cleared_${item.id}`) === 'true';
+            const currentlyLocked = item.isLocked && !isCleared;
+            
+            const lockIcon = currentlyLocked ? "🔒" : "🔓";
+            const lockClass = currentlyLocked ? "locked" : "";
+
             const li = document.createElement('li');
-            li.className = 'archive-item';
-            li.onclick = () => openModal(originalIndex);
+            li.className = `archive-item ${lockClass}`;
+            li.onclick = () => handleItemClick(originalIndex, currentlyLocked);
             li.innerHTML = `
                 <div>
-                    <span class="badge ${getBadgeClass(item.level)}">${item.level}</span>
-                    <span>[${item.zone}] ${item.title}</span>
+                    <span class="badge ${item.level === '1급' ? 'badge-lv1' : 'badge-lv2'}">${item.level}</span>
+                    <span>${lockIcon} [${item.zone}] ${item.title}</span>
                 </div>
                 <span class="date">${item.date}</span>
             `;
-            listElement.appendChild(li);
+            list.appendChild(li);
         });
     }
 
-    function openModal(index) {
-        const item = caseDatabase[index];
-        document.getElementById('modalTitle').innerHTML = item.modalHeader;
-        document.getElementById('modalBody').innerHTML = item.content;
-
-        const vBtn = document.getElementById('videoPlayBtn');
-        if (item.videoUrl && item.videoUrl.trim() !== '') {
-            currentVideoUrl = item.videoUrl;
-            vBtn.style.display = 'block';
+    // ==========================================
+    // 3. 열람 로직 (비밀번호 확인 or 문서 열람)
+    // ==========================================
+    function handleItemClick(index, isLocked) {
+        if (isLocked) {
+            selectedItemIndex = index;
+            document.getElementById('pw-error').style.display = 'none';
+            document.getElementById('pw-input').value = '';
+            document.getElementById('passwordModal').style.display = 'flex';
         } else {
-            currentVideoUrl = '';
-            vBtn.style.display = 'none';
+            openDocumentModal(index);
         }
+    }
 
+    function checkPassword() {
+        const input = document.getElementById('pw-input').value;
+        const item = caseDatabase[selectedItemIndex];
+
+        if (input === item.password) {
+            // 업적 달성! 로컬스토리지에 영구 저장
+            localStorage.setItem(`cleared_${item.id}`, 'true');
+            closeModal('passwordModal');
+            renderList(); // 리스트 새로고침 (자물쇠 풀림 🔓)
+            
+            // 글리치 효과 주면서 문서 열기
+            document.body.classList.add('glitch-effect');
+            setTimeout(() => {
+                document.body.classList.remove('glitch-effect');
+                openDocumentModal(selectedItemIndex);
+            }, 300);
+        } else {
+            document.getElementById('pw-error').style.display = 'block';
+            document.getElementById('pw-input').value = '';
+        }
+    }
+
+    // ==========================================
+    // 4. 타이핑 효과 적용된 문서 모달 열기
+    // ==========================================
+    let typeInterval; // 진행 중인 타이핑 중지용
+
+    function openDocumentModal(index) {
+        const item = caseDatabase[index];
+        document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
+        document.getElementById('videoPlayBtn').style.display = 'none'; // 영상 버튼 숨김
         document.getElementById('archiveModal').style.display = 'flex';
+        
+        currentVideoUrl = item.videoUrl;
+        
+        // 타이핑 효과 실행
+        const bodyBox = document.getElementById('modalBody');
+        bodyBox.innerHTML = '';
+        clearInterval(typeInterval); // 이전 타이핑 중지
+
+        const htmlString = item.content;
+        let i = 0;
+        let isTag = false;
+        let currentHTML = "";
+
+        // 한 글자씩 출력하는 로직
+        typeInterval = setInterval(() => {
+            if (i < htmlString.length) {
+                let char = htmlString.charAt(i);
+                currentHTML += char;
+                bodyBox.innerHTML = currentHTML + "<span class='blink'>_</span>";
+                
+                // HTML 태그(<br>, <b> 등)는 딜레이 없이 한 번에 넘기기 위해 체크
+                if (char === '<') isTag = true;
+                if (char === '>') isTag = false;
+                
+                i++;
+                if (isTag) {
+                    while (htmlString.charAt(i) !== '>' && i < htmlString.length) {
+                        currentHTML += htmlString.charAt(i);
+                        i++;
+                    }
+                }
+            } else {
+                clearInterval(typeInterval);
+                bodyBox.innerHTML = currentHTML; // 깜빡이 커서 제거
+                if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; // 버튼 짠!
+            }
+        }, 30); // 30ms 간격으로 타자 침 (속도 조절 가능)
     }
 
-    function closeModal() {
-        document.getElementById('archiveModal').style.display = 'none';
+    // ==========================================
+    // 5. 모달 및 영상 컨트롤
+    // ==========================================
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+        clearInterval(typeInterval); // 창 닫으면 타이핑 중지
     }
 
-    // 🎥 내부 플레이어 열기 / 닫기
     function openVideoPlayer() {
-        if (!currentVideoUrl) return;
         const frame = document.getElementById('videoPlayerFrame');
-        // 자동 재생 및 음산한 UI 적용
-        frame.src = currentVideoUrl + (currentVideoUrl.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
+        frame.src = currentVideoUrl + '?autoplay=1';
         document.getElementById('videoModal').style.display = 'flex';
     }
 
     function closeVideoPlayer() {
-        const frame = document.getElementById('videoPlayerFrame');
-        frame.src = ''; // 닫을 때 영상 중지
+        document.getElementById('videoPlayerFrame').src = '';
         document.getElementById('videoModal').style.display = 'none';
     }
 
+    // 최초 렌더링
     renderList();
-</script>
 
+</script>
 </body>
 </html>
