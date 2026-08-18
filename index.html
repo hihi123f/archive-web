@@ -347,37 +347,6 @@ const caseDatabase = [
         id: "CASE-02",
         zone: "ZONE-3",
         level: "3급 기밀",
-        title: "홍대 M 방탈출 카페 지하 무한 확장 사건",
-        date: "2016-11-03",
-        isLocked: true,    
-        password: "1103",  
-        videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
-        content: `
-            <div class="wiki-infobox">
-                <div class="wiki-infobox-title">홍대 번화가 지하 공간 비정상 확장 사태</div>
-                <div class="wiki-row"><div class="wiki-label">분류 등급</div><div class="wiki-value">ZONE-3 (도심 내 변칙구역)</div></div>
-                <div class="wiki-row"><div class="wiki-label">발생 일자</div><div class="wiki-value">2016.11.03</div></div>
-                <div class="wiki-row"><div class="wiki-label">피해 현황</div><div class="wiki-value" style="color:#ff6666;">입장객 3명 행방불명</div></div>
-            </div>
-
-            <div class="wiki-h2">1. 개요</div>
-            도심 한복판 방탈출 카페에서 제한 시간 60분이 지난 후에도 입장객이 퇴장하지 않아 직원이 강제로 문을 개방함. 그러나 기존 건축 도면에 존재하지 않던 <b>지하 15m 깊이의 수직 계단</b>이 발견됨.<br>
-            CCTV 확인 결과 마지막 방 벽장을 열고 들어간 세 명의 실종자는 영구 미확인 상태로 분류되었으며, 현재 해당 구역은 콘크리트로 완전 봉인 조치됨.
-            {
-        id: "CASE-01",
-        zone: "ZONE-1",
-        level: "1급 기밀",
-        title: "사립 청하공업고등학교",
-        date: "2004-10-14 폐쇄",
-        isLocked: false,
-        videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
-        content: `(기존 청하공고 내용 유지)`
-    },
-    // 🔥 새롭게 갱신된 홍대 방탈출 사건
-    {
-        id: "CASE-02",
-        zone: "ZONE-3",
-        level: "3급 기밀",
         title: "홍대 M 방탈출 카페 '미퇴장' 사건",
         date: "2016-11-03",
         isLocked: true,    // 🔒 잠금 시스템 ON
@@ -399,11 +368,13 @@ const caseDatabase = [
             실종자 중 1명(김ㅇㅇ)이 입장 전 휴대전화를 카운터에 반납하지 않고 몰래 반입한 것으로 확인됨.<br>
             아래는 통신사 서버를 통해 복원한 외부 대기자(지인)와의 K-메신저 대화 로그임.<br>
 
+            <!-- 📱 포렌식 스타일 메신저 대화 로그 구현 -->
             <div style="border: 1px dashed #00ff66; padding: 12px; background: rgba(0, 255, 102, 0.05); margin: 15px 0; font-family: 'Noto Sans KR', sans-serif; font-size: 14px;">
                 <div style="text-align:center; color:#00ff66; margin-bottom:12px; font-family: 'Share Tech Mono';">
                     [DATA RECOVERY_ CHAT LOG : 2016-11-03]
                 </div>
                 
+                <!-- 실종자 (좌측) -->
                 <div style="margin-bottom:8px;">
                     <span style="color:#ff8888; font-weight:bold;">[실종자 김ㅇㅇ (19:42)]</span> : 야 여기 테마 미쳤다 ㅋㅋ 개무서움
                 </div>
@@ -411,18 +382,22 @@ const caseDatabase = [
                     <span style="color:#ff8888; font-weight:bold;">[실종자 김ㅇㅇ (19:43)]</span> : 옷장 열었는데 계단 끝이 안보임. 우리 지하로 내려가는건가?
                 </div>
 
+                <!-- 지인 (우측) -->
                 <div style="margin-bottom:8px; text-align:right;">
                     거기 폰 반입 금지 아님? ㅋㅋ 미친놈아 걸리면 퇴장임 : <span style="color:#88ffaa;">[외부 지인 (19:44)]</span>
                 </div>
 
+                <!-- 실종자 사진 전송 (좌측) -->
                 <div style="margin-bottom:8px;">
                     <span style="color:#ff8888; font-weight:bold;">[실종자 김ㅇㅇ (19:45)]</span> : <br>
+                    <!-- 🚨 여기에 직접 만드신 어두운 계단 사진/GIF 링크를 넣으세요 -->
                     <img src="https://media.giphy.com/media/3o7aD2d7qc9qI8bzsQ/giphy.gif" class="creepy-gif" style="max-width: 200px; border: 1px solid #ff3333; margin-top: 4px; filter: grayscale(100%);">
                 </div>
                 <div style="margin-bottom:8px;">
                     <span style="color:#ff8888; font-weight:bold;">[실종자 김ㅇㅇ (19:45)]</span> : 근데 밑에서 누가 자꾸 쳐다보면서 올라오는데?
                 </div>
 
+                <!-- 지인 (우측) -->
                 <div style="margin-bottom:8px; text-align:right;">
                     알바생이겠지 ㅋㅋ 쫄? : <span style="color:#88ffaa;">[외부 지인 (19:47)]</span>
                 </div>
@@ -439,8 +414,6 @@ const caseDatabase = [
 
             <div class="wiki-h2">3. 후속 조치</div>
             해당 지하 계단 진입로에서 심한 악취가 올라오고 <b>기기 오작동(배터리 급속 방전 및 녹음 파일 손상)</b>이 발생하여, 경찰 특공대 수색이 중단됨. 현재 해당 건물 지하 1층 전체는 특수 배합 콘크리트로 완전 매립되어 봉인된 상태임.
-        `
-    }
         `
     }
 ];
