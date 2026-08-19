@@ -24,23 +24,20 @@
             cursor: crosshair;
         }
 
-        /* 📺 CRT 스캔라인 */
+        /* 📺 CRT 스캔라인 오버레이 */
         body::before {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
             z-index: 10; background-size: 100% 3px, 6px 100%; pointer-events: none;
         }
 
-        /* 🔌 인트로 부팅 */
+        /* 🔌 인트로 부팅 화면 */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
             background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
             flex-direction: column; cursor: pointer; text-align: center; padding: 20px;
         }
-        .intro-box {
-            width: 20px; height: 20px; background: #00ff66; box-shadow: 0 0 15px #00ff66;
-            transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1);
-        }
+        .intro-box { width: 20px; height: 20px; background: #00ff66; box-shadow: 0 0 15px #00ff66; transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1); }
         .intro-text { margin-top: 25px; color: #00ff66; font-weight: bold; font-size: 20px; }
         .expand-x { width: 100vw !important; height: 4px !important; }
         .expand-y { height: 100vh !important; height: 100dvh !important; }
@@ -76,12 +73,17 @@
         .archive-item:hover { background: #00ff66; color: #000; }
         .archive-item.locked { border-color: #ff3333; color: #ff5555; background: rgba(50, 0, 0, 0.3); text-shadow: 0 0 4px rgba(255, 51, 51, 0.5); }
         .archive-item.locked:hover { background: #ff3333; color: #000; }
+        
+        /* 🔥 새벽 전용 기괴한 문서 디자인 */
+        .archive-item.glitch-row { border-color: #ff00ff; color: #fff; background: rgba(50, 0, 50, 0.5); animation: blinker 2s infinite; }
+        .archive-item.glitch-row:hover { background: #ff00ff; color: #000; }
 
         .badge { padding: 2px 6px; font-size: 12px; margin-right: 8px; font-weight: bold; }
         .badge-lv0 { background: #ffcc00; color: #000; box-shadow: 0 0 5px #ffcc00; }
         .badge-lv1 { background: #ff3333; color: #fff; }
         .badge-lv2 { background: #ff9900; color: #000; }
         .badge-lv3 { background: #9900ff; color: #fff; }
+        .badge-lvx { background: #000; color: #ff00ff; border: 1px solid #ff00ff; }
 
         /* 📑 위키형 UI */
         .wiki-infobox { border: 2px solid #00ff66; background: rgba(0, 15, 5, 0.85); margin: 12px 0 16px; font-size: 14px; }
@@ -95,13 +97,13 @@
         .wiki-warning { background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333; padding: 10px; color: #ff8888; font-size: 14px; margin: 16px 0; }
         .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
         
-        /* 🔥 신규: 위키 하이퍼링크 스타일 */
         .wiki-link { color: #3388ff; text-decoration: underline; cursor: pointer; font-weight: bold; }
         .wiki-link:hover { color: #ff3333; background: rgba(255, 51, 51, 0.1); }
         .wiki-list { padding-left: 20px; line-height: 1.8; margin-bottom: 10px; color: #ccc; }
 
         .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
+        .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
         /* 📎 서류 모달 스타일 (공통) */
         .paper-doc { background: #f4ebd8; color: #1a1a1a; font-family: 'Noto Serif KR', serif; padding: 20px; border: 1px solid #ccc; box-shadow: inset 0 0 50px rgba(100, 70, 30, 0.2); position: relative; overflow: hidden; }
@@ -110,10 +112,9 @@
         .paper-table th, .paper-table td { border: 1px solid #1a1a1a; padding: 8px; text-align: left; }
         .paper-table th { background: #e0d5c1; width: 35%; font-weight: bold; text-align: center; }
 
-        /* 경찰 조서 질감 */
+        /* 경찰 조서 및 일기장 질감 */
         .paper-police { background: #e6ebf0; color: #111; font-family: 'Noto Sans KR', sans-serif; border: 2px solid #555; padding: 20px; position: relative; }
-        /* 교장 수첩 질감 */
-        .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); }
+        .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); position: relative; overflow: hidden; }
         .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
 
         /* 🗺️ 유저 조작형 3D 인터랙티브 맵 */
@@ -128,30 +129,21 @@
         .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 30px; height: 30px; font-size: 18px; cursor: pointer; font-weight: bold; border-radius: 4px; }
         .map-ctrl-btn:hover { background: #00ff66; color: #000; }
         .building-3d { position: relative; width: 160px; height: 220px; transform-style: preserve-3d; transform: rotateX(65deg) rotateZ(45deg) scale(1); transition: transform 0.1s ease-out; }
-        .floor {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7);
-            background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px);
-            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none;
-        }
+        .floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7); background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px); box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none; }
         .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
         .f-1 { transform: translateZ(0px); }    
         .f-2 { transform: translateZ(70px); }   
         .f-3 { transform: translateZ(140px); }  
         .floor-label { position: absolute; top: 5px; left: 5px; color: #00ff66; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #000; pointer-events: none; }
         .f-b1 .floor-label { color: #ff3333; }
-        .anomaly-node {
-            position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%;
-            transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer;
-            pointer-events: auto; animation: pulseRed 1s infinite;
-        }
+        .anomaly-node { position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%; transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer; pointer-events: auto; animation: pulseRed 1s infinite; }
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); } 70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
 
-        /* 폼 입력 (제보/퀴즈) */
+        /* 폼 요소 및 모달 */
         .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
         .form-textarea { height: 100px; resize: none; }
         .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; }
 
-        /* 모달 공통 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; background: rgba(0, 0, 0, 0.92); z-index: 50; justify-content: center; align-items: center; padding: 10px; }
         .modal-content { background: #060c07; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3); padding: 16px; max-width: 650px; width: 100%; color: #d0d0d0; position: relative; max-height: 86vh; max-height: 86dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10; }
@@ -171,13 +163,11 @@
 </head>
 <body>
 
-<!-- 업적 토스트 -->
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center;">
     <div style="font-size:13px; color:#fff;">[SYSTEM: 권한 해제]</div>
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
-<!-- 프로필 모달 -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
@@ -192,7 +182,6 @@
     </div>
 </div>
 
-<!-- 부팅 화면 -->
 <div id="intro-screen" onclick="startSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
@@ -201,7 +190,6 @@
     </div>
 </div>
 
-<!-- 메인 터미널 -->
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
         <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
@@ -233,7 +221,6 @@
     </footer>
 </div>
 
-<!-- 🗺️ 3D 맵 모달 -->
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
     <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
@@ -264,21 +251,19 @@
     </div>
 </div>
 
-<!-- 🚨 제보 게시판 모달 -->
 <div id="reportModal" class="modal" onclick="closeModal('reportModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
         <h2 style="color:#ff3333; margin-bottom:10px;">[시민 변칙 제보 채널]</h2>
         <p style="color:#aaa; font-size:14px; margin-bottom:15px;">이곳에 작성된 데이터는 추적 불가능한 상태로 보안망에 전송됩니다.</p>
         <input type="text" id="rep-loc" class="form-input" placeholder="[발생 지역] 예: 서울시 마포구">
-        <input type="text" id="rep-date" class="form-input" placeholder="[목격 일자] 예: 2023.10.14">
+        <input type="date" id="rep-date" class="form-input" placeholder="목격 일자">
         <textarea id="rep-desc" class="form-textarea" placeholder="[현상 서술] 기이한 현상에 대해 자세히 적어주십시오..."></textarea>
         <button class="tool-btn" style="width:100%; background:#00ff66; color:#000; font-size:16px;" onclick="submitReport()">데이터 전송</button>
         <div id="report-log" style="margin-top:10px; font-size:13px; color:#ffcc00; white-space:pre-line;"></div>
     </div>
 </div>
 
-<!-- 🎓 승급 심사 (퀴즈) 모달 -->
 <div id="quizModal" class="modal" onclick="closeModal('quizModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('quizModal')">[X]</span>
@@ -301,7 +286,15 @@
     </div>
 </div>
 
-<!-- 📄 문서 열람 위키 모달 -->
+<div id="timeLockModal" class="modal" style="z-index: 60;" onclick="closeModal('timeLockModal')">
+    <div class="modal-content" style="text-align:center; max-width:340px; border-color:#ff00ff; background: #1a001a;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ff00ff;" onclick="closeModal('timeLockModal')">[X]</span>
+        <h3 style="color:#ff00ff; font-size:20px; margin-bottom: 10px; animation: blinker 1s infinite;">[SYSTEM ERROR]</h3>
+        <p style="color:#ff99ff; font-size:15px; line-height:1.6;">접근 시간 불일치.<br><br>해당 데이터는 공간의 경계가 얇아지는 <b>심야(03:00~05:00)</b>의 특정 파장에만 동기화됩니다.</p>
+        <button class="tool-btn" style="background:#ff00ff; color:#000; border:none; margin-top:15px; width:100%;" onclick="closeModal('timeLockModal')">돌아가기</button>
+    </div>
+</div>
+
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation(); skipTyping();">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
@@ -312,7 +305,6 @@
     </div>
 </div>
 
-<!-- 🔒 비밀번호 입력 모달 -->
 <div id="passwordModal" class="modal" style="z-index: 60;" onclick="closeModal('passwordModal')">
     <div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
@@ -325,7 +317,6 @@
     </div>
 </div>
 
-<!-- 🎥 비디오 플레이어 모달 -->
 <div id="videoModal" class="modal" style="z-index:70;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; font-size:13px; margin-bottom:6px; border-bottom:1px dashed #ff3333;">
@@ -338,7 +329,24 @@
     </div>
 </div>
 
-<!-- 📜 신규: 첨부문서 팝업들 (토지대장, 경찰조서, 교장수첩) -->
+<div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
+    <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
+        <div class="paper-doc">
+            <div class="top-secret-stamp">국가기밀<br>TOP SECRET</div>
+            <h3 style="text-align:center; text-decoration:underline; margin-bottom: 20px; margin-top: 10px;">대통령 특별 지시서 (제4특수조사과 신설)</h3>
+            <div style="font-size: 15px; line-height: 1.8;">
+                최근 전국 단위로 원인을 규명할 수 없는 '실종, 비현실적 공간 확장, 집단 환각' 사례가 급증함에 따라, 일반 경찰력으로는 이를 통제할 수 없다고 판단함.<br><br>
+                이에 <b>국가안전보장회의(NSC) 직속으로 '제4특수조사과' 창설을 인가</b>한다.<br><br>
+                1. 민간인 거주 구역 내 변칙 현상 발생 시, 가스 폭발 및 싱크홀 등의 사고로 위장하여 해당 부지를 영구 매립 및 봉인할 것.<br>
+                2. 현장을 목격한 민간인은 [기억 소거 및 사후 통제 프로토콜]에 따라 처리할 것.<br>
+                3. 변칙 개체와의 직접 교전은 금지하며, 관측과 격리를 최우선으로 삼는다.
+            </div>
+            <div style="text-align:right; margin-top:30px; font-weight:bold;">1972년 4월 1일<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Seal_of_the_President_of_the_Republic_of_Korea.svg/200px-Seal_of_the_President_of_the_Republic_of_Korea.svg.png" style="width:50px; opacity:0.3; margin-top:10px;"></div>
+        </div>
+    </div>
+</div>
+
 <div id="landRegModal" class="modal" style="z-index: 80;" onclick="closeModal('landRegModal')">
     <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('landRegModal')">[X]</span>
@@ -513,7 +521,6 @@ let mapRotX = 65, mapRotZ = 45, mapScale = 1;
 let isDraggingMap = false;
 let startMouseX = 0, startMouseY = 0;
 let initialPinchDist = null;
-
 const mapContainer = document.getElementById('map3dArea');
 const building = document.getElementById('building3d');
 
@@ -556,18 +563,18 @@ function openSpecificDocument(caseId) {
 }
 
 // ==========================================
-// 📚 복구된 초대형 위키 데이터베이스 (하이퍼링크 기믹 포함)
+// 📚 복구된 초대형 위키 데이터베이스 (+ 3AM 호러 기믹)
 // ==========================================
 const caseDatabase = [
     {
         id: "CASE-00",
         zone: "ZONE-0",
         level: "국장급 기밀",
-        title: "[열람 인가됨] 제4특수조사과 설립 배경",
+        title: "[열람 인가됨] 제4특수조사과 창설 및 운영 규정",
         date: "1972-04-01",
         isLocked: false,
         videoUrl: "",
-        content: "<div class='wiki-infobox' style='border-color:#ffcc00;'><div class='wiki-infobox-title' style='background:#ffcc00;'>제4특수조사과 (SEC-04) 진실</div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>존재 의의</div><div class='wiki-value'>국가 내 미확인 변칙 현상 격리</div></div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>사상자 수</div><div class='wiki-value' style='color:#ff6666;'>집계 불가</div></div></div><div class='wiki-h2' style='color:#ffcc00;'>환영합니다. 특무 조사관.</div>이 문서는 승급 심사를 통과한 소수의 인원에게만 열람이 허가된 ZONE-0 구역입니다.<br><br>당신이 앞서 확인한 '청하공고'와 '방탈출 카페' 사건은 빙산의 일각에 불과합니다. 우리는 도심 곳곳에 뚫린 구멍(변칙 구역)을 시멘트로 메우고 통제선으로 가리며 대중의 눈을 속여왔습니다.<br><br><b>[지침]</b><br>앞으로 당신에게 더 위험하고 기괴한 임무(CASE-03, 04...)가 하달될 것입니다. 절대 시선을 돌리지 마십시오."
+        content: "<div class='wiki-infobox' style='border-color:#ffcc00;'><div class='wiki-infobox-title' style='background:#ffcc00;'>제4특수조사과 (SEC-04)</div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>존재 의의</div><div class='wiki-value'>국가 내 미확인 변칙 현상 격리</div></div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>사상자 수</div><div class='wiki-value' style='color:#ff6666;'>집계 불가</div></div></div><div class='wiki-toc'><b>[목차]</b><br>1. 개요<br>2. 부서 임무<br>3. 변칙 구역 분류 기준<br>4. 기억 소거 및 위장 프로토콜<br>5. 관련 문헌</div><div class='wiki-h2' style='color:#ffcc00;'>환영합니다. 특무 조사관.</div>이 문서는 승급 심사를 통과한 소수의 인원에게만 열람이 허가된 ZONE-0 구역입니다.<br><div class='wiki-h2'>1. 개요 및 설립 연혁</div>1970년대 급격한 산업화와 함께 도심 곳곳에서 인과율을 무시하는 변칙 현상이 보고되기 시작함. 이에 국가안전보장회의(NSC) 직속으로 본 기관이 비공식 창설됨.<br><div class='wiki-h2'>2. 부서 임무</div>우리의 목적은 변칙 개체의 소멸이 아닙니다. 대중이 모르게 <b>은폐하고, 시멘트로 메우고, 철책선을 치는 것</b>입니다.<br><div class='wiki-h2'>3. 변칙 구역(ZONE) 분류 기준</div>• <b>ZONE-1:</b> 민간인 접근이 완전 통제된 격리 구역 (예: 청하공고)<br>• <b>ZONE-2:</b> 활동이 멎었으나 지속적인 관찰이 필요한 구역<br>• <b>ZONE-3:</b> 도심 내에 존재하여 완벽한 통제가 불가능한 은폐 구역 (예: 방탈출 매장)<br>• <b>ZONE-0:</b> 국가적 재난을 초래할 수 있는 최고 기밀 구역<br><div class='wiki-h2'>4. 기억 소거 및 위장 프로토콜</div>변칙 현상으로 발생한 민간인 사상자는 가스 폭발, 싱크홀, 연쇄 살인 등의 일반적인 범죄 및 사고로 위장하여 언론에 배포합니다.<br><div class='wiki-h2'>5. 관련 문헌</div><ul class='wiki-list'><li>📄 <a class='wiki-link' onclick='document.getElementById(\"sec04Modal\").style.display=\"flex\"'>국가기밀문서_제1호_설립인가서.pdf</a></li></ul>"
     },
     {
         id: "CASE-01",
@@ -589,6 +596,18 @@ const caseDatabase = [
         password: "1103",
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
         content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>홍대 M 방탈출 매장 지하 비정상 확장 사태</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-3 (도심 내 변칙구역)</div></div><div class='wiki-row'><div class='wiki-label'>발생 일자</div><div class='wiki-value'>2016.11.03 19:00</div></div><div class='wiki-row'><div class='wiki-label'>실종자</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>대학생 3명 행방불명</div></div></div><div class='wiki-h2'>1. 사건 개요</div>서울 마포구 서교동에 위치한 방탈출 카페 'M'에서 발생한 미퇴장(未退場) 및 실종 사건. 제한 시간 60분이 지난 후에도 입장객이 퇴장하지 않아 직원이 마스터 키로 문을 개방함.<br>그러나 해당 테마의 마지막 방인 '벽장' 너머로, 기존 건물 도면에 존재할 수 없는 <b>지하 15m 깊이의 콘크리트 수직 계단</b>이 뚫려 있는 것이 발견됨.<br><div class='wiki-h2'>2. 복원된 통신 기록 (포렌식 데이터)</div>실종자 중 1명(김ㅇㅇ)이 입장 전 휴대전화를 카운터에 반납하지 않고 몰래 반입한 것으로 확인됨.<br>아래는 통신사 서버를 통해 복원한 외부 대기자(지인)와의 K-메신저 대화 로그임.<br><div style='border: 1px dashed #00ff66; padding: 12px; background: rgba(0, 255, 102, 0.05); margin: 15px 0; font-family: sans-serif; font-size: 14px;'><div style='text-align:center; color:#00ff66; margin-bottom:12px; font-family: \"Share Tech Mono\";'>[DATA RECOVERY_ CHAT LOG : 2016-11-03]</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[실종자 김ㅇㅇ (19:42)]</span> : 야 여기 테마 미쳤다 ㅋㅋ 개무서움</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[실종자 김ㅇㅇ (19:43)]</span> : 옷장 열었는데 계단 끝이 안보임. 우리 지하로 내려가는건가?</div><div style='margin-bottom:8px; text-align:right;'>거기 폰 반입 금지 아님? ㅋㅋ 미친놈아 걸리면 퇴장임 : <span style='color:#88ffaa;'>[외부 지인 (19:44)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[실종자 김ㅇㅇ (19:45)]</span> : <br><img src='https://media.giphy.com/media/3o7aD2d7qc9qI8bzsQ/giphy.gif' class='creepy-gif' style='max-width: 200px; border: 1px solid #ff3333; margin-top: 4px; filter: grayscale(100%);'></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[실종자 김ㅇㅇ (19:45)]</span> : 근데 밑에서 누가 자꾸 쳐다보면서 올라오는데?</div><div style='margin-bottom:8px; text-align:right;'>알바생이겠지 ㅋㅋ 쫄? : <span style='color:#88ffaa;'>[외부 지인 (19:47)]</span></div><div style='margin-bottom:8px; text-align:right;'>야? : <span style='color:#88ffaa;'>[외부 지인 (19:55)]</span></div><div style='margin-bottom:8px; text-align:right;'>나왔냐? 밥먹으러 가자매 : <span style='color:#88ffaa;'>[외부 지인 (20:05)]</span></div><div style='margin-bottom:8px; text-align:right; color:#777;'>(이후 응답 없음) : <span style='color:#88ffaa;'>[외부 지인 (20:12)]</span></div></div><div class='wiki-h2'>3. 후속 조치</div>해당 지하 계단 진입로에서 심한 악취가 올라오고 <b>기기 오작동(배터리 급속 방전 및 녹음 파일 손상)</b>이 발생하여, 경찰 특공대 수색이 중단됨. 현재 해당 건물 지하 1층 전체는 특수 배합 콘크리트로 완전 매립되어 봉인된 상태임."
+    },
+    // 🔥 신규: 심야 3AM 호러 기믹 파일
+    {
+        id: "CASE-3AM",
+        zone: "ZONE-X",
+        level: "분류 불가",
+        title: "발신자 불명 (데이터 오염)",
+        date: "UNKNOWN",
+        isLocked: true, 
+        password: "NONE", // 이 비밀번호는 쓰이지 않음 (시간으로만 체크됨)
+        videoUrl: "",
+        content: "<div style='color:#ff3333; font-size:22px; font-weight:bold; text-align:center; margin-bottom:20px; animation: blinker 2s infinite;'>[경고: 관측자 역추적 발생]</div><div style='font-size:16px; line-height:1.8; color:#ddd;'>이 문서는 제4특수조사과의 데이터베이스가 아닙니다.<br>지금 스마트폰 화면을 통해 이 텍스트를 읽고 있는 <b>당신</b>에게 직접 송출되는 메시지입니다.<br><br>현재 시각, 주변은 어둡고 조용할 것입니다.<br>푸르스름한 화면 불빛만이 당신의 얼굴을 비추고 있겠죠.<br><br><b style='color:#ff3333;'>화면에서 눈을 떼지 마십시오.</b><br>당신이 이 기밀 문서들에 시선을 빼앗긴 사이, 어둠 속에 있던 '그것'이 방금 당신의 침대 발치까지 다가왔습니다.<br><br>이불 밖으로 발을 내밀고 있다면 당장 집어넣으십시오.<br>등 뒤에서 낯선 숨소리가 들려도 <b>절대 돌아보지 마십시오.</b><br><br><span style='color:#ff8888;'>[SYSTEM WARNING] 전면 카메라 렌즈에 미확인 피사체가 감지되었습니다...</span></div><br><img src='https://media.giphy.com/media/l41YfG5pbXm1FUXxC/giphy.gif' class='creepy-gif' style='filter: invert(1) contrast(150%); max-width: 100%; border-color:#ff00ff;'>"
     }
 ];
 
@@ -600,7 +619,7 @@ let fullModalHTML = "";
 let isTyping = false;
 
 function startSystem() {
-    if(new Date().getHours() === 3) unlockAchievement('ach_rare_2');
+    if(new Date().getHours() >= 3 && new Date().getHours() < 5) unlockAchievement('ach_rare_2');
     const box = document.getElementById('intro-box');
     document.getElementById('intro-text').style.display = "none";
     box.classList.add("expand-x");
@@ -629,6 +648,7 @@ function renderList() {
 
     const filtered = caseDatabase.filter(item => {
         if(item.zone === 'ZONE-0' && !isLvl2) return false;
+        if(item.zone === 'ZONE-X' && currentZone !== 'ALL') return false; // 3AM 파일은 ALL 탭에서만 보임
         return currentZone === 'ALL' || item.zone === currentZone;
     });
 
@@ -638,11 +658,14 @@ function renderList() {
         const currentlyLocked = item.isLocked && !isCleared;
         const lockIcon = currentlyLocked ? "🔒" : "📄";
         let badgeClass = "badge-lv1";
+        let extraRowClass = "";
+        
         if(item.zone === 'ZONE-0') badgeClass = "badge-lv0";
         if(item.zone === 'ZONE-3') badgeClass = "badge-lv3";
+        if(item.zone === 'ZONE-X') { badgeClass = "badge-lvx"; extraRowClass = "glitch-row"; } // 새벽 파일 스타일
 
         const li = document.createElement('li');
-        li.className = `archive-item ${currentlyLocked ? 'locked' : ''}`;
+        li.className = `archive-item ${currentlyLocked ? 'locked' : ''} ${extraRowClass}`;
         li.onclick = () => handleItemClick(originalIndex, currentlyLocked);
         li.innerHTML = `<div style="flex:1;"><span class="badge ${badgeClass}">${item.zone}</span><span style="font-size:16px;">${lockIcon} ${item.title}</span></div>`;
         list.appendChild(li);
@@ -651,6 +674,21 @@ function renderList() {
 
 function handleItemClick(index, isLocked) {
     selectedItemIndex = index;
+    const item = caseDatabase[index];
+
+    // 🔥 신규: 심야 호러 기믹 파일 처리
+    if (item.id === "CASE-3AM") {
+        const hour = new Date().getHours();
+        if (hour >= 3 && hour < 5) {
+            // 진짜 3~5시일 경우 바로 열림
+            openDocumentModal(index);
+        } else {
+            // 다른 시간대일 경우 시간 불일치 에러 팝업
+            document.getElementById('timeLockModal').style.display = 'flex';
+        }
+        return;
+    }
+
     if (isLocked) {
         document.getElementById('pw-error').style.display = 'none';
         document.getElementById('pw-input').value = '';
@@ -693,7 +731,7 @@ function openDocumentModal(index) {
         } else {
             finishTyping();
         }
-    }, 2); // 텍스트가 많으므로 타이핑 속도 빠름
+    }, 2); // 빠른 타이핑
 }
 
 function skipTyping() {
@@ -736,27 +774,13 @@ function checkPassword() {
     }
 }
 
+// 🌐 언어 변환
 const langs = ['KR', 'EN', 'JP'];
 let langIdx = 0;
 const uiDict = {
-    'KR': { 
-        title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사",
-        tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
-        footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다."
-    },
-    'EN': { 
-        title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM",
-        tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
-        footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED. VIOLATORS WILL BE TERMINATED."
-    },
-    'JP': { 
-        title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課",
-        btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査",
-        tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3",
-        footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。"
-    }
+    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
+    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
 };
 
 function changeLanguage() {
@@ -801,7 +825,7 @@ document.getElementById('pw-input').addEventListener('keypress', (e) => {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal');
-        closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal');
+        closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal');
     }
 });
 let clickCount = 0;
