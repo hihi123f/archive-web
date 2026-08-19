@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[RESTRICTED] NATIONAL ANOMALY ARCHIVE</title>
+    <!-- 진짜 캡처 저장을 위한 라이브러리 추가 -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Noto+Sans+KR:wght@400;700&display=swap');
@@ -37,6 +38,7 @@
 
         .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 14px; background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative; }
 
+        /* 상단 툴바 */
         .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; flex-wrap: wrap; gap: 4px; }
         .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .tool-btn:hover { background: #00ff66; color: #000; }
@@ -337,7 +339,7 @@
     </div>
 </div>
 
-<!-- 서류 모달들 생략 없이 모두 유지 -->
+<!-- 서류 모달들 -->
 <div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
     <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
@@ -418,7 +420,6 @@ function triggerHaptic(type) {
     }
 }
 
-// 🔥 신규 업적 대폭 추가
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
@@ -450,7 +451,6 @@ function unlockAchievement(achId) {
     setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
 }
 
-// 🔥 AES 암호화 해시코드 생성 및 탭 기믹 로직
 let hashTaps = 0;
 function generateHash() {
     const hash = Array.from({length: 32}, () => Math.floor(Math.random()*16).toString(16).toUpperCase()).join('');
@@ -551,7 +551,6 @@ function submitReport() {
     }, 1500);
 }
 
-// 구역 확인 업적 트리거
 const clickedZones = new Set();
 clickedZones.add('ALL');
 function switchZone(zone, e) {
@@ -599,7 +598,47 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }});
 mapContainer.addEventListener('wheel', (e) => { e.preventDefault(); zoomMap(e.deltaY * -0.001); }, {passive: false});
 
-// 🔥 데이터베이스 변경: 비디오 배열(videos) 추가 지원
+mapContainer.addEventListener('touchstart', (e) => {
+    if(e.touches.length === 1) { isDraggingMap = true; startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; building.style.transition = 'none'; }
+    else if (e.touches.length === 2) { isDraggingMap = false; initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
+});
+mapContainer.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (isDraggingMap && e.touches.length === 1) {
+        mapRotZ -= (e.touches[0].clientX - startMouseX) * 0.8; mapRotX -= (e.touches[0].clientY - startMouseY) * 0.8; mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; updateMapTransform();
+    } else if (e.touches.length === 2 && initialPinchDist !== null) {
+        const currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); zoomMap((currentDist - initialPinchDist) * 0.005); initialPinchDist = currentDist;
+    }
+}, {passive: false});
+document.addEventListener('touchend', (e) => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; } if(e.touches.length < 2) initialPinchDist = null; });
+
+
+/* =====================================================================
+   🔥 터치 먹통 현상을 고치는 핵심 코드 복구 (startSystem 등 변수 추가)
+   ===================================================================== */
+let currentZone = 'ALL', selectedItemIndex = -1;
+
+function startSystem() {
+    triggerHaptic('tap');
+    if(new Date().getHours() >= 3 && new Date().getHours() < 5) unlockAchievement('ach_rare_2');
+    const box = document.getElementById('intro-box');
+    document.getElementById('intro-text').style.display = "none"; box.classList.add("expand-x");
+    setTimeout(() => { box.classList.add("expand-y"); }, 400);
+    setTimeout(() => { 
+        document.getElementById('intro-screen').classList.add("fade-out"); 
+        document.getElementById('main-ui').style.transition = "opacity 0.8s"; document.getElementById('main-ui').style.opacity = 1; renderList();
+    }, 700);
+    setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1000);
+}
+
+function openSpecificDocument(caseId) { 
+    closeModal('mapModal'); 
+    const idx = caseDatabase.findIndex(c => c.id === caseId); 
+    if(idx !== -1) handleItemClick(idx, false); 
+}
+/* ===================================================================== */
+
+
 const caseDatabase = [
     {
         id: "CASE-00", zone: "ZONE-0", level: "국장급 기밀", title: "[열람 인가됨] 제4특수조사과 창설 및 운영 강령", date: "1972-04-01", isLocked: false, videos: [],
