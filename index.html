@@ -510,17 +510,14 @@ function shareToInsta() {
 function submitReport() {
     triggerHaptic('tap');
     const loc = document.getElementById('rep-loc').value;
-    const date = document.getElementById('rep-date').value; // 👈 이 줄이 빠져있었습니다!
+    const date = document.getElementById('rep-date').value;
     const desc = document.getElementById('rep-desc').value;
-    
-    if(!loc || !desc) { 
-        alert("지역과 내용을 모두 입력하십시오."); 
-        return; 
-    }
+    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
     
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
 
+    // ❗ 여기에 실제 디스코드 웹훅 주소를 넣으세요!
     const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-"; 
 
     if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
@@ -540,10 +537,7 @@ function submitReport() {
         triggerHaptic('success');
         setTimeout(() => {
             closeModal('reportModal');
-            document.getElementById('rep-loc').value = ''; 
-            document.getElementById('rep-date').value = ''; 
-            document.getElementById('rep-desc').value = ''; 
-            logBox.innerText = '';
+            document.getElementById('rep-loc').value = ''; document.getElementById('rep-date').value = ''; document.getElementById('rep-desc').value = ''; logBox.innerText = '';
         }, 2000);
     }, 1500);
 }
@@ -749,7 +743,7 @@ const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
 const uiDict = {
     'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
     'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無단流출금지。違反者は統制措置の対象となります。" }
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
 };
 function changeLanguage() {
     triggerHaptic('tap'); unlockAchievement('ach_basic_2'); langIdx = (langIdx + 1) % langs.length; const dict = uiDict[langs[langIdx]];
