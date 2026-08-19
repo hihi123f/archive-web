@@ -17,14 +17,12 @@
             -webkit-tap-highlight-color: transparent; cursor: crosshair;
         }
 
-        /* 📺 CRT 스캔라인 오버레이 */
         body::before {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
             z-index: 10; background-size: 100% 3px, 6px 100%; pointer-events: none;
         }
 
-        /* 🔌 인트로 부팅 화면 */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
             background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
@@ -36,36 +34,31 @@
         .expand-y { height: 100vh !important; height: 100dvh !important; }
         .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 
-        /* 🖥️ 메인 컨테이너 */
         .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 14px; background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative; }
 
-        /* 툴바 및 버튼 */
-        .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; }
+        .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; flex-wrap: wrap; gap: 4px; }
         .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; }
         .tool-btn:hover { background: #00ff66; color: #000; }
+        .tool-btn.insta-btn { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; border: 1px solid #ff3366; text-shadow: 0 1px 2px #000; }
+
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 10px; margin-bottom: 14px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 20px; }
 
         .action-group { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-        .action-btn { flex: 1 1 30%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; transition: 0.2s; }
+        .action-btn { flex: 1 1 30%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; }
         .action-btn:hover { background: #00ff66; color: #000; }
         .action-btn.danger { background: rgba(50, 0, 0, 0.5); color: #ff8888; border-color: #ff3333; }
-        .action-btn.danger:hover { background: #ff3333; color: #000; }
         .action-btn.safe { background: rgba(0, 50, 100, 0.5); color: #88ccff; border-color: #3388ff; }
-        .action-btn.safe:hover { background: #3388ff; color: #000; }
 
         .zone-nav { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 8px; flex-wrap: wrap; }
         .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 4px; font-family: inherit; font-size: 14px; cursor: pointer; flex: 1; text-align: center; }
         .zone-btn.active { background: #00ff66; color: #000; font-weight: bold; }
 
-        /* 아카이브 목록 */
         .archive-list { list-style: none; }
         .archive-item { border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 10px; padding: 12px 14px; background: rgba(0, 30, 10, 0.3); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
         .archive-item:hover { background: #00ff66; color: #000; }
         .archive-item.locked { border-color: #ff3333; color: #ff5555; background: rgba(50, 0, 0, 0.3); text-shadow: 0 0 4px rgba(255, 51, 51, 0.5); }
-        .archive-item.locked:hover { background: #ff3333; color: #000; }
         .archive-item.glitch-row { border-color: #ff00ff; color: #fff; background: rgba(50, 0, 50, 0.5); animation: blinker 2s infinite; }
-        .archive-item.glitch-row:hover { background: #ff00ff; color: #000; }
 
         .badge { padding: 2px 6px; font-size: 12px; margin-right: 8px; font-weight: bold; }
         .badge-lv0 { background: #ffcc00; color: #000; box-shadow: 0 0 5px #ffcc00; }
@@ -74,7 +67,6 @@
         .badge-lv3 { background: #9900ff; color: #fff; }
         .badge-lvx { background: #000; color: #ff00ff; border: 1px solid #ff00ff; }
 
-        /* 📑 위키형 UI */
         .wiki-infobox { border: 2px solid #00ff66; background: rgba(0, 15, 5, 0.85); margin: 12px 0 16px; font-size: 14px; }
         .wiki-infobox-title { background: #00ff66; color: #000; font-weight: bold; padding: 4px 8px; text-align: center; font-size: 16px; }
         .wiki-row { display: flex; border-bottom: 1px dashed rgba(0, 255, 102, 0.4); }
@@ -86,24 +78,21 @@
         .wiki-warning { background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333; padding: 10px; color: #ff8888; font-size: 14px; margin: 16px 0; }
         .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
         .wiki-link { color: #3388ff; text-decoration: underline; cursor: pointer; font-weight: bold; }
-        .wiki-link:hover { color: #ff3333; background: rgba(255, 51, 51, 0.1); }
         .wiki-list { padding-left: 20px; line-height: 1.8; margin-bottom: 10px; color: #ccc; }
         .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
-        /* 📸 인스타 공유용 ID 카드 스타일 */
+        /* 📸 ID 카드 */
         .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); }
         .id-card-header { font-size: 18px; color: #00ff66; text-align: center; border-bottom: 2px dashed #00ff66; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
         .id-card-content { display: flex; gap: 15px; align-items: center; }
         .id-photo-box { width: 80px; height: 100px; background: rgba(0,255,102,0.1); border: 1px solid #00ff66; display: flex; justify-content: center; align-items: center; text-align: center; color: #00ff66; font-size: 12px; }
         .id-details { flex: 1; font-size: 14px; line-height: 1.6; }
-        .id-details span { color: #fff; font-family: 'Share Tech Mono', sans-serif; font-size: 16px; }
         .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 24px; color: #00ff66; margin-top: 15px; text-align: center; letter-spacing: 2px; }
-        .btn-insta-share { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.5); font-family: inherit; margin-bottom: 10px; font-size:16px; transition: transform 0.1s; }
-        .btn-insta-share:active { transform: scale(0.98); }
+        .btn-insta-share { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.5); font-family: inherit; margin-bottom: 10px; font-size:16px; }
 
-        /* 📎 서류 모달 (공통) */
+        /* 📎 서류 모달 */
         .paper-doc { background: #f4ebd8; color: #1a1a1a; font-family: 'Noto Serif KR', serif; padding: 20px; border: 1px solid #ccc; box-shadow: inset 0 0 50px rgba(100, 70, 30, 0.2); position: relative; overflow: hidden; }
         .top-secret-stamp { position: absolute; top: 10px; right: 10px; color: #cc0000; border: 3px solid #cc0000; font-size: 20px; font-weight: bold; padding: 5px 10px; border-radius: 5px; transform: rotate(-15deg); opacity: 0.8; pointer-events: none; }
         .paper-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; border: 2px solid #1a1a1a; }
@@ -113,28 +102,24 @@
         .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); position: relative; overflow: hidden; }
         .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
 
-        /* 🗺️ 유저 조작형 3D 인터랙티브 맵 */
+        /* 🗺️ 3D 맵 */
         .map-3d-container { position: relative; width: 100%; height: 400px; margin-top: 10px; background: #020503; border: 1px solid #00ff66; box-shadow: inset 0 0 40px rgba(0,255,102,0.15); display: flex; justify-content: center; align-items: center; overflow: hidden; perspective: 1000px; cursor: grab; touch-action: none; }
         .map-3d-container:active { cursor: grabbing; }
         .map-overlay { position: absolute; top: 10px; left: 10px; z-index: 10; color: #00ff66; font-size: 13px; pointer-events: none; text-shadow: 0 0 5px #000; line-height: 1.4; }
         .map-controls { position: absolute; bottom: 10px; right: 10px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
         .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 35px; height: 35px; font-size: 20px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .map-ctrl-btn:hover { background: #00ff66; color: #000; }
         .building-3d { position: relative; width: 160px; height: 220px; transform-style: preserve-3d; transform: rotateX(65deg) rotateZ(45deg) scale(1); transition: transform 0.1s ease-out; }
         .floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7); background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px); box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none; }
         .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
-        .f-1 { transform: translateZ(0px); }    
-        .f-2 { transform: translateZ(70px); }   
-        .f-3 { transform: translateZ(140px); }  
+        .f-1 { transform: translateZ(0px); } .f-2 { transform: translateZ(70px); } .f-3 { transform: translateZ(140px); }  
         .floor-label { position: absolute; top: 5px; left: 5px; color: #00ff66; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #000; pointer-events: none; }
         .f-b1 .floor-label { color: #ff3333; }
         .anomaly-node { position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%; transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer; pointer-events: auto; animation: pulseRed 1s infinite; }
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); } 70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
 
-        /* 폼 요소 및 모달 */
         .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
         .form-textarea { height: 100px; resize: none; }
-        .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; }
+        .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 15px; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; background: rgba(0, 0, 0, 0.92); z-index: 50; justify-content: center; align-items: center; padding: 10px; }
         .modal-content { background: #060c07; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3); padding: 16px; max-width: 650px; width: 100%; color: #d0d0d0; position: relative; max-height: 86vh; max-height: 86dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -155,33 +140,30 @@
 </head>
 <body>
 
-<!-- 🏆 업적 토스트 -->
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center;">
     <div style="font-size:13px; color:#fff;">[SYSTEM: 권한 해제]</div>
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
-<!-- 💳 프로필 모달 (인스타 공유 최적화) -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
         
-        <!-- 공유용 ID 카드 UI -->
         <div class="id-card-wrapper" id="id-card-capture">
             <div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div>
             <div class="id-card-content">
-                <div class="id-photo-box">RESTRICTED<br>FACE DATA</div>
+                <div class="id-photo-box">RESTRICTED<br>IDENTITY</div>
                 <div class="id-details">
                     AGENT ID: <span id="card-agent-id">X-9982</span><br>
                     RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1</span><br>
-                    CLEARANCE: <span id="badge-count">0</span> DATA
+                    DATA CLEAR: <span id="badge-count">0</span> FILES
                 </div>
             </div>
             <div class="id-barcode">|||||| ||||| |||||||</div>
         </div>
         
-        <button class="btn-insta-share" onclick="shareToInsta()">📸 인스타 스토리 업로드용 스캔 (클릭!)</button>
-        <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px;">※ 버튼을 눌러 스캔한 뒤 화면을 캡처하여 인스타에 공유하세요.</p>
+        <button class="btn-insta-share" onclick="shareToInsta()">📸 인스타그램 스토리 공유 (탭하여 스캔)</button>
+        <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px;">※ 위 신분증을 캡처하여 요원 권한을 공유하십시오.</p>
 
         <h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-bottom:10px;">[획득한 기밀 배지]</h3>
         <div style="max-height: 40vh; overflow-y: auto;">
@@ -190,7 +172,6 @@
     </div>
 </div>
 
-<!-- 🔌 부팅 화면 -->
 <div id="intro-screen" onclick="startSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
@@ -199,12 +180,16 @@
     </div>
 </div>
 
-<!-- 🖥️ 메인 터미널 -->
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
-        <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
-        <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
-        <button id="lang-btn" class="tool-btn" onclick="changeLanguage()" style="background:#000; color:#00ff66;">[SYS: KR]</button>
+        <div style="display:flex; gap:4px;">
+            <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
+            <button class="tool-btn insta-btn" onclick="openProfile(); shareToInsta();">[📸 INSTA ID]</button>
+        </div>
+        <div style="display:flex; gap:4px; align-items:center;">
+            <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
+            <button id="lang-btn" class="tool-btn" onclick="changeLanguage()" style="background:#000; color:#00ff66;">[SYS: KR]</button>
+        </div>
     </div>
 
     <header>
@@ -231,7 +216,6 @@
     </footer>
 </div>
 
-<!-- 🗺️ 3D 맵 모달 -->
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
     <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
@@ -262,7 +246,6 @@
     </div>
 </div>
 
-<!-- 🚨 제보 게시판 모달 -->
 <div id="reportModal" class="modal" onclick="closeModal('reportModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
@@ -276,7 +259,6 @@
     </div>
 </div>
 
-<!-- 🎓 승급 심사 (퀴즈 - 4문제 확장) 모달 -->
 <div id="quizModal" class="modal" onclick="closeModal('quizModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('quizModal')">[X]</span>
@@ -309,7 +291,6 @@
     </div>
 </div>
 
-<!-- 🕒 심야 경고 모달 -->
 <div id="timeLockModal" class="modal" style="z-index: 60;" onclick="closeModal('timeLockModal')">
     <div class="modal-content" style="text-align:center; max-width:340px; border-color:#ff00ff; background: #1a001a;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ff00ff;" onclick="closeModal('timeLockModal')">[X]</span>
@@ -319,7 +300,6 @@
     </div>
 </div>
 
-<!-- 📄 문서 열람 위키 모달 -->
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
@@ -330,7 +310,6 @@
     </div>
 </div>
 
-<!-- 🔒 비밀번호 입력 모달 -->
 <div id="passwordModal" class="modal" style="z-index: 60;" onclick="closeModal('passwordModal')">
     <div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
@@ -343,7 +322,6 @@
     </div>
 </div>
 
-<!-- 🎥 비디오 플레이어 모달 -->
 <div id="videoModal" class="modal" style="z-index:70;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; font-size:13px; margin-bottom:6px; border-bottom:1px dashed #ff3333;">
@@ -356,7 +334,6 @@
     </div>
 </div>
 
-<!-- 📜 첨부문서 팝업들 -->
 <div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
     <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
@@ -427,17 +404,18 @@
 
 <script>
 // ==========================================
-// 📱 햅틱 진동 피드백 모듈 (모바일 전용)
+// 📱 햅틱 진동 피드백 모듈 (Galaxy 브라우저 최적화)
 // ==========================================
 function triggerHaptic(type) {
-    if (!navigator.vibrate) return; // 미지원 기기 패스
-    try {
-        if (type === 'success') navigator.vibrate([100, 50, 100]); // 징-징 (경쾌)
-        else if (type === 'error') navigator.vibrate([300]); // 징- (무겁게)
-        else if (type === 'horror_denied') navigator.vibrate([50, 100, 50, 100, 50]); // 지직지직
-        else if (type === 'horror_open') navigator.vibrate([200, 100, 200, 100, 600, 200, 800]); // 심장박동 쿵-쿵-쿠웅
-        else if (type === 'tap') navigator.vibrate([30]); // 가벼운 터치
-    } catch(e) {}
+    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+        try {
+            if (type === 'success') navigator.vibrate([100, 50, 100]); 
+            else if (type === 'error') navigator.vibrate([400]); 
+            else if (type === 'horror_denied') navigator.vibrate([50, 80, 50, 80, 50]); 
+            else if (type === 'horror_open') navigator.vibrate([200, 100, 300, 100, 700]); 
+            else if (type === 'tap') navigator.vibrate(40); 
+        } catch(e) {}
+    }
 }
 
 // ==========================================
@@ -493,28 +471,37 @@ function openProfile() {
     const isLvl2 = localStorage.getItem('ach_quiz') === 'true';
     const rankTxt = isLvl2 ? "LEVEL 2 (특무 조사관)" : "LEVEL 1 (수습)";
     document.getElementById('user-level').innerText = rankTxt;
-    
-    // 고유 ID 번호 임의 생성
     document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
     document.getElementById('profileModal').style.display = 'flex';
 }
 
-// 📸 인스타 공유 기능 (화면 플래시 연출)
+// 📸 Web Share API 및 플래시 연출
 function shareToInsta() {
     triggerHaptic('success');
+    
     // 카메라 플래시 연출
     const flash = document.createElement('div');
     flash.style.position = 'fixed'; flash.style.top = '0'; flash.style.left = '0';
-    flash.style.width = '100%'; flash.style.height = '100%';
-    flash.style.backgroundColor = 'white'; flash.style.zIndex = '99999';
-    flash.style.transition = 'opacity 0.5s';
+    flash.style.width = '100vw'; flash.style.height = '100vh';
+    flash.style.backgroundColor = 'white'; flash.style.zIndex = '999999';
+    flash.style.transition = 'opacity 0.4s ease-out';
     document.body.appendChild(flash);
     
-    setTimeout(() => { flash.style.opacity = '0'; }, 100);
-    setTimeout(() => { 
-        flash.remove(); 
-        alert("[SYSTEM] ID 카드가 스캔되었습니다.\n이 화면을 캡처하여 인스타그램 스토리에 공유하세요!");
-    }, 600);
+    setTimeout(() => { flash.style.opacity = '0'; }, 80);
+    setTimeout(() => { flash.remove(); }, 500);
+
+    // 모바일 기본 공유 시트 호출 시도
+    if (navigator.share) {
+        navigator.share({
+            title: '[NATIONAL ANOMALY ARCHIVE] 조사관 신분증',
+            text: `[제4특수조사과 기밀 전산망]\n인가 등급: ${document.getElementById('user-level').innerText}\n요원 코드: ${document.getElementById('card-agent-id').innerText}`,
+            url: window.location.href
+        }).catch(() => {});
+    } else {
+        setTimeout(() => {
+            alert("[SYSTEM] ID 카드가 스캔되었습니다.\n이 화면을 캡처하여 인스타그램 스토리에 공유하십시오!");
+        }, 550);
+    }
 }
 
 // ==========================================
@@ -530,7 +517,6 @@ function submitReport() {
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
 
-    // 🔥 본인의 디스코드 웹훅 주소를 아래에 넣으세요!
     const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-"; 
 
     if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
@@ -641,6 +627,7 @@ const caseDatabase = [
 let currentZone = 'ALL', currentVideoUrl = '', selectedItemIndex = -1, typeInterval, fullModalHTML = "", isTyping = false;
 
 function startSystem() {
+    triggerHaptic('tap');
     if(new Date().getHours() >= 3 && new Date().getHours() < 5) unlockAchievement('ach_rare_2');
     const box = document.getElementById('intro-box');
     document.getElementById('intro-text').style.display = "none"; box.classList.add("expand-x");
@@ -751,12 +738,11 @@ function checkPassword() {
     }
 }
 
-// 🌐 언어 변환
 const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
 const uiDict = {
     'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
     'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無단流출금지。違反者は統制措置の対象となります。" }
 };
 function changeLanguage() {
     triggerHaptic('tap'); unlockAchievement('ach_basic_2'); langIdx = (langIdx + 1) % langs.length; const dict = uiDict[langs[langIdx]];
