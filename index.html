@@ -83,7 +83,7 @@
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
-        /* 📸 ID 카드 */
+        /* 📸 ID 카드 스타일 */
         .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); }
         .id-card-header { font-size: 18px; color: #00ff66; text-align: center; border-bottom: 2px dashed #00ff66; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
         .id-card-content { display: flex; gap: 15px; align-items: center; }
@@ -149,6 +149,7 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
         
+        <!-- 📸 사진으로 보여주신 그 부분 맞습니다! 4문제, 인스타ID 다 들어있습니다! -->
         <div class="id-card-wrapper" id="id-card-capture">
             <div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div>
             <div class="id-card-content">
@@ -396,7 +397,7 @@
             <div style="font-size: 16px; line-height: 1.8; font-style: italic;">
                 <b>10/12:</b> 방송실 주전원을 끊고 문을 용접했다. 그런데도 새벽 2시 14분만 되면 마이크 하울링 소리가 들린다. 누가 방송을 하는 건가.<br><br>
                 <b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 우리 학교엔 붉은 명찰이 없다. 눈을 마주치면 안 된다. 시멘트가 더 필요하다. 수영장을 막아야 해.<br><br>
-                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 한다. 가야겠다.
+                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 기야겠다.
             </div>
         </div>
     </div>
@@ -510,14 +511,18 @@ function shareToInsta() {
 function submitReport() {
     triggerHaptic('tap');
     const loc = document.getElementById('rep-loc').value;
-    const date = document.getElementById('rep-date').value;
+    const date = document.getElementById('rep-date').value; 
     const desc = document.getElementById('rep-desc').value;
-    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
+    
+    if(!loc || !desc) { 
+        alert("지역과 내용을 모두 입력하십시오."); 
+        return; 
+    }
     
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
 
-    // ❗ 여기에 실제 디스코드 웹훅 주소를 넣으세요!
+    // ❗ 디스코드 주소 적용 완료
     const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-"; 
 
     if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
@@ -743,7 +748,7 @@ const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
 const uiDict = {
     'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
     'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ3: "ZONE-3", footer: "WARNING: 無단流출금지。違反者は統制措置の対象となります。" }
 };
 function changeLanguage() {
     triggerHaptic('tap'); unlockAchievement('ach_basic_2'); langIdx = (langIdx + 1) % langs.length; const dict = uiDict[langs[langIdx]];
