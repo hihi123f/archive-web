@@ -510,9 +510,13 @@ function shareToInsta() {
 function submitReport() {
     triggerHaptic('tap');
     const loc = document.getElementById('rep-loc').value;
-    const date = document.getElementById('rep-date').value;
+    const date = document.getElementById('rep-date').value; // 👈 이 줄이 빠져있었습니다!
     const desc = document.getElementById('rep-desc').value;
-    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
+    
+    if(!loc || !desc) { 
+        alert("지역과 내용을 모두 입력하십시오."); 
+        return; 
+    }
     
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
@@ -536,7 +540,10 @@ function submitReport() {
         triggerHaptic('success');
         setTimeout(() => {
             closeModal('reportModal');
-            document.getElementById('rep-loc').value = ''; document.getElementById('rep-date').value = ''; document.getElementById('rep-desc').value = ''; logBox.innerText = '';
+            document.getElementById('rep-loc').value = ''; 
+            document.getElementById('rep-date').value = ''; 
+            document.getElementById('rep-desc').value = ''; 
+            logBox.innerText = '';
         }, 2000);
     }, 1500);
 }
