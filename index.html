@@ -38,7 +38,6 @@
 
         .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 14px; background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative; }
 
-        /* 상단 툴바 */
         .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; flex-wrap: wrap; gap: 4px; }
         .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .tool-btn:hover { background: #00ff66; color: #000; }
@@ -85,7 +84,6 @@
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
-        /* 📸 기밀스러운 ID 카드 & 저장 버튼 */
         .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); }
         .id-card-header { font-size: 18px; color: #00ff66; text-align: center; border-bottom: 2px dashed #00ff66; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
         .id-card-content { display: flex; gap: 15px; align-items: center; }
@@ -93,11 +91,9 @@
         .id-details { flex: 1; font-size: 14px; line-height: 1.6; }
         .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 24px; color: #00ff66; margin-top: 15px; text-align: center; letter-spacing: 2px; }
         
-        /* 핑크 버튼 제거, 기밀 해커 스타일 추출 버튼으로 교체 */
         .btn-export { background: rgba(0, 255, 102, 0.1); border: 1px dashed #00ff66; color: #00ff66; padding: 10px; width: 100%; font-family: inherit; font-size: 15px; cursor: pointer; text-align: center; margin-bottom: 10px; transition: all 0.2s; font-weight: bold; }
         .btn-export:hover { background: #00ff66; color: #000; }
 
-        /* 📎 서류 모달 */
         .paper-doc { background: #f4ebd8; color: #1a1a1a; font-family: 'Noto Serif KR', serif; padding: 20px; border: 1px solid #ccc; box-shadow: inset 0 0 50px rgba(100, 70, 30, 0.2); position: relative; overflow: hidden; }
         .top-secret-stamp { position: absolute; top: 10px; right: 10px; color: #cc0000; border: 3px solid #cc0000; font-size: 20px; font-weight: bold; padding: 5px 10px; border-radius: 5px; transform: rotate(-15deg); opacity: 0.8; pointer-events: none; }
         .paper-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; border: 2px solid #1a1a1a; }
@@ -107,7 +103,6 @@
         .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); position: relative; overflow: hidden; }
         .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
 
-        /* 🗺️ 3D 맵 */
         .map-3d-container { position: relative; width: 100%; height: 400px; margin-top: 10px; background: #020503; border: 1px solid #00ff66; box-shadow: inset 0 0 40px rgba(0,255,102,0.15); display: flex; justify-content: center; align-items: center; overflow: hidden; perspective: 1000px; cursor: grab; touch-action: none; }
         .map-3d-container:active { cursor: grabbing; }
         .map-overlay { position: absolute; top: 10px; left: 10px; z-index: 10; color: #00ff66; font-size: 13px; pointer-events: none; text-shadow: 0 0 5px #000; line-height: 1.4; }
@@ -130,7 +125,8 @@
         .modal-content { background: #060c07; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3); padding: 16px; max-width: 650px; width: 100%; color: #d0d0d0; position: relative; max-height: 86vh; max-height: 86dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10; }
 
-        .btn-video { display: none; width: 100%; margin: 14px 0 6px; background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333; color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: bold; text-align: center; }
+        /* 🔥 버튼이 처음부터 보이도록 display 기본값 설정 */
+        .btn-video { display: block; width: 100%; margin: 14px 0 6px; background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333; color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: bold; text-align: center; }
         .video-box { background: #000; border: 2px solid #ff3333; width: 92vw; max-width: 380px; padding: 8px; }
         .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
@@ -154,7 +150,6 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
         
-        <!-- 📸 캡처 대상 ID 카드 -->
         <div class="id-card-wrapper" id="id-card-capture">
             <div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div>
             <div class="id-card-content">
@@ -168,7 +163,6 @@
             <div class="id-barcode">|||||| ||||| |||||||</div>
         </div>
         
-        <!-- 🔥 기밀 테마 추출 버튼 (html2canvas로 이미지 자동 생성 및 저장) -->
         <button class="btn-export" onclick="exportIDCard()">[데이터 추출 : ID 카드 이미지 발급]</button>
         <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px;">※ 추출된 이미지(png)를 인스타그램 스토리에 공유하여 신분을 증명하십시오.</p>
 
@@ -189,7 +183,6 @@
 
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
-        <!-- 🔥 상단 툴바: 다시 깔끔하게 1개 버튼으로 통일 -->
         <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
         <div style="display:flex; gap:4px; align-items:center;">
             <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
@@ -221,7 +214,6 @@
     </footer>
 </div>
 
-<!-- 나머지 모달 코드들 (동일) -->
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
     <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
@@ -239,7 +231,7 @@
             <div class="building-3d" id="building3d">
                 <div class="floor f-b1">
                     <span class="floor-label">B1: POOL</span>
-                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('-01')"></div>
+                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
                 </div>
                 <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
                 <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
@@ -312,7 +304,8 @@
         <div style="font-size:12px; color:#aaa; margin-bottom:4px;">※ 화면을 탭하면 해독이 즉시 완료됩니다.</div>
         <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div>
         <div id="modalBody" style="font-size: 15px; line-height: 1.6; min-height: 120px;"></div>
-        <button id="videoPlayBtn" class="btn-video" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED : 감시 영상 재생]</button>
+        <!-- 🔥 버튼이 항시 보이도록 변경 -->
+        <button id="videoPlayBtn" class="btn-video" style="display:none;" onclick="openVideoPlayer()">▶ [SURVEILLANCE FEED : 감시 영상 재생]</button>
     </div>
 </div>
 
@@ -409,24 +402,18 @@
 </div>
 
 <script>
-// ==========================================
-// 📱 햅틱 진동 피드백 모듈 (전체적으로 세기 약화)
-// ==========================================
 function triggerHaptic(type) {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
         try {
-            if (type === 'success') navigator.vibrate([30, 30, 30]); // 지징-징 (가볍게)
-            else if (type === 'error') navigator.vibrate([150]); // 징- (짧고 굵게)
-            else if (type === 'horror_denied') navigator.vibrate([30, 50, 30, 50, 30]); // 스스슥 (벌레 기어가듯)
-            else if (type === 'horror_open') navigator.vibrate([100, 50, 150, 50, 300]); // 심박수 (징- 징- 지이잉)
-            else if (type === 'tap') navigator.vibrate(15); // 매우 가벼운 터치
+            if (type === 'success') navigator.vibrate([30, 30, 30]); 
+            else if (type === 'error') navigator.vibrate([150]); 
+            else if (type === 'horror_denied') navigator.vibrate([30, 50, 30, 50, 30]); 
+            else if (type === 'horror_open') navigator.vibrate([100, 50, 150, 50, 300]); 
+            else if (type === 'tap') navigator.vibrate(15); 
         } catch(e) {}
     }
 }
 
-// ==========================================
-// 🏆 업적 시스템 로직
-// ==========================================
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
@@ -484,25 +471,21 @@ function openProfile() {
     document.getElementById('profileModal').style.display = 'flex';
 }
 
-// 📸 html2canvas를 이용한 실제 이미지 파일 자동 저장 기능
 function exportIDCard() {
     triggerHaptic('success');
     const cardElement = document.getElementById('id-card-capture');
-    
-    // 시각적 피드백 (스캔되는 느낌)
     cardElement.style.boxShadow = "0 0 30px #fff";
     setTimeout(() => { cardElement.style.boxShadow = "0 0 15px rgba(0, 255, 102, 0.3)"; }, 300);
 
-    // html2canvas 라이브러리로 div를 캔버스로 변환 후 다운로드
     if (typeof html2canvas !== 'undefined') {
         html2canvas(cardElement, {
             backgroundColor: "#05100a",
-            scale: 2 // 고화질 캡처
+            scale: 2 
         }).then(canvas => {
             let link = document.createElement('a');
-            link.download = 'SEC04_AGENT_ID.png'; // 다운로드 파일명
+            link.download = 'SEC04_AGENT_ID.png'; 
             link.href = canvas.toDataURL('image/png');
-            link.click(); // 자동 다운로드 실행
+            link.click(); 
             alert("[SYSTEM] ID 카드가 암호화된 이미지 파일로 저장되었습니다.\n해당 파일을 인스타그램 등 보안 채널에 공유하십시오.");
         }).catch(err => {
             alert("[SYSTEM] 저장 오류 발생. 화면을 직접 캡처해 주십시오.");
@@ -512,9 +495,6 @@ function exportIDCard() {
     }
 }
 
-// ==========================================
-// 🚨 제보 전송 (Discord Webhook)
-// ==========================================
 function submitReport() {
     triggerHaptic('tap');
     const loc = document.getElementById('rep-loc').value;
@@ -706,11 +686,22 @@ function handleItemClick(index, isLocked) {
     }
 }
 
+// 🔥 문서를 열자마자 버튼이 보이게 하는 핵심 수정!
 function openDocumentModal(index) {
     const item = caseDatabase[index];
     document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
-    document.getElementById('videoPlayBtn').style.display = 'none'; document.getElementById('archiveModal').style.display = 'flex';
-    currentVideoUrl = item.videoUrl; fullModalHTML = item.content;
+    document.getElementById('archiveModal').style.display = 'flex';
+    
+    currentVideoUrl = item.videoUrl; 
+    fullModalHTML = item.content;
+    
+    // 비디오 주소가 있으면 창을 열자마자 바로 버튼을 띄움
+    if(currentVideoUrl) {
+        document.getElementById('videoPlayBtn').style.display = 'block';
+    } else {
+        document.getElementById('videoPlayBtn').style.display = 'none';
+    }
+
     const bodyBox = document.getElementById('modalBody'); bodyBox.innerHTML = '';
     clearInterval(typeInterval); isTyping = true;
     let i = 0, isTag = false, currentHTML = "";
@@ -725,7 +716,7 @@ function openDocumentModal(index) {
 }
 
 function skipTyping() { if (isTyping) finishTyping(); }
-function finishTyping() { clearInterval(typeInterval); document.getElementById('modalBody').innerHTML = fullModalHTML; if (currentVideoUrl) document.getElementById('videoPlayBtn').style.display = 'block'; isTyping = false; }
+function finishTyping() { clearInterval(typeInterval); document.getElementById('modalBody').innerHTML = fullModalHTML; isTyping = false; }
 
 function checkPassword() {
     const input = document.getElementById('pw-input').value.toUpperCase().trim();
