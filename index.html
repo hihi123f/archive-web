@@ -149,7 +149,6 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
         
-        <!-- 📸 사진으로 보여주신 그 부분 맞습니다! 4문제, 인스타ID 다 들어있습니다! -->
         <div class="id-card-wrapper" id="id-card-capture">
             <div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div>
             <div class="id-card-content">
@@ -185,7 +184,7 @@
     <div class="top-toolbar">
         <div style="display:flex; gap:4px;">
             <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
-            <button class="tool-btn insta-btn" onclick="openProfile(); shareToInsta();">[📸 INSTA ID]</button>
+            <button class="tool-btn insta-btn" onclick="openProfile(); setTimeout(shareToInsta, 200);">[📸 INSTA ID]</button>
         </div>
         <div style="display:flex; gap:4px; align-items:center;">
             <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
@@ -397,16 +396,13 @@
             <div style="font-size: 16px; line-height: 1.8; font-style: italic;">
                 <b>10/12:</b> 방송실 주전원을 끊고 문을 용접했다. 그런데도 새벽 2시 14분만 되면 마이크 하울링 소리가 들린다. 누가 방송을 하는 건가.<br><br>
                 <b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 우리 학교엔 붉은 명찰이 없다. 눈을 마주치면 안 된다. 시멘트가 더 필요하다. 수영장을 막아야 해.<br><br>
-                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 기야겠다.
+                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 한다. 가야겠다.
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// ==========================================
-// 📱 햅틱 진동 피드백 모듈 (Galaxy 브라우저 최적화)
-// ==========================================
 function triggerHaptic(type) {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
         try {
@@ -419,9 +415,6 @@ function triggerHaptic(type) {
     }
 }
 
-// ==========================================
-// 🏆 업적 시스템 로직
-// ==========================================
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
@@ -472,15 +465,16 @@ function openProfile() {
     const isLvl2 = localStorage.getItem('ach_quiz') === 'true';
     const rankTxt = isLvl2 ? "LEVEL 2 (특무 조사관)" : "LEVEL 1 (수습)";
     document.getElementById('user-level').innerText = rankTxt;
-    document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
+    
+    if(!document.getElementById('card-agent-id').innerText.startsWith('X-')) {
+        document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
+    }
     document.getElementById('profileModal').style.display = 'flex';
 }
 
-// 📸 Web Share API 및 플래시 연출
 function shareToInsta() {
     triggerHaptic('success');
     
-    // 카메라 플래시 연출
     const flash = document.createElement('div');
     flash.style.position = 'fixed'; flash.style.top = '0'; flash.style.left = '0';
     flash.style.width = '100vw'; flash.style.height = '100vh';
@@ -491,7 +485,6 @@ function shareToInsta() {
     setTimeout(() => { flash.style.opacity = '0'; }, 80);
     setTimeout(() => { flash.remove(); }, 500);
 
-    // 모바일 기본 공유 시트 호출 시도
     if (navigator.share) {
         navigator.share({
             title: '[NATIONAL ANOMALY ARCHIVE] 조사관 신분증',
@@ -505,9 +498,6 @@ function shareToInsta() {
     }
 }
 
-// ==========================================
-// 🚨 제보 전송 (Discord Webhook)
-// ==========================================
 function submitReport() {
     triggerHaptic('tap');
     const loc = document.getElementById('rep-loc').value;
@@ -522,7 +512,6 @@ function submitReport() {
     const logBox = document.getElementById('report-log');
     logBox.innerText = "> 데이터 암호화 중...\n";
 
-    // ❗ 디스코드 주소 적용 완료
     const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-"; 
 
     if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
@@ -564,7 +553,6 @@ function submitQuiz() {
     const q3 = document.querySelector('input[name="q3"]:checked');
     const q4 = document.querySelector('input[name="q4"]:checked');
     
-    // 정답: 2, 1, 2, 2
     if(q1?.value === "2" && q2?.value === "1" && q3?.value === "2" && q4?.value === "2") {
         triggerHaptic('success');
         unlockAchievement('ach_quiz');
@@ -577,7 +565,6 @@ function submitQuiz() {
     }
 }
 
-// 🗺️ 3D 맵 인터랙션 컨트롤
 let mapRotX = 65, mapRotZ = 45, mapScale = 1, isDraggingMap = false, startMouseX = 0, startMouseY = 0, initialPinchDist = null;
 const mapContainer = document.getElementById('map3dArea'), building = document.getElementById('building3d');
 function updateMapTransform() { building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`; }
@@ -608,9 +595,6 @@ document.addEventListener('touchend', (e) => { if(isDraggingMap) { isDraggingMap
 
 function openSpecificDocument(caseId) { closeModal('mapModal'); const idx = caseDatabase.findIndex(c => c.id === caseId); if(idx !== -1) handleItemClick(idx, false); }
 
-// ==========================================
-// 📚 복구 및 대폭 확장된 위키 데이터베이스
-// ==========================================
 const caseDatabase = [
     {
         id: "CASE-00", zone: "ZONE-0", level: "국장급 기밀", title: "[열람 인가됨] 제4특수조사과 창설 및 운영 강령", date: "1972-04-01", isLocked: false, videoUrl: "",
