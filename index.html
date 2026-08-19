@@ -24,14 +24,14 @@
             cursor: crosshair;
         }
 
-        /* 📺 CRT 스캔라인 오버레이 */
+        /* 📺 CRT 스캔라인 */
         body::before {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
             z-index: 10; background-size: 100% 3px, 6px 100%; pointer-events: none;
         }
 
-        /* 🔌 인트로 부팅 화면 */
+        /* 🔌 인트로 부팅 */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
             background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
@@ -94,89 +94,62 @@
         .wiki-h3 { color: #88ffaa; font-size: 15px; margin: 14px 0 6px; font-weight: bold; border-left: 3px solid #00ff66; padding-left: 8px; }
         .wiki-warning { background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333; padding: 10px; color: #ff8888; font-size: 14px; margin: 16px 0; }
         .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
-        .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
+        
+        /* 🔥 신규: 위키 하이퍼링크 스타일 */
+        .wiki-link { color: #3388ff; text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .wiki-link:hover { color: #ff3333; background: rgba(255, 51, 51, 0.1); }
+        .wiki-list { padding-left: 20px; line-height: 1.8; margin-bottom: 10px; color: #ccc; }
 
         .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
         .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
 
-        /* =========================================
-           🗺️ 유저 조작형 3D 인터랙티브 맵
-           ========================================= */
+        /* 📎 서류 모달 스타일 (공통) */
+        .paper-doc { background: #f4ebd8; color: #1a1a1a; font-family: 'Noto Serif KR', serif; padding: 20px; border: 1px solid #ccc; box-shadow: inset 0 0 50px rgba(100, 70, 30, 0.2); position: relative; overflow: hidden; }
+        .top-secret-stamp { position: absolute; top: 10px; right: 10px; color: #cc0000; border: 3px solid #cc0000; font-size: 20px; font-weight: bold; padding: 5px 10px; border-radius: 5px; transform: rotate(-15deg); opacity: 0.8; pointer-events: none; }
+        .paper-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; border: 2px solid #1a1a1a; }
+        .paper-table th, .paper-table td { border: 1px solid #1a1a1a; padding: 8px; text-align: left; }
+        .paper-table th { background: #e0d5c1; width: 35%; font-weight: bold; text-align: center; }
+
+        /* 경찰 조서 질감 */
+        .paper-police { background: #e6ebf0; color: #111; font-family: 'Noto Sans KR', sans-serif; border: 2px solid #555; padding: 20px; position: relative; }
+        /* 교장 수첩 질감 */
+        .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); }
+        .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
+
+        /* 🗺️ 유저 조작형 3D 인터랙티브 맵 */
         .map-3d-container {
-            position: relative; width: 100%; height: 400px; margin-top: 10px;
-            background: #020503; border: 1px solid #00ff66;
-            box-shadow: inset 0 0 40px rgba(0,255,102,0.15);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; perspective: 1000px; 
-            cursor: grab; touch-action: none; /* 드래그 중 스크롤 방지 */
+            position: relative; width: 100%; height: 400px; margin-top: 10px; background: #020503; border: 1px solid #00ff66;
+            box-shadow: inset 0 0 40px rgba(0,255,102,0.15); display: flex; justify-content: center; align-items: center;
+            overflow: hidden; perspective: 1000px; cursor: grab; touch-action: none;
         }
         .map-3d-container:active { cursor: grabbing; }
-        
-        .map-overlay {
-            position: absolute; top: 10px; left: 10px; z-index: 10;
-            color: #00ff66; font-size: 13px; pointer-events: none;
-            text-shadow: 0 0 5px #000; line-height: 1.4;
-        }
-
-        /* 컨트롤 패널 (우측 하단) */
-        .map-controls {
-            position: absolute; bottom: 10px; right: 10px; z-index: 10;
-            display: flex; flex-direction: column; gap: 5px;
-        }
+        .map-overlay { position: absolute; top: 10px; left: 10px; z-index: 10; color: #00ff66; font-size: 13px; pointer-events: none; text-shadow: 0 0 5px #000; line-height: 1.4; }
+        .map-controls { position: absolute; bottom: 10px; right: 10px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
         .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 30px; height: 30px; font-size: 18px; cursor: pointer; font-weight: bold; border-radius: 4px; }
         .map-ctrl-btn:hover { background: #00ff66; color: #000; }
-
-        /* 허공에 뜬 건물 몸체 */
-        .building-3d {
-            position: relative; width: 160px; height: 220px;
-            transform-style: preserve-3d;
-            /* 초기 각도 설정, JS로 유저가 드래그하면 변함 */
-            transform: rotateX(65deg) rotateZ(45deg) scale(1); 
-            transition: transform 0.1s ease-out; /* 부드러운 드래그/줌 */
-        }
-
+        .building-3d { position: relative; width: 160px; height: 220px; transform-style: preserve-3d; transform: rotateX(65deg) rotateZ(45deg) scale(1); transition: transform 0.1s ease-out; }
         .floor {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border: 2px solid rgba(0, 255, 102, 0.7);
-            background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px),
-                        repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px);
-            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2);
-            transform-style: preserve-3d; pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7);
+            background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px);
+            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none;
         }
-        /* 각 층 높이 */
         .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
         .f-1 { transform: translateZ(0px); }    
         .f-2 { transform: translateZ(70px); }   
         .f-3 { transform: translateZ(140px); }  
-
-        .floor-label {
-            position: absolute; top: 5px; left: 5px;
-            color: #00ff66; font-size: 14px; font-weight: bold;
-            text-shadow: 0 0 5px #000; pointer-events: none;
-        }
+        .floor-label { position: absolute; top: 5px; left: 5px; color: #00ff66; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #000; pointer-events: none; }
         .f-b1 .floor-label { color: #ff3333; }
-
-        /* 변칙 노드는 클릭 가능해야 하므로 pointer-events: auto */
         .anomaly-node {
-            position: absolute; width: 16px; height: 16px;
-            background: #ff3333; border-radius: 50%;
-            transform: translate(-50%, -50%) translateZ(1px);
-            box-shadow: 0 0 15px #ff3333; cursor: pointer;
-            pointer-events: auto; /* 클릭 허용 */
-            animation: pulseRed 1s infinite;
+            position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%;
+            transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer;
+            pointer-events: auto; animation: pulseRed 1s infinite;
         }
-        @keyframes pulseRed {
-            0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
-        }
-        .anomaly-node:hover { background: #fff; box-shadow: 0 0 25px #fff; }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); } 70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
 
         /* 폼 입력 (제보/퀴즈) */
         .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
         .form-textarea { height: 100px; resize: none; }
         .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; }
-        .quiz-label:hover { background: rgba(0,255,102,0.3); }
 
         /* 모달 공통 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; background: rgba(0, 0, 0, 0.92); z-index: 50; justify-content: center; align-items: center; padding: 10px; }
@@ -184,7 +157,6 @@
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10; }
 
         .btn-video { display: none; width: 100%; margin: 14px 0 6px; background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333; color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: bold; text-align: center; }
-        .btn-video:hover { background: #ff3333; color: #000; }
         .video-box { background: #000; border: 2px solid #ff3333; width: 92vw; max-width: 380px; padding: 8px; }
         .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
@@ -199,11 +171,13 @@
 </head>
 <body>
 
+<!-- 업적 토스트 -->
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center;">
     <div style="font-size:13px; color:#fff;">[SYSTEM: 권한 해제]</div>
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
+<!-- 프로필 모달 -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
@@ -218,6 +192,7 @@
     </div>
 </div>
 
+<!-- 부팅 화면 -->
 <div id="intro-screen" onclick="startSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
@@ -226,6 +201,7 @@
     </div>
 </div>
 
+<!-- 메인 터미널 -->
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
         <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
@@ -257,34 +233,28 @@
     </footer>
 </div>
 
+<!-- 🗺️ 3D 맵 모달 -->
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
     <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
         <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
-        
         <div class="map-3d-container" id="map3dArea">
             <div class="map-overlay">
                 > FACILITY: 청하공고<br>
                 > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
                 > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
             </div>
-
             <div class="map-controls">
                 <button class="map-ctrl-btn" onclick="zoomMap(0.2)">+</button>
                 <button class="map-ctrl-btn" onclick="zoomMap(-0.2)">-</button>
             </div>
-            
             <div class="building-3d" id="building3d">
                 <div class="floor f-b1">
                     <span class="floor-label">B1: POOL</span>
                     <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="openSpecificDocument('CASE-01')"></div>
                 </div>
-                <div class="floor f-1">
-                    <span class="floor-label">1F: LOBBY</span>
-                </div>
-                <div class="floor f-2">
-                    <span class="floor-label">2F: LAB</span>
-                </div>
+                <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
+                <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
                 <div class="floor f-3">
                     <span class="floor-label">3F: CLASS</span>
                     <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="openSpecificDocument('CASE-01')"></div>
@@ -294,6 +264,7 @@
     </div>
 </div>
 
+<!-- 🚨 제보 게시판 모달 -->
 <div id="reportModal" class="modal" onclick="closeModal('reportModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
@@ -307,6 +278,7 @@
     </div>
 </div>
 
+<!-- 🎓 승급 심사 (퀴즈) 모달 -->
 <div id="quizModal" class="modal" onclick="closeModal('quizModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('quizModal')">[X]</span>
@@ -315,11 +287,9 @@
             <p style="margin-bottom:10px; color:#ddd;">Q1. 교내 방송에서 "창밖의 소리에 응답하지 마십시오"라는 안내가 나왔다. 행동 지침은?</p>
             <label class="quiz-label"><input type="radio" name="q1" value="1"> 밖을 내다보며 원인을 찾는다.</label>
             <label class="quiz-label"><input type="radio" name="q1" value="2"> 바닥에 엎드려 귀를 막고 대기한다.</label>
-
             <p style="margin-bottom:10px; margin-top:15px; color:#ddd;">Q2. 방탈출 매장 지하에서 15m 수직 계단을 발견했다. 후속 조치는?</p>
             <label class="quiz-label"><input type="radio" name="q2" value="1"> 즉시 콘크리트로 완전 매립 및 봉인한다.</label>
             <label class="quiz-label"><input type="radio" name="q2" value="2"> 계단 아래로 구조대를 파견한다.</label>
-
             <button class="tool-btn" style="width:100%; background:#3388ff; color:#000; margin-top:15px;" onclick="submitQuiz()">결과 제출</button>
             <p id="quiz-error" style="color:#ff3333; margin-top:10px; font-weight:bold; display:none;" class="blink">불합격: 조사 수칙을 다시 숙지하십시오.</p>
         </div>
@@ -331,6 +301,7 @@
     </div>
 </div>
 
+<!-- 📄 문서 열람 위키 모달 -->
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation(); skipTyping();">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
@@ -341,6 +312,7 @@
     </div>
 </div>
 
+<!-- 🔒 비밀번호 입력 모달 -->
 <div id="passwordModal" class="modal" style="z-index: 60;" onclick="closeModal('passwordModal')">
     <div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
@@ -353,6 +325,7 @@
     </div>
 </div>
 
+<!-- 🎥 비디오 플레이어 모달 -->
 <div id="videoModal" class="modal" style="z-index:70;" onclick="closeVideoPlayer()">
     <div class="video-box" onclick="event.stopPropagation()">
         <div style="display:flex; justify-content:space-between; color:#ff3333; font-size:13px; margin-bottom:6px; border-bottom:1px dashed #ff3333;">
@@ -365,9 +338,60 @@
     </div>
 </div>
 
+<!-- 📜 신규: 첨부문서 팝업들 (토지대장, 경찰조서, 교장수첩) -->
+<div id="landRegModal" class="modal" style="z-index: 80;" onclick="closeModal('landRegModal')">
+    <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('landRegModal')">[X]</span>
+        <div class="paper-doc">
+            <div class="top-secret-stamp">극 비<br>CLASSIFIED</div>
+            <h3 style="text-align:center; text-decoration:underline; margin-bottom: 20px; margin-top: 10px;">건축물대장 및 토지조사 특이사항 보고</h3>
+            <table class="paper-table">
+                <tr><th>문서 번호</th><td>SEC04-1983-009</td></tr>
+                <tr><th>대상 소재지</th><td>강원도 [검열삭제] 산 42-1 (청하공업고등학교 부지)</td></tr>
+                <tr><th>조사관</th><td>현장요원 박ㅇㅇ</td></tr>
+            </table>
+            <div style="margin-top: 20px; font-size: 14px; line-height: 1.6;">
+                본 부지는 화강암반으로 이루어져 있어 <b>지하 3m 이상 굴착이 불가함</b>. 도면에도 지하 설계는 없음.<br><br>
+                그러나 1983년 11월 점검 중 체육관 하부에서 <b><span style="background:#1a1a1a; color:#1a1a1a;">수심을 알 수 없는 거대한 지하시설(현 수영장)</span></b>이 이미 완성된 채 발견됨.<br><br>
+                물에서는 짙은 비린내와 알 수 없는 진동이 감지됨. <i>국장 지시: 일반 수영장으로 위장 후 은폐할 것.</i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="policeModal" class="modal" style="z-index: 80;" onclick="closeModal('policeModal')">
+    <div class="modal-content" style="background:#000; border-color:#fff; max-width:500px;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#fff;" onclick="closeModal('policeModal')">[X]</span>
+        <div class="paper-police">
+            <h3 style="text-align:center; border-bottom:2px solid #111; padding-bottom:10px; margin-bottom: 15px;">[ 내 사 보 고 서 ]</h3>
+            <p><b>사건번호:</b> 98-수-041<br><b>수사관:</b> 형사과 경위 이ㅇㅇ</p>
+            <div style="margin-top: 15px; font-size: 14px; line-height: 1.6;">
+                수영장 배수 작업 완료. 바닥에서 특이사항 발견. 배수구 안쪽에서 <b>다수의 손톱자국 및 지속적인 마찰음(긁는 소리)</b> 발생 확인.<br><br>
+                현장에서 실종된 학생 3명의 교복을 발견하였으나, 수거된 교복은 총 4벌임. 추가된 1벌의 명찰은 붉은색이며 이름이 마모되어 식별 불가.<br><br>
+                (상부 지시로 단순 가출로 종결 처리함)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="diaryModal" class="modal" style="z-index: 80;" onclick="closeModal('diaryModal')">
+    <div class="modal-content" style="background:#000; border-color:#ff3333; max-width:450px;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ff3333;" onclick="closeModal('diaryModal')">[X]</span>
+        <div class="paper-diary">
+            <div class="blood-stain"></div>
+            <h3 style="font-size:18px; margin-bottom:15px; color:#520;">[초대 교장의 수첩 조각]</h3>
+            <div style="font-size: 16px; line-height: 1.8; font-style: italic;">
+                <b>10/12:</b> 방송실 주전원을 끊고 문을 용접했다. 그런데도 새벽 2시 14분만 되면 마이크 하울링 소리가 들린다. 누가 방송을 하는 건가.<br><br>
+                <b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 우리 학교엔 붉은 명찰이 없다. 눈을 마주치면 안 된다. 시멘트가 더 필요하다. 수영장을 막아야 해.<br><br>
+                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 한다. 가야겠다.
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 // ==========================================
-// 🏆 업적 시스템 로직
+// 🏆 업적 및 시스템 로직
 // ==========================================
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
@@ -420,11 +444,45 @@ function openProfile() {
     document.getElementById('profileModal').style.display = 'flex';
 }
 
-
-
 // ==========================================
-// 🎓 승급 심사 (퀴즈)
+// 🚨 제보 전송 (Discord Webhook)
 // ==========================================
+function submitReport() {
+    const loc = document.getElementById('rep-loc').value;
+    const date = document.getElementById('rep-date').value;
+    const desc = document.getElementById('rep-desc').value;
+    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
+    
+    const logBox = document.getElementById('report-log');
+    logBox.innerText = "> 데이터 암호화 중...\n";
+
+    // 🔥 본인의 디스코드 웹훅 주소를 아래에 넣으세요!
+    const webhookUrl = "YOUR_DISCORD_WEBHOOK_URL_HERE"; 
+
+    if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
+        fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                content: `🚨 **[신규 변칙 제보 접수]**\n- **지역**: ${loc}\n- **목격 일자**: ${date ? date : '미상'}\n- **내용**: ${desc}`
+            })
+        }).catch(err => console.error("Webhook error:", err));
+    }
+
+    setTimeout(() => { logBox.innerText += "> 보안 서버 연결 시도...\n"; }, 600);
+    setTimeout(() => { 
+        logBox.innerText += "> [SUCCESS] 제보가 안전하게 접수되었습니다. (코드: X-" + Math.floor(Math.random()*9999) + ")"; 
+        unlockAchievement('ach_report');
+        setTimeout(() => {
+            closeModal('reportModal');
+            document.getElementById('rep-loc').value = '';
+            document.getElementById('rep-date').value = '';
+            document.getElementById('rep-desc').value = '';
+            logBox.innerText = '';
+        }, 2000);
+    }, 1500);
+}
+
 function openQuizModal() {
     if(localStorage.getItem('ach_quiz') === 'true') {
         document.getElementById('quiz-form').style.display = 'none';
@@ -450,51 +508,7 @@ function submitQuiz() {
     }
 }
 
-// ==========================================
-// 🚨 제보 전송 (Discord Webhook 실제 연동)
-// ==========================================
-function submitReport() {
-    const loc = document.getElementById('rep-loc').value;
-    const date = document.getElementById('rep-date').value; // 👈 목격 일자 추가됨!
-    const desc = document.getElementById('rep-desc').value;
-    
-    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
-    
-    const logBox = document.getElementById('report-log');
-    logBox.innerText = "> 데이터 암호화 중...\n";
-
-    // 🔥 여기에 본인의 디스코드 웹훅 주소를 넣으세요!
-    const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-";
-
-    if(webhookUrl !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
-        fetch(webhookUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                // 👇 디스코드로 날아가는 메시지에 목격 일자도 포함!
-                content: `🚨 **[신규 변칙 제보 접수]**\n- **지역**: ${loc}\n- **목격 일자**: ${date ? date : '미상'}\n- **내용**: ${desc}`
-            })
-        }).catch(err => console.error("Webhook error:", err));
-    }
-
-    setTimeout(() => { logBox.innerText += "> 보안 서버 연결 시도...\n"; }, 600);
-    setTimeout(() => { 
-        logBox.innerText += "> [SUCCESS] 제보가 안전하게 접수되었습니다. (코드: X-" + Math.floor(Math.random()*9999) + ")"; 
-        unlockAchievement('ach_report');
-        setTimeout(() => {
-            closeModal('reportModal');
-            document.getElementById('rep-loc').value = '';
-            document.getElementById('rep-date').value = '';
-            document.getElementById('rep-desc').value = '';
-            logBox.innerText = '';
-        }, 2000);
-    }, 1500);
-}
-
-
-// ==========================================
-// 🗺️ 3D 맵 인터랙션 컨트롤 (드래그 회전 / 줌)
-// ==========================================
+// 🗺️ 3D 맵 인터랙션 컨트롤
 let mapRotX = 65, mapRotZ = 45, mapScale = 1;
 let isDraggingMap = false;
 let startMouseX = 0, startMouseY = 0;
@@ -503,73 +517,31 @@ let initialPinchDist = null;
 const mapContainer = document.getElementById('map3dArea');
 const building = document.getElementById('building3d');
 
-function updateMapTransform() {
-    building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`;
-}
-function zoomMap(delta) {
-    mapScale += delta;
-    mapScale = Math.max(0.5, Math.min(mapScale, 2.5)); // 줌 한계치
-    updateMapTransform();
-}
+function updateMapTransform() { building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`; }
+function zoomMap(delta) { mapScale += delta; mapScale = Math.max(0.5, Math.min(mapScale, 2.5)); updateMapTransform(); }
+function openMapModal() { document.getElementById('mapModal').style.display = 'flex'; mapRotX = 65; mapRotZ = 45; mapScale = 1; updateMapTransform(); }
 
-function openMapModal() {
-    document.getElementById('mapModal').style.display = 'flex';
-    // 모달 열 때마다 정위치 초기화
-    mapRotX = 65; mapRotZ = 45; mapScale = 1;
-    updateMapTransform();
-}
-
-// PC 마우스 드래그
-mapContainer.addEventListener('mousedown', (e) => {
-    isDraggingMap = true;
-    startMouseX = e.clientX; startMouseY = e.clientY;
-    building.style.transition = 'none'; 
-});
+mapContainer.addEventListener('mousedown', (e) => { isDraggingMap = true; startMouseX = e.clientX; startMouseY = e.clientY; building.style.transition = 'none'; });
 document.addEventListener('mousemove', (e) => {
     if (!isDraggingMap) return;
-    const deltaX = e.clientX - startMouseX;
-    const deltaY = e.clientY - startMouseY;
-    mapRotZ -= deltaX * 0.6; // 좌우 드래그로 Z축(바닥판) 회전
-    mapRotX -= deltaY * 0.6; // 상하 드래그로 X축(기울기) 조절
-    mapRotX = Math.max(10, Math.min(mapRotX, 85)); // 훌러덩 뒤집어지지 않게 제한
-    startMouseX = e.clientX; startMouseY = e.clientY;
-    updateMapTransform();
+    mapRotZ -= (e.clientX - startMouseX) * 0.6; mapRotX -= (e.clientY - startMouseY) * 0.6;
+    mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.clientX; startMouseY = e.clientY; updateMapTransform();
 });
-document.addEventListener('mouseup', () => {
-    if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }
-});
-// 마우스 휠 줌
-mapContainer.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    zoomMap(e.deltaY * -0.001);
-}, {passive: false});
+document.addEventListener('mouseup', () => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }});
+mapContainer.addEventListener('wheel', (e) => { e.preventDefault(); zoomMap(e.deltaY * -0.001); }, {passive: false});
 
-// 모바일 터치 드래그 및 핀치 줌
 mapContainer.addEventListener('touchstart', (e) => {
-    if(e.touches.length === 1) {
-        isDraggingMap = true;
-        startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY;
-        building.style.transition = 'none';
-    } else if (e.touches.length === 2) {
-        isDraggingMap = false;
-        initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    }
+    if(e.touches.length === 1) { isDraggingMap = true; startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; building.style.transition = 'none'; }
+    else if (e.touches.length === 2) { isDraggingMap = false; initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
 });
 mapContainer.addEventListener('touchmove', (e) => {
-    e.preventDefault(); // 화면 스크롤 방지
+    e.preventDefault();
     if (isDraggingMap && e.touches.length === 1) {
-        const deltaX = e.touches[0].clientX - startMouseX;
-        const deltaY = e.touches[0].clientY - startMouseY;
-        mapRotZ -= deltaX * 0.8;
-        mapRotX -= deltaY * 0.8;
-        mapRotX = Math.max(10, Math.min(mapRotX, 85));
-        startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY;
-        updateMapTransform();
+        mapRotZ -= (e.touches[0].clientX - startMouseX) * 0.8; mapRotX -= (e.touches[0].clientY - startMouseY) * 0.8;
+        mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; updateMapTransform();
     } else if (e.touches.length === 2 && initialPinchDist !== null) {
         const currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-        const delta = currentDist - initialPinchDist;
-        zoomMap(delta * 0.005);
-        initialPinchDist = currentDist;
+        zoomMap((currentDist - initialPinchDist) * 0.005); initialPinchDist = currentDist;
     }
 }, {passive: false});
 document.addEventListener('touchend', (e) => {
@@ -584,7 +556,7 @@ function openSpecificDocument(caseId) {
 }
 
 // ==========================================
-// 📚 복구된 초대형 위키 데이터베이스
+// 📚 복구된 초대형 위키 데이터베이스 (하이퍼링크 기믹 포함)
 // ==========================================
 const caseDatabase = [
     {
@@ -605,7 +577,7 @@ const caseDatabase = [
         date: "2004-10-14 폐쇄",
         isLocked: false,
         videoUrl: "https://www.youtube.com/embed/SRjNDKaGD1o",
-        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>사립 청하공업고등학교 (靑夏工高)</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-1 (접근 제한구역)</div></div><div class='wiki-row'><div class='wiki-label'>교훈</div><div class='wiki-value'><i>\"부름에 답하지 말고 묵묵히 나아가라\"</i></div></div><div class='wiki-row'><div class='wiki-label'>피해/실종</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>학생 11명, 교직원 4명, 조사원 2명 영구 실종</div></div><div class='wiki-row'><div class='wiki-label'>현재 상태</div><div class='wiki-value'>무기한 폐교 및 반경 2km 철책선 통제</div></div></div><div class='wiki-toc'><b>[목차]</b><br>1. 개요<br>2. 연혁<br>3. 학교 특징<br>4. 학교 시설 (본관, 실습동, 기숙사, 지하수영장)<br>5. 학교 생활 및 복장<br>6. 사건·사고 (1998년 실종, 2004년 사태)<br>7. 기타 및 관련 문헌</div><div class='wiki-h2'>1. 개요</div>강원도 [검열삭제] 산간 지역에 위치했던 사립 공업계 고등학교. 2004년 10월 발생한 <b>'교내 방송 사태'</b> 이후 정부 기관에 의해 비공식적으로 완전 폐쇄되었다. 현재 일반 지도 앱에서는 검색되지 않으며, 해당 산자락은 군사 통제구역으로 위장되어 있다.<br><div class='wiki-h2'>2. 연혁</div>• <b>1983. 03:</b> 청하공업고등학교 개교 (기계과, 전기과)<br>• <b>1998. 07:</b> 기숙사생 3명 야간 집단 실종 사건 발생. 지하 수영장 영구 폐쇄 조치.<br>• <b>2004. 10. 14:</b> 교내 자동 안내 방송 사태 발생. 전교생 귀가 조치 및 당일 부로 무기한 휴교 (사실상 폐교).<br><div class='wiki-h2'>3. 학교 특징</div><div class='wiki-h3'>3.1. 기형적인 결석률</div>1999년 이후 매년 평균 2~3명의 학생이 '전학' 또는 '가출' 명목으로 학적에서 말소되었다. 이들의 공통점은 실종 전날 <b>\"창밖에서 가족이 나를 부르는 소리를 들었다\"</b>고 호소했다는 점이다.<br><div class='wiki-h3'>3.2. 청하제 (기이한 축제)</div>매년 10월 열렸던 학교 축제. 특이하게도 학생회칙에 <i>\"축제 당일 해가 진 후에는 교사(校舍) 밖을 쳐다보지 말 것\"</i>이라는 기조항이 존재했다.<br><div class='wiki-h2'>4. 학교 시설</div><div class='wiki-h3'>4.1. 본관</div>가장 낡은 적벽돌 건물. 2003년부터 야간 순찰 중 본관 3층 교실에서 <b>'책상 밑에 웅크려 있는 덩어리 형태의 인영'</b>들이 다수 관측되었다. 순찰용 손전등을 비추면 그것들이 일제히 고개를 돌려 빛을 바라본다고 보고되었다.<br><div class='wiki-h3'>4.2. 제2실습동</div>주전원 차단기가 내려간 심야 시간대에도 선반(Lathe) 기계가 혼자 굉음을 내며 돌아간다는 괴담이 팽배했다.<br><div class='wiki-h3'>4.3. 청솔학사 (기숙사)</div>산기슭과 가장 맞닿아 있는 기숙사. 새벽 2시경 흙바닥인 운동장에 기숙사 쪽을 향해 수십 개의 맨발 발자국이 찍혀 있는 현상이 자주 발생했다.<br><div class='wiki-h3'>4.4. 체육관 및 지하수영장 (접근 금지)</div>1998년 실종된 학생들의 교복이 발견된 장소. 물을 빼고 시멘트로 봉인했으나, 조사관들에 따르면 지금도 시멘트 바닥 위로 정체불명의 짙은 안개가 차오르며 푸른 발광체가 유영하는 것이 목격된다고 한다.<div style='border:1px dashed #ff3333; padding:8px; margin:10px 0; background:rgba(255,0,0,0.1);'>[기밀 해제 단서] 실종자 유류품에서 이상한 낙서가 발견됨. 타 구역 해제 코드 ➔ <span class='hidden-text'>1103</span> (텍스트를 드래그하여 확인)</div><div class='wiki-h2'>5. 학교 생활 및 복장</div>표준적인 90년대 짙은 남색 교복을 채택했으나, 학생수첩에는 다음과 같은 규정이 적혀 있었다.<blockquote style='background:rgba(0,0,0,0.5); border-left:3px solid #ff3333; padding:10px; margin:10px 0; font-style:italic;'>\"본교는 붉은색 명찰을 사용하지 않습니다. 복도에서 붉은색 명찰을 단 학생을 마주칠 경우, 절대 눈을 마주치지 말고 즉시 교무실로 이동하십시오.\"</blockquote><div class='wiki-h2'>6. 사건·사고</div><div class='wiki-h3'>6.1. 2004년 방송실 사태 및 푸티지 (REC_17680)</div>전기가 끊긴 2004년 10월 14일 심야 01시 40분. 02시 14분이 되자 학교 전체 스피커에서 전원 없이 마이크 하울링 소리와 함께 안내 방송이 송출되기 시작했다.<br>이후 현장 수색을 위해 투입된 제4조사팀의 1인칭 캠코더 테이프가 교문 앞 덤불에서 회수되었다.<br><img src='https://media.giphy.com/media/3o7WTqjG4O9N4H0nWU/giphy.gif' class='creepy-gif' alt='SIGNAL LOST'><br>영상 후반부, 수영장 통로 문틀 상단에 <b>'거꾸로 매달린 변칙체'</b>와 마주한 직후 촬영자의 비명과 함께 통신이 영구 두절되었다.<div class='wiki-warning'>⚠️ <b>[통제구역 생존 수칙 제1항]</b><br>방송에서 <i>\"창밖의 소리에 절대 응답하지 마십시오\"</i>라는 멘트가 나오면 즉시 바닥에 엎드려 귀를 막으십시오.</div><div class='wiki-h2'>7. 관련 문헌 및 시청각 자료</div>아래 버튼을 클릭하여 기적적으로 데이터가 복원된 현장 수색팀의 마지막 비디오 피드를 직접 열람할 수 있습니다."
+        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>사립 청하공업고등학교 (靑夏工高)</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-1 (접근 제한구역)</div></div><div class='wiki-row'><div class='wiki-label'>교훈</div><div class='wiki-value'><i>\"부름에 답하지 말고 묵묵히 나아가라\"</i></div></div><div class='wiki-row'><div class='wiki-label'>피해/실종</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>학생 11명, 교직원 4명, 조사원 2명 영구 실종</div></div><div class='wiki-row'><div class='wiki-label'>현재 상태</div><div class='wiki-value'>무기한 폐교 및 반경 2km 철책선 통제</div></div></div><div class='wiki-toc'><b>[목차]</b><br>1. 개요<br>2. 연혁<br>3. 학교 특징<br>4. 학교 시설 (본관, 실습동, 기숙사, 지하수영장)<br>5. 학교 생활 및 복장<br>6. 사건·사고 (1998년 실종, 2004년 사태)<br>7. 관련 문헌 및 첨부 파일</div><div class='wiki-h2'>1. 개요</div>강원도 [검열삭제] 산간 지역에 위치했던 사립 공업계 고등학교. 2004년 10월 발생한 <b>'교내 방송 사태'</b> 이후 정부 기관에 의해 비공식적으로 완전 폐쇄되었다. 현재 일반 지도 앱에서는 검색되지 않으며, 해당 산자락은 군사 통제구역으로 위장되어 있다.<br><div class='wiki-h2'>2. 연혁</div>• <b>1983. 03:</b> 청하공업고등학교 개교 (기계과, 전기과)<br>• <b>1998. 07:</b> 기숙사생 3명 야간 집단 실종 사건 발생. 지하 수영장 영구 폐쇄 조치.<br>• <b>2004. 10. 14:</b> 교내 자동 안내 방송 사태 발생. 전교생 귀가 조치 및 당일 부로 무기한 휴교 (사실상 폐교).<br><div class='wiki-h2'>3. 학교 특징</div><div class='wiki-h3'>3.1. 기형적인 결석률</div>1999년 이후 매년 평균 2~3명의 학생이 '전학' 또는 '가출' 명목으로 학적에서 말소되었다. 이들의 공통점은 실종 전날 <b>\"창밖에서 가족이 나를 부르는 소리를 들었다\"</b>고 호소했다는 점이다.<br><div class='wiki-h3'>3.2. 청하제 (기이한 축제)</div>매년 10월 열렸던 학교 축제. 특이하게도 학생회칙에 <i>\"축제 당일 해가 진 후에는 교사(校舍) 밖을 쳐다보지 말 것\"</i>이라는 기조항이 존재했다.<br><div class='wiki-h2'>4. 학교 시설</div><div class='wiki-h3'>4.1. 본관</div>가장 낡은 적벽돌 건물. 2003년부터 야간 순찰 중 본관 3층 교실에서 <b>'책상 밑에 웅크려 있는 덩어리 형태의 인영'</b>들이 다수 관측되었다. 순찰용 손전등을 비추면 그것들이 일제히 고개를 돌려 빛을 바라본다고 보고되었다.<br><div class='wiki-h3'>4.2. 제2실습동</div>주전원 차단기가 내려간 심야 시간대에도 선반(Lathe) 기계가 혼자 굉음을 내며 돌아간다는 괴담이 팽배했다.<br><div class='wiki-h3'>4.3. 청솔학사 (기숙사)</div>산기슭과 가장 맞닿아 있는 기숙사. 새벽 2시경 흙바닥인 운동장에 기숙사 쪽을 향해 수십 개의 맨발 발자국이 찍혀 있는 현상이 자주 발생했다.<br><div class='wiki-h3'>4.4. 체육관 및 지하수영장 (접근 금지)</div>1998년 실종된 학생들의 교복이 발견된 장소. 물을 빼고 시멘트로 봉인했으나, 조사관들에 따르면 지금도 시멘트 바닥 위로 정체불명의 짙은 안개가 차오르며 푸른 발광체가 유영하는 것이 목격된다고 한다.<div style='border:1px dashed #ff3333; padding:8px; margin:10px 0; background:rgba(255,0,0,0.1);'>[기밀 해제 단서] 실종자 유류품에서 이상한 낙서가 발견됨. 타 구역 해제 코드 ➔ <span class='hidden-text'>1103</span> (텍스트를 드래그하여 확인)</div><div class='wiki-h2'>5. 학교 생활 및 복장</div>표준적인 90년대 짙은 남색 교복을 채택했으나, 학생수첩에는 다음과 같은 규정이 적혀 있었다.<blockquote style='background:rgba(0,0,0,0.5); border-left:3px solid #ff3333; padding:10px; margin:10px 0; font-style:italic;'>\"본교는 붉은색 명찰을 사용하지 않습니다. 복도에서 붉은색 명찰을 단 학생을 마주칠 경우, 절대 눈을 마주치지 말고 즉시 교무실로 이동하십시오.\"</blockquote><div class='wiki-h2'>6. 사건·사고</div><div class='wiki-h3'>6.1. 2004년 방송실 사태 및 푸티지 (REC_17680)</div>전기가 끊긴 2004년 10월 14일 심야 01시 40분. 02시 14분이 되자 학교 전체 스피커에서 전원 없이 마이크 하울링 소리와 함께 안내 방송이 송출되기 시작했다.<br>이후 현장 수색을 위해 투입된 제4조사팀의 1인칭 캠코더 테이프가 교문 앞 덤불에서 회수되었다.<br><img src='https://media.giphy.com/media/3o7WTqjG4O9N4H0nWU/giphy.gif' class='creepy-gif' alt='SIGNAL LOST'><br>영상 후반부, 수영장 통로 문틀 상단에 <b>'거꾸로 매달린 변칙체'</b>와 마주한 직후 촬영자의 비명과 함께 통신이 영구 두절되었다.<div class='wiki-warning'>⚠️ <b>[통제구역 생존 수칙 제1항]</b><br>방송에서 <i>\"창밖의 소리에 절대 응답하지 마십시오\"</i>라는 멘트가 나오면 즉시 바닥에 엎드려 귀를 막으십시오.</div><div class='wiki-h2'>7. 관련 문헌 및 첨부 파일</div>본 사건과 관련된 회수 문서 목록입니다. 문서 열람 시 인가 등급에 유의하십시오.<br><ul class='wiki-list'><li>📄 <a class='wiki-link' onclick='document.getElementById(\"landRegModal\").style.display=\"flex\"'>1983년_건축물대장_특이사항_보고서.pdf</a></li><li>📄 <a class='wiki-link' onclick='document.getElementById(\"policeModal\").style.display=\"flex\"'>1998년_관할경찰서_미제사건_내사보고서.pdf</a></li><li>📓 <a class='wiki-link' onclick='document.getElementById(\"diaryModal\").style.display=\"flex\"'>2004년_초대교장_업무수첩_파쇄본.txt</a></li></ul>"
     },
     {
         id: "CASE-02",
@@ -764,7 +736,6 @@ function checkPassword() {
     }
 }
 
-// 🌐 언어 변환 (UI 텍스트 실제 변경)
 const langs = ['KR', 'EN', 'JP'];
 let langIdx = 0;
 const uiDict = {
@@ -830,6 +801,7 @@ document.getElementById('pw-input').addEventListener('keypress', (e) => {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal');
+        closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal');
     }
 });
 let clickCount = 0;
