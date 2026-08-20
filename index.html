@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[RESTRICTED] NATIONAL ANOMALY ARCHIVE</title>
-    <!-- 진짜 캡처 저장을 위한 라이브러리 추가 -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Noto+Sans+KR:wght@400;700&display=swap');
@@ -38,10 +37,11 @@
 
         .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 14px; background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative; }
 
-        /* 상단 툴바 */
         .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; flex-wrap: wrap; gap: 4px; }
         .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .tool-btn:hover { background: #00ff66; color: #000; }
+        
+        .credit-display { background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; padding: 4px 10px; font-weight: bold; color: #fff; text-shadow: 0 0 5px #00ff66; display: flex; align-items: center; gap: 5px; }
 
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 10px; margin-bottom: 14px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 20px; }
@@ -50,7 +50,8 @@
         .action-btn { flex: 1 1 30%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; }
         .action-btn:hover { background: #00ff66; color: #000; }
         .action-btn.danger { background: rgba(50, 0, 0, 0.5); color: #ff8888; border-color: #ff3333; }
-        .action-btn.safe { background: rgba(0, 50, 100, 0.5); color: #88ccff; border-color: #3388ff; }
+        .action-btn.shop { background: rgba(153, 0, 255, 0.2); color: #eebbff; border-color: #9900ff; }
+        .action-btn.shop:hover { background: #9900ff; color: #fff; }
 
         .zone-nav { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid rgba(0, 255, 102, 0.3); padding-bottom: 8px; flex-wrap: wrap; }
         .zone-btn { background: rgba(0, 30, 10, 0.6); color: #00ff66; border: 1px solid #00ff66; padding: 6px 4px; font-family: inherit; font-size: 14px; cursor: pointer; flex: 1; text-align: center; }
@@ -61,11 +62,12 @@
         .archive-item:hover { background: #00ff66; color: #000; }
         .archive-item.locked { border-color: #ff3333; color: #ff5555; background: rgba(50, 0, 0, 0.3); text-shadow: 0 0 4px rgba(255, 51, 51, 0.5); }
         .archive-item.glitch-row { border-color: #ff00ff; color: #fff; background: rgba(50, 0, 50, 0.5); animation: blinker 2s infinite; }
+        .archive-item.daily-row { border-color: #00ccff; color: #ddffff; background: rgba(0, 100, 200, 0.3); }
 
         .badge { padding: 2px 6px; font-size: 12px; margin-right: 8px; font-weight: bold; }
         .badge-lv0 { background: #ffcc00; color: #000; box-shadow: 0 0 5px #ffcc00; }
         .badge-lv1 { background: #ff3333; color: #fff; }
-        .badge-lv2 { background: #ff9900; color: #000; }
+        .badge-lv2 { background: #00ccff; color: #000; }
         .badge-lv3 { background: #9900ff; color: #fff; }
         .badge-lvx { background: #000; color: #ff00ff; border: 1px solid #ff00ff; }
 
@@ -78,62 +80,34 @@
         .wiki-h2 { color: #00ff66; border-bottom: 1px dashed #00ff66; font-size: 18px; padding-bottom: 2px; margin: 24px 0 8px; font-weight: bold; }
         .wiki-h3 { color: #88ffaa; font-size: 15px; margin: 14px 0 6px; font-weight: bold; border-left: 3px solid #00ff66; padding-left: 8px; }
         .wiki-warning { background: rgba(255, 51, 51, 0.15); border: 1px solid #ff3333; padding: 10px; color: #ff8888; font-size: 14px; margin: 16px 0; }
-        .wiki-toc { background: rgba(0, 255, 102, 0.05); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 20px; font-size: 13px; }
-        .wiki-link { color: #3388ff; text-decoration: underline; cursor: pointer; font-weight: bold; }
-        .wiki-list { padding-left: 20px; line-height: 1.8; margin-bottom: 10px; color: #ccc; }
-        .hidden-text { color: #050806; background: #050806; transition: all 0.3s; user-select: text; border-radius: 2px; }
-        .hidden-text:hover, .hidden-text:active { color: #ff3333; background: transparent; text-shadow: 0 0 8px #ff3333; font-weight: bold; }
         .creepy-gif { width: 100%; max-width: 400px; display: block; margin: 15px auto; border: 2px dashed #ff3333; filter: grayscale(80%) contrast(120%); }
 
-        .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); }
+        .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); transition: all 0.3s; }
         .id-card-header { font-size: 18px; color: #00ff66; text-align: center; border-bottom: 2px dashed #00ff66; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
         .id-card-content { display: flex; gap: 15px; align-items: center; }
         .id-photo-box { width: 80px; height: 100px; background: rgba(0,255,102,0.1); border: 1px solid #00ff66; display: flex; justify-content: center; align-items: center; text-align: center; color: #00ff66; font-size: 12px; }
         .id-details { flex: 1; font-size: 14px; line-height: 1.6; }
-        
-        /* 🔥 암호화된 AES 해시코드 스타일 */
-        .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: #00ff66; margin-top: 15px; text-align: center; letter-spacing: 1px; word-break: break-all; cursor: pointer; padding: 6px; border: 1px dashed rgba(0,255,102,0.3); background: rgba(0,255,102,0.05); }
-        
-        .btn-export { background: rgba(0, 255, 102, 0.1); border: 1px dashed #00ff66; color: #00ff66; padding: 10px; width: 100%; font-family: inherit; font-size: 15px; cursor: pointer; text-align: center; margin-bottom: 10px; transition: all 0.2s; font-weight: bold; }
-        .btn-export:hover { background: #00ff66; color: #000; }
+        .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #00ff66; margin-top: 15px; text-align: center; letter-spacing: 1px; word-break: break-all; cursor: pointer; padding: 8px; border: 1px dashed rgba(0,255,102,0.3); background: rgba(0,255,102,0.05); }
 
-        .paper-doc { background: #f4ebd8; color: #1a1a1a; font-family: 'Noto Serif KR', serif; padding: 20px; border: 1px solid #ccc; box-shadow: inset 0 0 50px rgba(100, 70, 30, 0.2); position: relative; overflow: hidden; }
-        .top-secret-stamp { position: absolute; top: 10px; right: 10px; color: #cc0000; border: 3px solid #cc0000; font-size: 20px; font-weight: bold; padding: 5px 10px; border-radius: 5px; transform: rotate(-15deg); opacity: 0.8; pointer-events: none; }
-        .paper-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; border: 2px solid #1a1a1a; }
-        .paper-table th, .paper-table td { border: 1px solid #1a1a1a; padding: 8px; text-align: left; }
-        .paper-table th { background: #e0d5c1; width: 35%; font-weight: bold; text-align: center; }
-        .paper-police { background: #e6ebf0; color: #111; font-family: 'Noto Sans KR', sans-serif; border: 2px solid #555; padding: 20px; position: relative; }
-        .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); position: relative; overflow: hidden; }
-        .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
+        /* 🔥 홀로그램 골드 요원증 효과 */
+        .gold-theme { background: linear-gradient(135deg, #1a1500, #332a00) !important; border-color: #ffcc00 !important; box-shadow: 0 0 20px rgba(255, 204, 0, 0.4) !important; }
+        .gold-theme .id-card-header, .gold-theme .id-photo-box, .gold-theme .id-barcode { color: #ffcc00 !important; border-color: #ffcc00 !important; }
 
-        .map-3d-container { position: relative; width: 100%; height: 400px; margin-top: 10px; background: #020503; border: 1px solid #00ff66; box-shadow: inset 0 0 40px rgba(0,255,102,0.15); display: flex; justify-content: center; align-items: center; overflow: hidden; perspective: 1000px; cursor: grab; touch-action: none; }
-        .map-3d-container:active { cursor: grabbing; }
-        .map-overlay { position: absolute; top: 10px; left: 10px; z-index: 10; color: #00ff66; font-size: 13px; pointer-events: none; text-shadow: 0 0 5px #000; line-height: 1.4; }
-        .map-controls { position: absolute; bottom: 10px; right: 10px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
-        .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 35px; height: 35px; font-size: 20px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .building-3d { position: relative; width: 160px; height: 220px; transform-style: preserve-3d; transform: rotateX(65deg) rotateZ(45deg) scale(1); transition: transform 0.1s ease-out; }
-        .floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7); background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px); box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none; }
-        .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
-        .f-1 { transform: translateZ(0px); } .f-2 { transform: translateZ(70px); } .f-3 { transform: translateZ(140px); }  
-        .floor-label { position: absolute; top: 5px; left: 5px; color: #00ff66; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #000; pointer-events: none; }
-        .f-b1 .floor-label { color: #ff3333; }
-        .anomaly-node { position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%; transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer; pointer-events: auto; animation: pulseRed 1s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); } 70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
-
-        .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
-        .form-textarea { height: 100px; resize: none; }
-        .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 15px; }
+        .btn-export { background: rgba(0, 255, 102, 0.1); border: 1px dashed #00ff66; color: #00ff66; padding: 10px; width: 100%; font-family: inherit; font-size: 15px; cursor: pointer; text-align: center; margin-bottom: 6px; font-weight: bold; }
+        .btn-restore { background: rgba(51, 136, 255, 0.1); border: 1px dashed #3388ff; color: #88ccff; padding: 10px; width: 100%; font-family: inherit; font-size: 15px; cursor: pointer; text-align: center; margin-bottom: 10px; font-weight: bold; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; background: rgba(0, 0, 0, 0.92); z-index: 50; justify-content: center; align-items: center; padding: 10px; }
         .modal-content { background: #060c07; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3); padding: 16px; max-width: 650px; width: 100%; color: #d0d0d0; position: relative; max-height: 86vh; max-height: 86dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .close-btn { position: absolute; top: 10px; right: 14px; color: #ff3333; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10; }
 
-        .btn-video { display: block; width: 100%; margin: 14px 0 6px; background: rgba(255, 51, 51, 0.2); border: 2px solid #ff3333; color: #ff8888; padding: 12px; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: bold; text-align: center; transition: 0.2s; }
-        .btn-video:hover { background: #ff3333; color: #000; }
-        .video-box { background: #000; border: 2px solid #ff3333; width: 92vw; max-width: 380px; padding: 8px; }
-        .video-container { position: relative; width: 100%; padding-bottom: 177.77%; background: #050505; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .shop-item { border: 1px dashed #9900ff; padding: 12px; margin-bottom: 10px; background: rgba(153,0,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .shop-info { flex: 1; }
+        .shop-buy { background: #9900ff; color: #fff; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; font-family: inherit; }
+        .shop-buy:disabled { background: #444; color: #888; cursor: not-allowed; }
 
+        .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
+        .form-textarea { height: 100px; resize: none; }
+        
         .pw-input { background: #000; border: 1px solid #ff3333; color: #ff3333; padding: 8px; text-align: center; font-size: 18px; width: 70%; margin: 10px 0; font-family: inherit; }
         .pw-btn { background: #ff3333; color: #000; border: none; padding: 10px 16px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 16px; }
 
@@ -144,11 +118,12 @@
 </head>
 <body>
 
-<div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center;">
-    <div style="font-size:13px; color:#fff;">[SYSTEM: 권한 해제]</div>
-    <div id="toast-title" style="font-size:16px;">업적 이름</div>
+<div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+    <div style="font-size:13px; color:#fff;" id="toast-subtitle">[SYSTEM]</div>
+    <div id="toast-title" style="font-size:16px;">메시지 내용</div>
 </div>
 
+<!-- 🔥 ID 프로필 모달 (백업/복구 추가) -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
@@ -159,20 +134,61 @@
                 <div class="id-photo-box">RESTRICTED<br>IDENTITY</div>
                 <div class="id-details">
                     AGENT ID: <span id="card-agent-id">X-9982</span><br>
-                    RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1</span><br>
+                    RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span><br>
                     DATA CLEAR: <span id="badge-count">0</span> FILES
                 </div>
             </div>
-            <!-- 🔥 AES 암호화 해시코드 영역 -->
-            <div class="id-barcode" id="id-hash-code" onclick="tapHash()">[ENC:AES-256]<br><span style="font-size:12px; color:#88ffaa;">LOADING...</span></div>
+            <!-- 실제 데이터가 담기는 백업용 해시코드 -->
+            <div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div>
         </div>
         
-        <button class="btn-export" onclick="exportIDCard()">[데이터 추출 : ID 카드 이미지 발급]</button>
-        <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px;">※ 추출된 이미지(png)를 인스타그램 스토리에 공유하여 신분을 증명하십시오.</p>
+        <button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button>
+        <button class="btn-restore" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button>
+        <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px; line-height: 1.4;">
+            ※ 위 ID 카드 이미지에 찍힌 해시코드를 복사/보관하십시오.<br>기기 변경이나 캐시 삭제 시 코드를 입력하면 크레딧과 데이터가 100% 복구됩니다.
+        </p>
 
         <h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-bottom:10px;">[획득한 기밀 배지]</h3>
-        <div style="max-height: 40vh; overflow-y: auto;">
+        <div style="max-height: 30vh; overflow-y: auto;">
             <ul id="achievement-list" style="list-style:none; padding:0;"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 암시장(상점) 모달 -->
+<div id="shopModal" class="modal" onclick="closeModal('shopModal')">
+    <div class="modal-content" style="border-color:#9900ff;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#9900ff;" onclick="closeModal('shopModal')">[X]</span>
+        <h2 style="color:#eebbff; border-bottom:2px dashed #9900ff; padding-bottom:6px; margin-bottom:15px;">[비인가 통신망 : 기밀 암시장]</h2>
+        <p style="color:#ccc; font-size:14px; margin-bottom: 15px;">※ 획득한 크레딧(CR)을 소모하여 특수 권한을 해금하십시오.</p>
+        
+        <div class="shop-item">
+            <div class="shop-info">
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[OVERRIDE] 비상 암호 해독기</div>
+                <div style="color:#aaa; font-size:12px;">잠긴 문서를 비밀번호 없이 강제 열람합니다.</div>
+            </div>
+            <button class="shop-buy" onclick="buyItem('ITEM_OVERRIDE', 300)">300 CR</button>
+        </div>
+        <div class="shop-item">
+            <div class="shop-info">
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[TIME-SYNC] 심야 파장 동기화</div>
+                <div style="color:#aaa; font-size:12px;">새벽 3~5시가 아니어도 CASE-3AM을 해금합니다.</div>
+            </div>
+            <button class="shop-buy" onclick="buyItem('ITEM_TIMESYNC', 500)">500 CR</button>
+        </div>
+        <div class="shop-item">
+            <div class="shop-info">
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[ID-CARD] 홀로그램 골드 요원증</div>
+                <div style="color:#aaa; font-size:12px;">ID 카드의 프레임이 영구적으로 골드로 변경됩니다.</div>
+            </div>
+            <button class="shop-buy" onclick="buyItem('ITEM_GOLD', 800)">800 CR</button>
+        </div>
+        <div class="shop-item">
+            <div class="shop-info">
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[RANK] 특수 칭호 라이선스</div>
+                <div style="color:#aaa; font-size:12px;">ID 카드 계급이 '현장 정찰대장'으로 변경됩니다.</div>
+            </div>
+            <button class="shop-buy" onclick="buyItem('ITEM_TITLE', 400)">400 CR</button>
         </div>
     </div>
 </div>
@@ -187,11 +203,8 @@
 
 <div class="container" id="main-ui" style="opacity: 0;">
     <div class="top-toolbar">
-        <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID]</button>
-        <div style="display:flex; gap:4px; align-items:center;">
-            <span id="sys-status" style="font-size: 13px; color:#ffcc00; display:none;" class="blink">[DB TRANSLATION FAILED]</span>
-            <button id="lang-btn" class="tool-btn" onclick="changeLanguage()" style="background:#000; color:#00ff66;">[SYS: KR]</button>
-        </div>
+        <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID 정보/백업]</button>
+        <div class="credit-display">💳 <span id="cr-val">0</span> CR</div>
     </div>
 
     <header>
@@ -200,64 +213,33 @@
     </header>
 
     <div class="action-group">
-        <button class="action-btn danger" id="btn-report" onclick="document.getElementById('reportModal').style.display='flex'">⚠️ 이상 현상 제보</button>
-        <button class="action-btn" id="btn-map" onclick="openMapModal()">🗺️ 3D 위성 관제 맵</button>
-        <button class="action-btn safe" id="btn-quiz" onclick="openQuizModal()">🎓 승급 심사</button>
+        <button class="action-btn danger" id="btn-report" onclick="openModal('reportModal')">⚠️ 이상 현상 제보</button>
+        <button class="action-btn" id="btn-quiz" onclick="openModal('quizModal')">🎓 승급 심사</button>
+        <button class="action-btn shop" id="btn-shop" onclick="openModal('shopModal')">🛒 기밀 암시장</button>
     </div>
 
     <div class="zone-nav" id="zone-nav-container">
-        <button class="zone-btn active" id="tab-all" onclick="switchZone('ALL', event)">ALL</button>
+        <button class="zone-btn active" id="tab-all" onclick="switchZone('ALL', event)">전체</button>
         <button class="zone-btn" id="tab-z0" onclick="switchZone('ZONE-0', event)" style="display:none;">ZONE-0</button>
         <button class="zone-btn" id="tab-z1" onclick="switchZone('ZONE-1', event)">ZONE-1</button>
+        <button class="zone-btn" id="tab-z2" onclick="switchZone('ZONE-2', event)">ZONE-2 (일일)</button>
         <button class="zone-btn" id="tab-z3" onclick="switchZone('ZONE-3', event)">ZONE-3</button>
     </div>
 
     <ul id="archiveList" class="archive-list"></ul>
-    <footer id="ui-footer" style="margin-top: 16px; font-size: 12px; color: #558866; border-top: 1px dashed #558866; padding-top: 6px; text-align: center;">
+    <footer style="margin-top: 16px; font-size: 12px; color: #558866; border-top: 1px dashed #558866; padding-top: 6px; text-align: center;">
         WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다.
     </footer>
 </div>
 
-<!-- 모달 요소들 -->
-<div id="mapModal" class="modal" onclick="closeModal('mapModal')">
-    <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
-        <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
-        <div class="map-3d-container" id="map3dArea">
-            <div class="map-overlay">
-                > FACILITY: 청하공고<br>
-                > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
-                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
-            </div>
-            <div class="map-controls">
-                <button class="map-ctrl-btn" onclick="zoomMap(0.2); triggerHaptic('tap');">+</button>
-                <button class="map-ctrl-btn" onclick="zoomMap(-0.2); triggerHaptic('tap');">-</button>
-            </div>
-            <div class="building-3d" id="building3d">
-                <div class="floor f-b1">
-                    <span class="floor-label">B1: POOL</span>
-                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
-                <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
-                <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
-                <div class="floor f-3">
-                    <span class="floor-label">3F: CLASS</span>
-                    <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- 기타 기능 모달 (제보, 퀴즈, 시간락, 비밀번호, 문서열람) -->
 <div id="reportModal" class="modal" onclick="closeModal('reportModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
         <h2 style="color:#ff3333; margin-bottom:10px;">[시민 변칙 제보 채널]</h2>
-        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">이곳에 작성된 데이터는 추적 불가능한 상태로 보안망에 전송됩니다.</p>
         <input type="text" id="rep-loc" class="form-input" placeholder="[발생 지역] 예: 서울시 마포구">
-        <input type="date" id="rep-date" class="form-input" placeholder="목격 일자">
-        <textarea id="rep-desc" class="form-textarea" placeholder="[현상 서술] 기이한 현상에 대해 자세히 적어주십시오..."></textarea>
-        <button class="tool-btn" style="width:100%; background:#00ff66; color:#000; font-size:16px;" onclick="submitReport()">데이터 전송</button>
+        <textarea id="rep-desc" class="form-textarea" placeholder="기이한 현상 서술..."></textarea>
+        <button class="tool-btn" style="width:100%; background:#00ff66; color:#000;" onclick="submitReport()">데이터 전송 (10 CR 획득)</button>
         <div id="report-log" style="margin-top:10px; font-size:13px; color:#ffcc00; white-space:pre-line;"></div>
     </div>
 </div>
@@ -267,29 +249,16 @@
         <span class="close-btn" onclick="closeModal('quizModal')">[X]</span>
         <h2 style="color:#3388ff; border-bottom:2px solid #3388ff; padding-bottom:6px; margin-bottom:15px;">[특무 조사관 자격 심사]</h2>
         <div id="quiz-form">
-            <p style="margin-bottom:8px; color:#ddd;">Q1. 교내 방송에서 "창밖의 소리에 응답하지 마십시오"라는 안내가 나왔을 때의 행동 지침은?</p>
-            <label class="quiz-label"><input type="radio" name="q1" value="1" onclick="triggerHaptic('tap')"> 밖을 내다보며 원인을 찾는다.</label>
-            <label class="quiz-label"><input type="radio" name="q1" value="2" onclick="triggerHaptic('tap')"> 바닥에 엎드려 귀를 막고 대기한다.</label>
-
-            <p style="margin-bottom:8px; margin-top:15px; color:#ddd;">Q2. 방탈출 매장 지하에서 도면에 없는 15m 수직 계단을 발견했다. 후속 조치는?</p>
-            <label class="quiz-label"><input type="radio" name="q2" value="1" onclick="triggerHaptic('tap')"> 즉시 콘크리트로 완전 매립 및 봉인한다.</label>
-            <label class="quiz-label"><input type="radio" name="q2" value="2" onclick="triggerHaptic('tap')"> 계단 아래로 구조대를 파견한다.</label>
-
-            <p style="margin-bottom:8px; margin-top:15px; color:#ddd;">Q3. 청하공고 복도에서 붉은색 명찰을 단 학생을 마주쳤다. 올바른 행동은?</p>
-            <label class="quiz-label"><input type="radio" name="q3" value="1" onclick="triggerHaptic('tap')"> 명찰에 적힌 이름을 확인하고 소속을 묻는다.</label>
-            <label class="quiz-label"><input type="radio" name="q3" value="2" onclick="triggerHaptic('tap')"> 절대 눈을 마주치지 말고 즉시 교무실로 이동한다.</label>
-
-            <p style="margin-bottom:8px; margin-top:15px; color:#ddd;">Q4. 지하 수영장 바닥 배수구에서 다수의 손톱자국과 긁는 소리가 발견되었다. 내사 보고서에 따른 상부의 최종 지시는?</p>
-            <label class="quiz-label"><input type="radio" name="q4" value="1" onclick="triggerHaptic('tap')"> 특공대를 파견해 배수구 하부를 폭파한다.</label>
-            <label class="quiz-label"><input type="radio" name="q4" value="2" onclick="triggerHaptic('tap')"> 단순 가출로 종결 처리 및 일반 수영장으로 위장 은폐한다.</label>
-
+            <p style="margin-bottom:8px; color:#ddd;">Q. 방송에서 "창밖의 소리에 응답하지 마십시오"가 나오면?</p>
+            <label class="quiz-label"><input type="radio" name="q1" value="2" onclick="triggerHaptic('tap')"> 바닥에 엎드려 귀를 막는다.</label>
+            <p style="margin-bottom:8px; margin-top:15px; color:#ddd;">Q. 복도에서 붉은색 명찰을 단 학생을 마주쳤다면?</p>
+            <label class="quiz-label"><input type="radio" name="q3" value="2" onclick="triggerHaptic('tap')"> 절대 눈을 마주치지 않는다.</label>
             <button class="tool-btn" style="width:100%; background:#3388ff; color:#000; margin-top:15px;" onclick="submitQuiz()">심사 결과 제출</button>
-            <p id="quiz-error" style="color:#ff3333; margin-top:10px; font-weight:bold; display:none;" class="blink">불합격: 기밀 문서를 다시 정독하십시오.</p>
+            <p id="quiz-error" style="color:#ff3333; margin-top:10px; display:none;" class="blink">불합격: 오답이 있습니다.</p>
         </div>
         <div id="quiz-success" style="display:none; text-align:center; padding: 20px 0;">
             <h3 style="color:#00ff66;">[인가 갱신 완료]</h3>
-            <p style="color:#ccc; margin-top:10px;">LEVEL 2 특무 조사관으로 승급되었습니다.<br>은폐된 ZONE-0 구역의 열람 권한이 해제됩니다.</p>
-            <button class="tool-btn" style="margin-top:15px;" onclick="closeModal('quizModal'); triggerHaptic('tap');">확인</button>
+            <p style="color:#ccc; margin-top:10px;">LEVEL 2 특무 조사관 승급. (ZONE-0 해제)</p>
         </div>
     </div>
 </div>
@@ -298,20 +267,7 @@
     <div class="modal-content" style="text-align:center; max-width:340px; border-color:#ff00ff; background: #1a001a;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ff00ff;" onclick="closeModal('timeLockModal')">[X]</span>
         <h3 style="color:#ff00ff; font-size:20px; margin-bottom: 10px; animation: blinker 1s infinite;">[SYSTEM ERROR]</h3>
-        <p style="color:#ff99ff; font-size:15px; line-height:1.6;">접근 시간 불일치.<br><br>해당 데이터는 공간의 경계가 얇아지는 <b>심야(03:00~05:00)</b>의 특정 파장에만 동기화됩니다.</p>
-        <button class="tool-btn" style="background:#ff00ff; color:#000; border:none; margin-top:15px; width:100%;" onclick="closeModal('timeLockModal'); triggerHaptic('tap');">돌아가기</button>
-    </div>
-</div>
-
-<!-- 🔥 문서 모달 (동적 버튼 컨테이너 추가) -->
-<div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
-    <div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');">
-        <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
-        <div style="font-size:12px; color:#aaa; margin-bottom:4px;">※ 화면을 탭하면 해독이 즉시 완료됩니다.</div>
-        <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div>
-        <div id="modalBody" style="font-size: 15px; line-height: 1.6; min-height: 120px;"></div>
-        <!-- 비디오 버튼들이 이 컨테이너 안에 렌더링됨 -->
-        <div id="videoBtnContainer" style="margin-top: 15px;"></div>
+        <p style="color:#ff99ff; font-size:15px; line-height:1.6;">접근 시간 불일치.<br><br>공간의 경계가 얇아지는 <b>심야(03:00~05:00)</b>에만 열립니다.</p>
     </div>
 </div>
 
@@ -319,11 +275,20 @@
     <div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('passwordModal')">[X]</span>
         <h3 style="color:#ff3333; font-size:20px; margin-bottom: 10px;">⚠️ [접근 인가 필요]</h3>
-        <p style="color:#ff9999; font-size:14px;">해당 문서는 열람이 통제되어 있습니다.<br>해제 코드를 입력하십시오.</p>
+        <p style="color:#ff9999; font-size:14px;">해제 코드를 입력하십시오.</p>
         <input type="password" id="pw-input" class="pw-input" placeholder="CODE">
-        <br>
         <button class="pw-btn" onclick="checkPassword()">DECRYPT (해독)</button>
-        <p id="pw-error" style="color:#ff3333; margin-top:12px; font-size:15px; font-weight:bold; display:none;" class="blink">인증 실패: 잘못된 코드입니다.</p>
+        <p id="pw-error" style="color:#ff3333; margin-top:12px; font-weight:bold; display:none;" class="blink">인증 실패.</p>
+    </div>
+</div>
+
+<div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
+    <div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');">
+        <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
+        <div style="font-size:12px; color:#aaa; margin-bottom:4px;">※ 화면을 탭하면 즉시 출력됩니다.</div>
+        <div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div>
+        <div id="modalBody" style="font-size: 15px; line-height: 1.6; min-height: 120px;"></div>
+        <div id="videoBtnContainer" style="margin-top: 15px;"></div>
     </div>
 </div>
 
@@ -339,331 +304,122 @@
     </div>
 </div>
 
-<!-- 서류 모달들 -->
-<div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
-    <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
-        <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
-        <div class="paper-doc">
-            <div class="top-secret-stamp">국가기밀<br>TOP SECRET</div>
-            <h3 style="text-align:center; text-decoration:underline; margin-bottom: 20px; margin-top: 10px;">대통령 특별 지시서 (제4특수조사과 신설)</h3>
-            <div style="font-size: 15px; line-height: 1.8;">
-                최근 전국 단위로 원인을 규명할 수 없는 '실종, 비현실적 공간 확장, 집단 환각' 사례가 급증함에 따라, 일반 경찰력으로는 이를 통제할 수 없다고 판단함.<br><br>
-                이에 <b>국가안전보장회의(NSC) 직속으로 '제4특수조사과' 창설을 인가</b>한다.<br><br>
-                1. 민간인 거주 구역 내 변칙 현상 발생 시, 가스 폭발 및 싱크홀 등의 사고로 위장하여 해당 부지를 영구 매립 및 봉인할 것.<br>
-                2. 현장을 목격한 민간인은 [기억 소거 및 사후 통제 프로토콜]에 따라 처리할 것.<br>
-                3. 변칙 개체와의 직접 교전은 금지하며, 관측과 격리를 최우선으로 삼는다.
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="landRegModal" class="modal" style="z-index: 80;" onclick="closeModal('landRegModal')">
-    <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
-        <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('landRegModal')">[X]</span>
-        <div class="paper-doc">
-            <div class="top-secret-stamp">극 비<br>CLASSIFIED</div>
-            <h3 style="text-align:center; text-decoration:underline; margin-bottom: 20px; margin-top: 10px;">건축물대장 및 토지조사 특이사항 보고</h3>
-            <table class="paper-table">
-                <tr><th>문서 번호</th><td>SEC04-1983-009</td></tr>
-                <tr><th>대상 소재지</th><td>강원도 [검열삭제] 산 42-1 (청하공업고등학교 부지)</td></tr>
-                <tr><th>조사관</th><td>현장요원 박ㅇㅇ</td></tr>
-            </table>
-            <div style="margin-top: 20px; font-size: 14px; line-height: 1.6;">
-                본 부지는 화강암반으로 이루어져 있어 <b>지하 3m 이상 굴착이 불가함</b>. 도면에도 지하 설계는 없음.<br><br>
-                그러나 1983년 11월 점검 중 체육관 하부에서 <b><span style="background:#1a1a1a; color:#1a1a1a;">수심을 알 수 없는 거대한 지하시설(현 수영장)</span></b>이 이미 완성된 채 발견됨.<br><br>
-                물에서는 짙은 비린내와 알 수 없는 진동이 감지됨. <i>국장 지시: 일반 수영장으로 위장 후 은폐할 것.</i>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="policeModal" class="modal" style="z-index: 80;" onclick="closeModal('policeModal')">
-    <div class="modal-content" style="background:#000; border-color:#fff; max-width:500px;" onclick="event.stopPropagation()">
-        <span class="close-btn" style="color:#fff;" onclick="closeModal('policeModal')">[X]</span>
-        <div class="paper-police">
-            <h3 style="text-align:center; border-bottom:2px solid #111; padding-bottom:10px; margin-bottom: 15px;">[ 내 사 보 고 서 ]</h3>
-            <p><b>사건번호:</b> 98-수-041<br><b>수사관:</b> 형사과 경위 이ㅇㅇ</p>
-            <div style="margin-top: 15px; font-size: 14px; line-height: 1.6;">
-                수영장 배수 작업 완료. 바닥에서 특이사항 발견. 배수구 안쪽에서 <b>다수의 손톱자국 및 지속적인 마찰음(긁는 소리)</b> 발생 확인.<br><br>
-                현장에서 실종된 학생 3명의 교복을 발견하였으나, 수거된 교복은 총 4벌임. 추가된 1벌의 명찰은 붉은색이며 이름이 마모되어 식별 불가.<br><br>
-                (상부 지시로 단순 가출로 종결 처리함)
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="diaryModal" class="modal" style="z-index: 80;" onclick="closeModal('diaryModal')">
-    <div class="modal-content" style="background:#000; border-color:#ff3333; max-width:450px;" onclick="event.stopPropagation()">
-        <span class="close-btn" style="color:#ff3333;" onclick="closeModal('diaryModal')">[X]</span>
-        <div class="paper-diary">
-            <div class="blood-stain"></div>
-            <h3 style="font-size:18px; margin-bottom:15px; color:#520;">[초대 교장의 수첩 조각]</h3>
-            <div style="font-size: 16px; line-height: 1.8; font-style: italic;">
-                <b>10/12:</b> 방송실 주전원을 끊고 문을 용접했다. 그런데도 새벽 2시 14분만 되면 마이크 하울링 소리가 들린다. 누가 방송을 하는 건가.<br><br>
-                <b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 우리 학교엔 붉은 명찰이 없다. 눈을 마주치면 안 된다. 시멘트가 더 필요하다. 수영장을 막아야 해.<br><br>
-                <b>10/14:</b> 창밖에서 부른다. 내 이름이다. 대답해야 한다. 가야겠다.
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
+/* =========================================================
+   1. 코어 시스템 (크레딧 & 접속 체크)
+   ========================================================= */
+let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
+let inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]');
+let currentZone = 'ALL', selectedItemIndex = -1;
+
+function updateCreditUI() {
+    document.getElementById('cr-val').innerText = userCredits;
+}
+
+function addCredits(amt, msg) {
+    userCredits += amt;
+    localStorage.setItem('agent_credits', userCredits);
+    updateCreditUI();
+    showToast(`💰 [크레딧 획득] +${amt} CR`, msg, "#00ff66");
+}
+
+function showToast(title, subtitle, color) {
+    const toast = document.getElementById('achievement-toast');
+    document.getElementById('toast-title').innerText = title;
+    document.getElementById('toast-subtitle').innerText = subtitle;
+    toast.style.borderColor = color;
+    document.getElementById('toast-title').style.color = color;
+    toast.style.bottom = "20px";
+    setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
+}
+
+function checkDailyLogin() {
+    const today = new Date().toISOString().split('T')[0];
+    if (localStorage.getItem('last_login') !== today) {
+        localStorage.setItem('last_login', today);
+        setTimeout(() => addCredits(50, "일일 보안망 접속 보상"), 1500);
+    }
+}
+
 function triggerHaptic(type) {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
         try {
             if (type === 'success') navigator.vibrate([30, 30, 30]); 
             else if (type === 'error') navigator.vibrate([150]); 
-            else if (type === 'horror_denied') navigator.vibrate([30, 50, 30, 50, 30]); 
-            else if (type === 'horror_open') navigator.vibrate([100, 50, 150, 50, 300]); 
             else if (type === 'tap') navigator.vibrate(15); 
         } catch(e) {}
     }
 }
 
-const achievementsDB = [
-    { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
-    { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
-    { id: "ach_report", type: "활동", name: "[내부 고발자] 제보 완료", desc: "미확인 변칙 현상을 데이터베이스에 전송했습니다.", color: "#ffcc00" },
-    { id: "ach_quiz", type: "활동", name: "[현장 투입] 승급 심사 통과", desc: "특무 조사관으로 승급하여 일급 기밀을 해제했습니다.", color: "#3388ff" },
-    { id: "ach_recon", type: "활동", name: "[현장 정찰조] 구역 스캔", desc: "모든 통제 구역(ZONE) 탭을 확인했습니다.", color: "#3388ff" },
-    { id: "ach_fake_report", type: "경고", name: "[허위 신고] 데이터 낭비", desc: "내용이 없는 빈 보고서를 전송하려 했습니다.", color: "#ff8888" },
-    { id: "ach_coward", type: "경고", name: "[회피] 시선 돌리기", desc: "감시 영상을 2초 만에 꺼버렸습니다.", color: "#ff8888" },
-    { id: "ach_rare_1", type: "경고", name: "[과부하] 보안 경고 누적", desc: "비밀번호를 연속 5회 틀렸습니다.", color: "#ff8888" },
-    { id: "ach_rare_2", type: "경고", name: "[올빼미] 심야의 목격자", desc: "새벽 3시~4시 사이에 접속했습니다.", color: "#ff8888" },
-    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "숨겨진 해제 코드로 봉인을 풀었습니다.", color: "#ff3333" },
-    { id: "ach_witness", type: "전설", name: "[진실의 목격자] 아카이브 완독", desc: "존재하는 모든 기밀 문서를 열람했습니다.", color: "#ffcc00" },
-    { id: "ach_hidden_1", type: "히든", name: "공허 응시", desc: "빈 배경을 10번 연속 탭했습니다.", color: "#ff3333", isHidden: true },
-    { id: "ach_hidden_2", type: "히든", name: "구조 거부", desc: "HELP 코드를 입력했으나 거절당했습니다.", color: "#ff3333", isHidden: true },
-    { id: "ach_hidden_3", type: "히든", name: "신분 위조", desc: "암호화된 요원 식별 코드를 조작했습니다.", color: "#ff3333", isHidden: true },
-    { id: "ach_paranoia", type: "히든", name: "편집증", desc: "기밀 해제 코드를 10회 이상 틀렸습니다.", color: "#ff3333", isHidden: true }
-];
-
-let pwFailCount = 0;
-function unlockAchievement(achId) {
-    if (localStorage.getItem(achId) === 'true') return;
-    localStorage.setItem(achId, 'true');
-    const ach = achievementsDB.find(a => a.id === achId);
-    if (!ach) return;
-    const toast = document.getElementById('achievement-toast');
-    document.getElementById('toast-title').innerText = `🏆 [${ach.type}] ${ach.name}`;
-    document.getElementById('toast-title').style.color = ach.color;
-    toast.style.bottom = "20px";
-    setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
-}
-
-let hashTaps = 0;
-function generateHash() {
-    const hash = Array.from({length: 32}, () => Math.floor(Math.random()*16).toString(16).toUpperCase()).join('');
-    return `[ENC:AES-256]<br><span style="font-size:12px; color:#88ffaa;">${hash}</span>`;
-}
-function tapHash() {
-    hashTaps++;
-    triggerHaptic('tap');
-    if (hashTaps === 5) {
-        triggerHaptic('error');
-        unlockAchievement('ach_hidden_3');
-        document.getElementById('id-hash-code').innerHTML = `[SYS: WARN]<br><span style="font-size:14px; color:#ff3333; font-weight:bold;">[IDENTITY_FORGED]</span>`;
-    }
-}
-
-function openProfile() {
-    triggerHaptic('tap');
-    const list = document.getElementById('achievement-list');
-    list.innerHTML = '';
-    let unlockCount = 0;
-    achievementsDB.forEach(ach => {
-        const isUnlocked = localStorage.getItem(ach.id) === 'true';
-        if (isUnlocked) unlockCount++;
-        const li = document.createElement('li');
-        li.style.padding = "8px"; li.style.marginBottom = "6px";
-        li.style.border = `1px solid ${isUnlocked ? ach.color : '#333'}`;
-        li.style.background = isUnlocked ? "rgba(0,0,0,0.6)" : "#050505";
-        li.style.color = isUnlocked ? "#fff" : "#444";
-        li.style.fontSize = "14px";
-        if (isUnlocked) {
-            li.innerHTML = `<b style="color:${ach.color};">[${ach.type}] ${ach.name}</b><br><span style="font-size:12px; color:#aaa;">${ach.desc}</span>`;
-        } else {
-            li.innerHTML = `<b>🔒 [${ach.isHidden ? '히든' : ach.type}] ${ach.isHidden ? '?????????' : ach.name}</b>`;
-        }
-        list.appendChild(li);
-    });
-    document.getElementById('badge-count').innerText = unlockCount;
-    const isLvl2 = localStorage.getItem('ach_quiz') === 'true';
-    document.getElementById('user-level').innerText = isLvl2 ? "LEVEL 2 (특무 조사관)" : "LEVEL 1 (수습)";
-    
-    if(!document.getElementById('card-agent-id').innerText.startsWith('X-')) {
-        document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
-    }
-    if(hashTaps < 5 && document.getElementById('id-hash-code').innerHTML.includes('LOADING')) {
-        document.getElementById('id-hash-code').innerHTML = generateHash();
-    }
-    document.getElementById('profileModal').style.display = 'flex';
-}
-
-function exportIDCard() {
-    triggerHaptic('success');
-    const cardElement = document.getElementById('id-card-capture');
-    cardElement.style.boxShadow = "0 0 30px #fff";
-    setTimeout(() => { cardElement.style.boxShadow = "0 0 15px rgba(0, 255, 102, 0.3)"; }, 300);
-
-    if (typeof html2canvas !== 'undefined') {
-        html2canvas(cardElement, { backgroundColor: "#05100a", scale: 2 }).then(canvas => {
-            let link = document.createElement('a');
-            link.download = 'SEC04_AGENT_ID.png'; 
-            link.href = canvas.toDataURL('image/png');
-            link.click(); 
-            alert("[SYSTEM] ID 카드가 암호화된 이미지 파일로 저장되었습니다.");
-        }).catch(err => alert("저장 오류 발생. 화면을 직접 캡처해 주십시오."));
-    } else {
-        alert("외부 라이브러리 로드 실패. 화면을 캡처해 주십시오.");
-    }
-}
-
-function submitReport() {
-    triggerHaptic('tap');
-    const loc = document.getElementById('rep-loc').value;
-    const date = document.getElementById('rep-date').value; 
-    const desc = document.getElementById('rep-desc').value;
-    
-    if(!loc || !desc) { 
-        unlockAchievement('ach_fake_report');
-        triggerHaptic('error');
-        alert("장난치지 마십시오. 시스템에 IP가 기록되었습니다."); 
-        return; 
-    }
-    
-    const logBox = document.getElementById('report-log');
-    logBox.innerText = "> 데이터 암호화 중...\n";
-    const webhookUrl = "https://discord.com/api/webhooks/1539420607463166043/kMcksT5uDe1b0_NQbtDUxp486fOTIj1j4QXCMaGS-ZW8uomfsCigA6w-WCD9f-Rmrq8-"; 
-    fetch(webhookUrl, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: `🚨 **[신규 제보]**\n지역: ${loc}\n일자: ${date||'미상'}\n내용: ${desc}` })
-    }).catch(e=>{});
-
-    setTimeout(() => { logBox.innerText += "> 보안 서버 연결 시도...\n"; }, 600);
-    setTimeout(() => { 
-        logBox.innerText += "> [SUCCESS] 접수 완료."; 
-        unlockAchievement('ach_report'); triggerHaptic('success');
-        setTimeout(() => {
-            closeModal('reportModal');
-            document.getElementById('rep-loc').value = ''; document.getElementById('rep-date').value = ''; document.getElementById('rep-desc').value = ''; logBox.innerText = '';
-        }, 2000);
-    }, 1500);
-}
-
-const clickedZones = new Set();
-clickedZones.add('ALL');
-function switchZone(zone, e) {
-    triggerHaptic('tap');
-    clickedZones.add(zone);
-    if(clickedZones.size >= 4) unlockAchievement('ach_recon');
-    currentZone = zone; document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); renderList();
-}
-
-function openQuizModal() {
-    triggerHaptic('tap');
-    if(localStorage.getItem('ach_quiz') === 'true') {
-        document.getElementById('quiz-form').style.display = 'none'; document.getElementById('quiz-success').style.display = 'block';
-    } else {
-        document.getElementById('quiz-form').style.display = 'block'; document.getElementById('quiz-success').style.display = 'none';
-    }
-    document.getElementById('quiz-error').style.display = 'none';
-    document.getElementById('quizModal').style.display = 'flex';
-}
-
-function submitQuiz() {
-    const q1 = document.querySelector('input[name="q1"]:checked');
-    const q2 = document.querySelector('input[name="q2"]:checked');
-    const q3 = document.querySelector('input[name="q3"]:checked');
-    const q4 = document.querySelector('input[name="q4"]:checked');
-    
-    if(q1?.value === "2" && q2?.value === "1" && q3?.value === "2" && q4?.value === "2") {
-        triggerHaptic('success'); unlockAchievement('ach_quiz');
-        document.getElementById('quiz-form').style.display = 'none'; document.getElementById('quiz-success').style.display = 'block'; renderList(); 
-    } else {
-        triggerHaptic('error'); document.getElementById('quiz-error').style.display = 'block';
-    }
-}
-
-let mapRotX = 65, mapRotZ = 45, mapScale = 1, isDraggingMap = false, startMouseX = 0, startMouseY = 0, initialPinchDist = null;
-const mapContainer = document.getElementById('map3dArea'), building = document.getElementById('building3d');
-function updateMapTransform() { building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`; }
-function zoomMap(delta) { mapScale += delta; mapScale = Math.max(0.5, Math.min(mapScale, 2.5)); updateMapTransform(); }
-function openMapModal() { triggerHaptic('tap'); document.getElementById('mapModal').style.display = 'flex'; mapRotX = 65; mapRotZ = 45; mapScale = 1; updateMapTransform(); }
-mapContainer.addEventListener('mousedown', (e) => { isDraggingMap = true; startMouseX = e.clientX; startMouseY = e.clientY; building.style.transition = 'none'; });
-document.addEventListener('mousemove', (e) => {
-    if (!isDraggingMap) return;
-    mapRotZ -= (e.clientX - startMouseX) * 0.6; mapRotX -= (e.clientY - startMouseY) * 0.6; mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.clientX; startMouseY = e.clientY; updateMapTransform();
-});
-document.addEventListener('mouseup', () => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }});
-mapContainer.addEventListener('wheel', (e) => { e.preventDefault(); zoomMap(e.deltaY * -0.001); }, {passive: false});
-
-mapContainer.addEventListener('touchstart', (e) => {
-    if(e.touches.length === 1) { isDraggingMap = true; startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; building.style.transition = 'none'; }
-    else if (e.touches.length === 2) { isDraggingMap = false; initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
-});
-mapContainer.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (isDraggingMap && e.touches.length === 1) {
-        mapRotZ -= (e.touches[0].clientX - startMouseX) * 0.8; mapRotX -= (e.touches[0].clientY - startMouseY) * 0.8; mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; updateMapTransform();
-    } else if (e.touches.length === 2 && initialPinchDist !== null) {
-        const currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); zoomMap((currentDist - initialPinchDist) * 0.005); initialPinchDist = currentDist;
-    }
-}, {passive: false});
-document.addEventListener('touchend', (e) => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; } if(e.touches.length < 2) initialPinchDist = null; });
-
-
-/* =====================================================================
-   🔥 터치 먹통 현상을 고치는 핵심 코드 복구 (startSystem 등 변수 추가)
-   ===================================================================== */
-let currentZone = 'ALL', selectedItemIndex = -1;
-
 function startSystem() {
     triggerHaptic('tap');
-    if(new Date().getHours() >= 3 && new Date().getHours() < 5) unlockAchievement('ach_rare_2');
+    checkDailyLogin();
     const box = document.getElementById('intro-box');
     document.getElementById('intro-text').style.display = "none"; box.classList.add("expand-x");
     setTimeout(() => { box.classList.add("expand-y"); }, 400);
     setTimeout(() => { 
         document.getElementById('intro-screen').classList.add("fade-out"); 
-        document.getElementById('main-ui').style.transition = "opacity 0.8s"; document.getElementById('main-ui').style.opacity = 1; renderList();
+        document.getElementById('main-ui').style.transition = "opacity 0.8s"; document.getElementById('main-ui').style.opacity = 1; 
+        updateCreditUI(); applyInventoryEffects(); renderList();
     }, 700);
     setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1000);
 }
 
-function openSpecificDocument(caseId) { 
-    closeModal('mapModal'); 
-    const idx = caseDatabase.findIndex(c => c.id === caseId); 
-    if(idx !== -1) handleItemClick(idx, false); 
-}
-/* ===================================================================== */
+function openModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'flex'; }
+function closeModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'none'; if(id === 'archiveModal') clearInterval(typeInterval); }
 
+/* =========================================================
+   2. 데이터베이스 및 요일 던전 자동 생성
+   ========================================================= */
+const dailyThemes = [
+    { title: "[공간 붕괴] 무한 확장 아파트", desc: "출구를 열어도 다른 층의 복도로 이어지는 현상. 구조대원 전원 실종." }, // 0 일
+    { title: "[수몰] 청하공고 지하 수영장", desc: "도면에 없는 수심 미상의 지하 시설. 짙은 비린내와 발광체 관측됨." }, // 1 월
+    { title: "[소실] 화재 및 존재 소멸", desc: "화재 진압 후, 거주자의 호적과 주변인의 기억까지 통째로 지워짐." }, // 2 화
+    { title: "[신체 변형] 마네킹 마을", desc: "마을 주민 40여 명의 신체가 서서히 플라스틱 재질로 석화 진행 중." }, // 3 수
+    { title: "[시간 왜곡] 영원한 방탈출", desc: "테마 룸 진입 후 현실 세계의 시간 축과 완전히 분리된 폐쇄 루프." }, // 4 목
+    { title: "[도플갱어] 신분 대체 구역", desc: "구조된 경비원의 거울 속 모습이 0.5초 늦게 움직임. 즉각 폐기 요망." }, // 5 금
+    { title: "[인지 오염] 라디오 착란", desc: "특정 주파수 청취 시 집단으로 자해 시도. 음성 파일 재생 절대 금지." }  // 6 토
+];
+
+const tIdx = new Date().getDay();
+const dailyCase = {
+    id: "CASE-DAILY", zone: "ZONE-2", level: "2급 기밀", title: `[일일 스캔] ${dailyThemes[tIdx].title}`, date: "TODAY", isLocked: false, videos: [],
+    content: `<div class='wiki-infobox' style='border-color:#00ccff;'><div class='wiki-infobox-title' style='background:#00ccff; color:#000;'>일일 관측 레이더 (ZONE-2)</div><div class='wiki-row'><div class='wiki-label' style='color:#00ccff;'>관측 대상</div><div class='wiki-value'>${dailyThemes[tIdx].title}</div></div></div><div class='wiki-h2'>현장 요약</div>${dailyThemes[tIdx].desc}<br><br><span style='color:#88ccff;'>※ 해당 구역은 오늘 자정까지만 관측 가능하며, 이후 시공간이 재배열됩니다. (완독 시 30 CR 지급)</span>`
+};
 
 const caseDatabase = [
     {
-        id: "CASE-00", zone: "ZONE-0", level: "국장급 기밀", title: "[열람 인가됨] 제4특수조사과 창설 및 운영 강령", date: "1972-04-01", isLocked: false, videos: [],
-        content: "<div class='wiki-infobox' style='border-color:#ffcc00;'><div class='wiki-infobox-title' style='background:#ffcc00;'>제4특수조사과 (SEC-04)</div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>존재 의의</div><div class='wiki-value'>국가 내 미확인 변칙 현상 격리 및 은폐</div></div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>사상자 수</div><div class='wiki-value' style='color:#ff6666;'>집계 불가</div></div><div class='wiki-row'><div class='wiki-label' style='color:#ffcc00;'>현 관리국장</div><div class='wiki-value'>[검열됨]</div></div></div><div class='wiki-toc'><b>[목차]</b><br>1. 개요 및 설립 배경<br>2. 핵심 임무 (격리 및 은폐)<br>3. 현장 조사관 3대 수칙<br>4. 부서 구성<br>5. 위험도(ZONE) 등급<br>6. 관련 기밀 문헌</div><div class='wiki-h2' style='color:#ffcc00;'>환영합니다. 특무 조사관.</div>이 문서는 승급 심사를 통과한 소수의 인원에게만 열람이 허가된 ZONE-0 구역입니다.<br><div class='wiki-h2'>1. 개요 및 설립 배경</div>1968년 서울 [검열삭제]동에서 발생한 '공간 소실 사태'를 계기로 기존 물리법칙과 인과율로 설명할 수 없는 현상(이하 '변칙')에 대응하기 위해 국가안전보장회의(NSC) 직속으로 비밀리에 창설되었습니다.<br><div class='wiki-h2'>2. 핵심 임무</div>우리의 목적은 변칙 개체의 '파괴'나 '이해'가 아닙니다. 그것들은 인간의 논리로 해석할 수 없습니다. 우리의 유일한 목적은 대중이 모르게 <b>은폐하고, 시멘트로 메우고, 철책선을 쳐서 격리하는 것</b>입니다. 대중의 공포는 변칙을 더욱 강하게 만듭니다.<br><div class='wiki-h2'>3. 현장 조사관 3대 수칙</div><blockquote style='background:rgba(255,204,0,0.1); border-left:3px solid #ffcc00; padding:10px; margin:10px 0;'><b>제1수칙:</b> 변칙의 원인을 이해하려 하지 말 것.<br><b>제2수칙:</b> 변칙 개체(또는 희생자)에 감정을 이입하거나 동정심을 느끼지 말 것. 감염의 징후로 간주되어 즉결 처분됨.<br><b>제3수칙:</b> 현장에서 사망이 확실시되더라도 웨어러블 캠의 녹화는 끝까지 유지할 것.</blockquote><div class='wiki-h2'>4. 부서 구성</div>• <b>정보통제팀(팀 파놉티콘):</b> 인터넷 상에 퍼지는 괴담, 목격담, 뉴스 기사를 조작하고 삭제합니다.<br>• <b>현장격리팀(팀 케르베로스):</b> 변칙 구역의 물리적 봉인(특수 배합 콘크리트 타설, 아크 용접 등)을 담당합니다.<br>• <b>기억소거반:</b> 변칙에 노출된 생존 민간인을 대상으로 화학적, 심리적 기억 소거를 집행합니다.<br><div class='wiki-h2'>5. 위험도(ZONE) 등급</div>• <b>ZONE-1:</b> 민간인 접근이 완전 통제된 영구 격리 구역 (예: 청하공고)<br>• <b>ZONE-2:</b> 활동이 멎었으나 지속적인 관찰이 필요한 구역<br>• <b>ZONE-3:</b> 도심 한복판에 존재하여 완벽한 물리적 통제가 불가능한 은폐 구역 (예: 방탈출 매장)<br>• <b>ZONE-0:</b> 국가적 재난을 초래할 수 있는 최고 기밀 정보<br><div class='wiki-h2'>6. 관련 기밀 문헌</div><ul class='wiki-list'><li>📄 <a class='wiki-link' onclick='triggerHaptic(\"tap\"); document.getElementById(\"sec04Modal\").style.display=\"flex\"'>국가기밀문서_제1호_대통령특별지시서.pdf</a></li></ul>"
+        id: "CASE-00", zone: "ZONE-0", level: "국장급", title: "[열람 인가됨] 제4특수조사과 운영 강령", isLocked: false, videos: [],
+        content: "<div class='wiki-h2' style='color:#ffcc00;'>환영합니다. 특무 조사관.</div>이 문서는 승급 심사를 통과한 인원에게만 열람이 허가된 ZONE-0 구역입니다.<br>우리의 목적은 변칙의 이해가 아닙니다. <b>은폐하고, 콘크리트로 메우고, 통제하는 것</b>입니다."
     },
     {
-        id: "CASE-01", zone: "ZONE-1", level: "1급 기밀", title: "사립 청하공업고등학교 폐쇄 사태", date: "2004-10-14 폐쇄", isLocked: false, 
+        id: "CASE-01", zone: "ZONE-1", level: "1급 기밀", title: "사립 청하공업고등학교 폐쇄 사태", isLocked: false, 
         videos: [
-            { title: "▶ [기록 1] 최초 제보 유출 영상 재생", url: "https://www.youtube.com/embed/8MbCY4lbUvI" },
-            { title: "▶ [기록 2] 최종 통신 기록 영상 재생", url: "https://www.youtube.com/embed/vCV4nLb2_tY" }
+            { title: "▶ [기록 1] 유출 영상 재생", url: "https://www.youtube.com/embed/8MbCY4lbUvI" },
+            { title: "▶ [기록 2] 통신 두절 영상 재생", url: "https://www.youtube.com/embed/vCV4nLb2_tY" }
         ],
-        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>사립 청하공업고등학교 (靑夏工高)</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-1 (접근 제한구역)</div></div><div class='wiki-row'><div class='wiki-label'>교훈</div><div class='wiki-value'><i>\"부름에 답하지 말고 묵묵히 나아가라\"</i></div></div><div class='wiki-row'><div class='wiki-label'>피해/실종</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>학생 11명, 교직원 4명, 조사원 2명 영구 실종</div></div><div class='wiki-row'><div class='wiki-label'>현재 상태</div><div class='wiki-value'>무기한 폐교 및 반경 2km 철책선 통제</div></div></div><div class='wiki-toc'><b>[목차]</b><br>1. 개요<br>2. 연혁<br>3. 학교 특징<br>4. 학교 시설<br>5. 사건·사고 (1998년 실종, 2004년 사태)<br>6. 관련 문헌 및 첨부 파일</div><div class='wiki-h2'>1. 사건 발단 (최초 제보 영상)</div>사건 초반, 익명의 정보원에 의해 유출된 짧은 현장 기록입니다.<br><b style='color:#ff8888;'>하단에 위치한 [기록 1] 재생 버튼을 통해 확인하십시오.</b><br><br>해당 영상 확인 직후 현장 수색을 위해 특수조사팀이 파견되었습니다.<br><div class='wiki-h2'>2. 개요 및 연혁</div>강원도 [검열삭제] 산간 지역에 위치했던 사립 공업계 고등학교. 2004년 10월 발생한 <b>'교내 방송 사태'</b> 이후 비공식적으로 완전 폐쇄되었습니다.<br>• 1998. 07: 기숙사생 3명 야간 집단 실종. 지하 수영장 영구 폐쇄 조치.<br>• 2004. 10. 14: 전교생 귀가 조치 및 당일 부로 무기한 휴교.<br><div class='wiki-h2'>3. 학교 시설 기형성</div><b>본관 3층:</b> 야간 순찰 중 '책상 밑에 웅크려 있는 덩어리 형태의 인영'들 다수 관측.<br><b>지하 수영장:</b> 1998년 실종자 교복이 발견된 장소. 물을 빼고 시멘트로 봉인했으나 정체불명의 안개와 발광체가 유영함.<div style='border:1px dashed #ff3333; padding:8px; margin:10px 0; background:rgba(255,0,0,0.1);'>[기밀 해제 단서] 실종자 유류품에서 이상한 낙서가 발견됨. 타 구역 해제 코드 ➔ <span class='hidden-text'>1103</span> (텍스트를 드래그하여 확인)</div><div class='wiki-h2'>4. 2004년 방송실 사태 결말</div>전기가 끊긴 2004년 10월 14일 심야. 학교 전체 스피커에서 마이크 하울링 소리와 함께 안내 방송이 송출되기 시작함.<br><div style='text-align:center;'><img src='./1103-GIF.gif' class='creepy-gif' alt='SIGNAL LOST'><img src='./1103-GIF2.gif' class='creepy-gif' alt='SIGNAL LOST'></div><div class='wiki-warning'>⚠️ <b>[통제구역 생존 수칙 제1항]</b><br>방송에서 <i>\"창밖의 소리에 절대 응답하지 마십시오\"</i>라는 멘트가 나오면 즉시 바닥에 엎드려 귀를 막으십시오.</div>"
+        content: "<div class='wiki-h2'>1. 2004년 방송실 사태 결말</div>전기가 끊긴 심야, 스피커에서 마이크 하울링 소리와 안내 방송이 송출되기 시작함.<br><div style='text-align:center;'><img src='./1103-GIF.gif' class='creepy-gif'><img src='./1103-GIF2.gif' class='creepy-gif'></div><div class='wiki-warning'>⚠️ <b>방송에서 창밖의 소리에 응답하지 마십시오.</b></div>"
     },
     {
-        id: "CASE-02", zone: "ZONE-3", level: "3급 기밀", title: "홍대 M 방탈출 '시간 축 분리' 및 고립 사건", date: "2016-11-03", isLocked: true, password: "1103", 
-        videos: [
-            { title: "▶ [현장 기록] CCTV 복원 영상 재생", url: "https://www.youtube.com/embed/pA5hGcmdVv4?si=7cvjT4PUBXHHdnC6" }
-        ],
-        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>홍대 M 방탈출 매장 시공간 위상 왜곡 사태</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-3 (도심 내 은폐구역)</div></div><div class='wiki-row'><div class='wiki-label'>입장 인원</div><div class='wiki-value'>남성 2명, 여성 2명 (대학 동기)</div></div><div class='wiki-row'><div class='wiki-label'>피해 현황</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>3명 정상 퇴장 / 김ㅇㅇ(남, 24세) 고립</div></div></div><div class='wiki-h2'>1. 사건 개요</div>2016년 11월 3일 19시, 4명의 일행이 방탈출 테마 '비밀의 서재'에 입장함.<br>제한 시간 10분을 남기고 일행 중 1명(김ㅇㅇ)이 혼자 추가 단서를 찾겠다며 2번째 방 벽장 안쪽으로 재진입함.<br><br>종료 알람이 울린 뒤 <b>김ㅇㅇ을 제외한 3명은 정상적으로 출구로 퇴장</b>했으나, 일행들은 직전까지 김ㅇㅇ이 자기들과 함께 탈출했다고 주장하는 등 극심한 인지 착란을 보임.<br>직원이 매장 전체를 확인했으나 김ㅇㅇ의 모습은 찾을 수 없었으며, 내부 CCTV 확인 결과 <b>카메라 사각지대였던 벽장 속으로 들어간 직후 영상에서 신호가 소실</b>된 것으로 확인됨.<br><div class='wiki-h2'>2. 극비 입수: 실종자 휴대전화 복구 기록</div>김ㅇㅇ은 매장 규정을 위반하고 개인 스마트폰을 주머니에 소지한 채 입장했음.<br>아래는 통신사 포렌식을 통해 제4특수조사과가 단독 입수한 <b>외부 일행과의 K-메신저 대화 및 현장 촬영본</b>임.<br><div style='border: 1px dashed #00ff66; padding: 12px; background: rgba(0, 255, 102, 0.05); margin: 15px 0; font-family: sans-serif; font-size: 14px;'><div style='text-align:center; color:#00ff66; margin-bottom:12px; font-family: \"Share Tech Mono\";'>[DATA RECOVERY_ CHAT LOG : 2016-11-03]</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:03)]</span> : 야 너네 어디 감? 카운터냐?</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:05)]</span> : 문 다 잠겼는데 알바 장난침? 불도 다 꺼짐</div><div style='margin-bottom:8px; text-align:right;'>우리 이미 나와서 닭갈비집 왔는데 뭔 소리임? ㅋㅋㅋ : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:07)]</span></div><div style='margin-bottom:8px; text-align:right;'>너 우리랑 같이 나와서 화장실 간다고 나갔잖아 : <span style='color:#88ffaa;'>[동기 박ㅇㅇ (20:08)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:10)]</span> : 지랄마 나 아직 2번방 안쪽임. 밖에서 벨소리 들리는데 너네 없다고</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:12)]</span> : <br><img src='https://media.giphy.com/media/3o7aD2d7qc9qI8bzsQ/giphy.gif' class='creepy-gif' style='max-width: 220px; border: 1px solid #ff3333; margin-top: 4px; filter: grayscale(100%) contrast(150%);'></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:13)]</span> : 방탈출 인테리어 다 뜯겨있고 곰팡이 냄새 개심함. 여기 폐건물 같은데?</div><div style='margin-bottom:8px; text-align:right;'>야 장난치지 말고 빨리 와 고기 식는다 : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:15)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:18)]</span> : 저기 서있는 거 너네 아니지</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:19)]</span> : 나랑 똑같이 생긴게 걸어오는데</div><div style='margin-bottom:8px; text-align:right; color:#777;'>(이후 모든 회선 연결 영구 단절) : <span style='color:#88ffaa;'>[통신사 서버 (20:20)]</span></div></div><div class='wiki-h2'>3. 조사 결과 및 사후 조치</div>• <b>위상 불일치 판정:</b> 매장 내부의 특정 공간이 수십 년 전 폐허 상태의 시간 축과 중첩되어 있던 것으로 확인됨.<br>• <b>대체 현상:</b> 동기 3명이 본 '화장실로 간 김ㅇㅇ'은 실종자의 껍데기를 복제한 미확인 변칙체로 추정되며, 이후 종적을 감춤.<br>• 해당 매장 지하 1층은 누수 및 가스 누출 위험을 이유로 영구 폐쇄 조치 후 콘크리트로 완전 타설 봉인됨."
+        id: "CASE-02", zone: "ZONE-3", level: "3급 기밀", title: "홍대 M 방탈출 시간 축 분리 고립", isLocked: true, password: "1103", 
+        videos: [{ title: "▶ [현장 기록] CCTV 영상 재생", url: "https://www.youtube.com/embed/pA5hGcmdVv4?si=7cvjT4PUBXHHdnC6" }],
+        content: "<div class='wiki-h2'>1. 사건 개요</div>제한 시간 종료 후 1명만 카메라 사각지대 벽장 속으로 진입하여 영상 신호가 영구 소실됨."
     },
+    dailyCase,
     {
-        id: "CASE-3AM", zone: "ZONE-X", level: "분류 불가", title: "발신자 불명 (데이터 오염)", date: "UNKNOWN", isLocked: true, password: "NONE", videos: [],
-        content: "<div style='color:#ff3333; font-size:22px; font-weight:bold; text-align:center; margin-bottom:20px; animation: blinker 2s infinite;'>[경고: 관측자 역추적 발생]</div><div style='font-size:16px; line-height:1.8; color:#ddd;'>이 문서는 제4특수조사과의 데이터베이스가 아닙니다.<br>지금 스마트폰 화면을 통해 이 텍스트를 읽고 있는 <b>당신</b>에게 직접 송출되는 메시지입니다.<br><br>현재 시각, 주변은 어둡고 조용할 것입니다.<br>푸르스름한 화면 불빛만이 당신의 얼굴을 비추고 있겠죠.<br><br><b style='color:#ff3333;'>화면에서 눈을 떼지 마십시오.</b><br>당신이 이 기밀 문서들에 시선을 빼앗긴 사이, 어둠 속에 있던 '그것'이 방금 당신의 등 뒤까지 다가왔습니다.<br><br>이불 밖으로 발을 내밀고 있다면 당장 집어넣으십시오.<br>낯선 숨소리가 들려도 <b>절대 돌아보지 마십시오.</b><br><br><span style='color:#ff8888;'>[SYSTEM WARNING] 전면 카메라 렌즈에 미확인 피사체가 감지되었습니다...</span></div><br><img src='https://media.giphy.com/media/l41YfG5pbXm1FUXxC/giphy.gif' class='creepy-gif' style='filter: invert(1) contrast(150%); max-width: 100%; border-color:#ff00ff;'>"
+        id: "CASE-3AM", zone: "ZONE-X", level: "분류 불가", title: "발신자 불명 (데이터 오염)", isLocked: true, password: "NONE", videos: [],
+        content: "<div style='color:#ff3333; font-size:22px; font-weight:bold; text-align:center; margin-bottom:20px; animation: blinker 2s infinite;'>[관측자 역추적 발생]</div><div style='font-size:16px; color:#ddd;'>지금 화면을 읽고 있는 <b>당신</b>에게 송출되는 메시지입니다.<br><b style='color:#ff3333;'>화면에서 눈을 떼지 마십시오.</b> 당신이 시선을 빼앗긴 사이 '그것'이 등 뒤까지 다가왔습니다.</div><img src='./1103-GIF.gif' class='creepy-gif' style='filter: invert(1) contrast(150%);'>"
     }
 ];
+
+/* =========================================================
+   3. 렌더링 및 해금 로직
+   ========================================================= */
+function switchZone(zone, e) {
+    triggerHaptic('tap'); currentZone = zone; 
+    document.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); 
+    renderList();
+}
 
 function renderList() {
     const list = document.getElementById('archiveList'); list.innerHTML = '';
@@ -676,21 +432,24 @@ function renderList() {
         return currentZone === 'ALL' || item.zone === currentZone;
     });
 
-    filtered.forEach(item => {
-        const originalIndex = caseDatabase.indexOf(item);
+    filtered.forEach((item, idx) => {
         const isCleared = localStorage.getItem('cleared_' + item.id) === 'true';
-        const currentlyLocked = item.isLocked && !isCleared;
-        const lockIcon = currentlyLocked ? "🔒" : "📄";
-        let badgeClass = "badge-lv1", extraRowClass = "";
+        let currentlyLocked = item.isLocked && !isCleared;
         
+        // 아이템 적용: 오버라이드 샀으면 비번 무시
+        if (item.id === "CASE-02" && inventory.includes('ITEM_OVERRIDE')) currentlyLocked = false;
+
+        const lockIcon = currentlyLocked ? "🔒" : "📄";
+        let badgeClass = "badge-lv1", extraClass = "";
         if(item.zone === 'ZONE-0') badgeClass = "badge-lv0";
+        if(item.zone === 'ZONE-2') { badgeClass = "badge-lv2"; extraClass = "daily-row"; }
         if(item.zone === 'ZONE-3') badgeClass = "badge-lv3";
-        if(item.zone === 'ZONE-X') { badgeClass = "badge-lvx"; extraRowClass = "glitch-row"; } 
+        if(item.zone === 'ZONE-X') { badgeClass = "badge-lvx"; extraClass = "glitch-row"; } 
 
         const li = document.createElement('li');
-        li.className = `archive-item ${currentlyLocked ? 'locked' : ''} ${extraRowClass}`;
-        li.onclick = () => { triggerHaptic('tap'); handleItemClick(originalIndex, currentlyLocked); }
-        li.innerHTML = `<div style="flex:1;"><span class="badge ${badgeClass}">${item.zone}</span><span style="font-size:16px;">${lockIcon} ${item.title}</span></div>`;
+        li.className = `archive-item ${currentlyLocked ? 'locked' : ''} ${extraClass}`;
+        li.onclick = () => { triggerHaptic('tap'); handleItemClick(caseDatabase.indexOf(item), currentlyLocked); }
+        li.innerHTML = `<div style="flex:1;"><span class="badge ${badgeClass}">${item.zone}</span><span>${lockIcon} ${item.title}</span></div>`;
         list.appendChild(li);
     });
 }
@@ -701,46 +460,42 @@ function handleItemClick(index, isLocked) {
 
     if (item.id === "CASE-3AM") {
         const hour = new Date().getHours();
-        if (hour >= 3 && hour < 5) {
+        // 타임싱크 샀으면 무조건 통과
+        if ((hour >= 3 && hour < 5) || inventory.includes('ITEM_TIMESYNC')) {
             triggerHaptic('horror_open'); openDocumentModal(index);
         } else {
-            triggerHaptic('horror_denied'); document.getElementById('timeLockModal').style.display = 'flex';
+            triggerHaptic('error'); document.getElementById('timeLockModal').style.display = 'flex';
         }
         return;
     }
 
     if (isLocked) {
         document.getElementById('pw-error').style.display = 'none'; document.getElementById('pw-input').value = '';
-        document.getElementById('passwordModal').style.display = 'flex'; setTimeout(() => document.getElementById('pw-input').focus(), 100);
+        openModal('passwordModal'); setTimeout(() => document.getElementById('pw-input').focus(), 100);
     } else {
-        unlockAchievement('ach_basic_1'); openDocumentModal(index);
+        openDocumentModal(index);
     }
 }
 
-// 🔥 진실의 목격자 업적 확인
-function checkWitnessAchievement(caseId) {
-    let opened = JSON.parse(localStorage.getItem('openedCases') || '[]');
-    if (!opened.includes(caseId)) { opened.push(caseId); localStorage.setItem('openedCases', JSON.stringify(opened)); }
-    if (opened.includes('CASE-00') && opened.includes('CASE-01') && opened.includes('CASE-02')) {
-        unlockAchievement('ach_witness');
-    }
-}
-
-let typeInterval, fullModalHTML = "", isTyping = false;
+let typeInterval, fullModalHTML = "";
 function openDocumentModal(index) {
     const item = caseDatabase[index];
-    checkWitnessAchievement(item.id);
-    document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
-    document.getElementById('archiveModal').style.display = 'flex';
     
-    // 🔥 비디오 버튼 동적 생성 (여러 개 지원)
+    // 문서 완독 보상 지급 (각 문서당 최초 1회)
+    if (localStorage.getItem(`read_${item.id}`) !== 'true') {
+        localStorage.setItem(`read_${item.id}`, 'true');
+        setTimeout(() => addCredits(30, "기밀 문서 최초 열람 보상"), 1000);
+    }
+
+    document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
+    openModal('archiveModal');
+    
     const btnContainer = document.getElementById('videoBtnContainer');
     btnContainer.innerHTML = '';
     if(item.videos && item.videos.length > 0) {
         item.videos.forEach(v => {
             const btn = document.createElement('button');
-            btn.className = 'btn-video'; btn.style.display = 'block';
-            btn.innerText = v.title;
+            btn.className = 'btn-video'; btn.innerText = v.title;
             btn.onclick = () => openVideoPlayer(v.url);
             btnContainer.appendChild(btn);
         });
@@ -748,68 +503,159 @@ function openDocumentModal(index) {
 
     fullModalHTML = item.content;
     const bodyBox = document.getElementById('modalBody'); bodyBox.innerHTML = '';
-    clearInterval(typeInterval); isTyping = true;
-    let i = 0, isTag = false, currentHTML = "";
+    clearInterval(typeInterval); let i = 0, isTag = false, currentHTML = "";
 
     typeInterval = setInterval(() => {
         if (i < fullModalHTML.length) {
             let char = fullModalHTML.charAt(i); currentHTML += char; bodyBox.innerHTML = currentHTML + "<span class='blink'>_</span>";
             if (char === '<') isTag = true; if (char === '>') isTag = false; i++;
             if (isTag) { while (fullModalHTML.charAt(i) !== '>' && i < fullModalHTML.length) { currentHTML += fullModalHTML.charAt(i); i++; } }
-        } else { finishTyping(); }
+        } else { skipTyping(); }
     }, 2); 
 }
 
-function skipTyping() { if (isTyping) finishTyping(); }
-function finishTyping() { clearInterval(typeInterval); document.getElementById('modalBody').innerHTML = fullModalHTML; isTyping = false; }
+function skipTyping() { clearInterval(typeInterval); document.getElementById('modalBody').innerHTML = fullModalHTML; }
 
 function checkPassword() {
     const input = document.getElementById('pw-input').value.toUpperCase().trim();
-    const item = caseDatabase[selectedItemIndex];
-
-    if (input === "HELP" || input === "SOS") {
-        unlockAchievement('ach_hidden_2'); triggerHaptic('error');
-        alert("[SYSTEM] 구조 신호가 차단되었습니다. 아무도 오지 않습니다."); document.getElementById('pw-input').value = ''; return; 
-    }
-
-    if (input === item.password) {
-        triggerHaptic('success'); unlockAchievement('ach_epic_1'); localStorage.setItem('cleared_' + item.id, 'true');
+    if (input === caseDatabase[selectedItemIndex].password) {
+        triggerHaptic('success'); localStorage.setItem('cleared_' + caseDatabase[selectedItemIndex].id, 'true');
         closeModal('passwordModal'); renderList(); document.body.classList.add('glitch-effect');
         setTimeout(() => { document.body.classList.remove('glitch-effect'); openDocumentModal(selectedItemIndex); }, 200);
     } else {
-        triggerHaptic('error'); pwFailCount++; 
-        if(pwFailCount === 5) unlockAchievement('ach_rare_1');
-        if(pwFailCount === 10) unlockAchievement('ach_paranoia');
-        document.getElementById('pw-error').style.display = 'block'; document.getElementById('pw-input').value = '';
+        triggerHaptic('error'); document.getElementById('pw-error').style.display = 'block';
     }
 }
 
-// 🔥 겁쟁이 업적 로직 (영상 재생 시간 체크)
-let videoStartTime = 0;
-function openVideoPlayer(url) { 
-    triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = url + '?autoplay=1'; 
-    document.getElementById('videoModal').style.display = 'flex'; 
-    videoStartTime = Date.now();
-}
-function closeVideoPlayer() { 
-    triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; 
-    document.getElementById('videoModal').style.display = 'none'; 
-    if(videoStartTime > 0 && Date.now() - videoStartTime < 2000) { unlockAchievement('ach_coward'); }
-    videoStartTime = 0;
+function openVideoPlayer(url) { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = url + '?autoplay=1'; openModal('videoModal'); }
+function closeVideoPlayer() { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; closeModal('videoModal'); }
+
+/* =========================================================
+   4. 상점 및 인벤토리 (백업 데이터 연동)
+   ========================================================= */
+function applyInventoryEffects() {
+    if (inventory.includes('ITEM_GOLD')) {
+        document.getElementById('id-card-capture').classList.add('gold-theme');
+    }
+    if (inventory.includes('ITEM_TITLE')) {
+        document.getElementById('user-level').innerText = "SPECIAL (현장 정찰대장)";
+    }
 }
 
-const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
-const uiDict = { 'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE" }, 'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE" }, 'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE" } };
-function changeLanguage() {
-    triggerHaptic('tap'); unlockAchievement('ach_basic_2'); langIdx = (langIdx + 1) % langs.length; 
-    document.body.classList.add('glitch-effect'); setTimeout(() => document.body.classList.remove('glitch-effect'), 200);
-    if(langs[langIdx] !== 'KR') { const sysStatus = document.getElementById('sys-status'); sysStatus.style.display = 'inline'; setTimeout(() => sysStatus.style.display = 'none', 3000); }
+function buyItem(itemId, price) {
+    if (inventory.includes(itemId)) { alert("이미 보유한 권한입니다."); return; }
+    if (userCredits < price) { alert("크레딧이 부족합니다."); return; }
+    
+    userCredits -= price;
+    inventory.push(itemId);
+    localStorage.setItem('agent_credits', userCredits);
+    localStorage.setItem('agent_inventory', JSON.stringify(inventory));
+    updateCreditUI();
+    applyInventoryEffects();
+    renderList();
+    
+    triggerHaptic('success');
+    alert(`[SYSTEM] 결제 완료. 권한이 성공적으로 해제되었습니다. (-${price} CR)`);
 }
 
-function closeModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'none'; if(id === 'archiveModal') clearInterval(typeInterval); }
-document.getElementById('pw-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal'); closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal'); } });
-let clickCount = 0; document.body.addEventListener('click', function(e) { if (e.target.tagName === 'BODY' || e.target.className === 'container') { clickCount++; if (clickCount >= 10) unlockAchievement('ach_hidden_1'); } });
+/* =========================================================
+   5. 완벽한 백업 & 복구 시스템 (해시코드)
+   ========================================================= */
+function getBackupHash() {
+    // 저장할 데이터를 모아서 암호화(Base64)
+    const data = {
+        c: userCredits,
+        i: inventory,
+        r: Object.keys(localStorage).filter(k => k.startsWith('read_') || k.startsWith('cleared_') || k.startsWith('ach_'))
+    };
+    const jsonStr = JSON.stringify(data);
+    // 한글 등 유니코드 안전 인코딩 후 btoa
+    const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    return `[ENC-256]\n${encoded}`;
+}
+
+function openProfile() {
+    const isLvl2 = localStorage.getItem('ach_quiz') === 'true';
+    if (!inventory.includes('ITEM_TITLE')) {
+        document.getElementById('user-level').innerText = isLvl2 ? "LEVEL 2 (조사관)" : "LEVEL 1 (수습)";
+    }
+    
+    // 해시코드 화면에 출력
+    document.getElementById('id-hash-code').innerHTML = getBackupHash().replace('\n', '<br><span style="color:#88ffaa; font-size:11px;">') + '</span>';
+    
+    openModal('profileModal');
+}
+
+function copyHash() {
+    triggerHaptic('tap');
+    const hashTxt = getBackupHash().split('\n')[1]; // 순수 코드만 복사
+    navigator.clipboard.writeText(hashTxt).then(() => {
+        alert("[SYSTEM] 백업 해시코드가 클립보드에 복사되었습니다.\n기기 변경 시 이 코드를 입력하면 데이터가 복원됩니다.");
+    });
+}
+
+function openRestorePrompt() {
+    triggerHaptic('tap');
+    const input = prompt("발급받은 [데이터 복구 해시코드]를 붙여넣으십시오.");
+    if (!input) return;
+    
+    try {
+        const decoded = decodeURIComponent(escape(atob(input.trim())));
+        const data = JSON.parse(decoded);
+        
+        if (data && data.c !== undefined) {
+            localStorage.setItem('agent_credits', data.c);
+            localStorage.setItem('agent_inventory', JSON.stringify(data.i || []));
+            if (data.r) data.r.forEach(k => localStorage.setItem(k, 'true'));
+            
+            alert("[SUCCESS] 기밀 데이터 복원 완료. 시스템을 재시작합니다.");
+            location.reload();
+        } else {
+            throw new Error("Invalid");
+        }
+    } catch(e) {
+        triggerHaptic('error');
+        alert("[ERROR] 코드가 손상되었거나 유효하지 않습니다.");
+    }
+}
+
+function exportIDCard() {
+    triggerHaptic('success');
+    const cardElement = document.getElementById('id-card-capture');
+    cardElement.style.boxShadow = "0 0 30px #fff";
+    setTimeout(() => { cardElement.style.boxShadow = ""; }, 300);
+
+    html2canvas(cardElement, { backgroundColor: "#05100a", scale: 2 }).then(canvas => {
+        let link = document.createElement('a'); link.download = 'AGENT_ID.png'; link.href = canvas.toDataURL(); link.click();
+    });
+}
+
+/* =========================================================
+   6. 기타 기능 (제보, 퀴즈)
+   ========================================================= */
+function submitReport() {
+    const loc = document.getElementById('rep-loc').value; const desc = document.getElementById('rep-desc').value;
+    if(!loc || !desc) { alert("지역과 내용을 모두 입력하십시오."); return; }
+    
+    document.getElementById('report-log').innerText = "> 데이터 전송 완료...";
+    setTimeout(() => { 
+        addCredits(10, "변칙 현상 제보 기여");
+        closeModal('reportModal');
+        document.getElementById('rep-loc').value = ''; document.getElementById('rep-desc').value = ''; document.getElementById('report-log').innerText = '';
+    }, 1500);
+}
+
+function submitQuiz() {
+    const q1 = document.querySelector('input[name="q1"]:checked'); const q3 = document.querySelector('input[name="q3"]:checked');
+    if(q1?.value === "2" && q3?.value === "2") {
+        triggerHaptic('success'); localStorage.setItem('ach_quiz', 'true');
+        addCredits(100, "승급 심사 통과");
+        document.getElementById('quiz-form').style.display = 'none'; document.getElementById('quiz-success').style.display = 'block'; renderList(); 
+    } else {
+        triggerHaptic('error'); document.getElementById('quiz-error').style.display = 'block';
+    }
+}
+
 </script>
 </body>
 </html>
