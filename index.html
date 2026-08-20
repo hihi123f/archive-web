@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[RESTRICTED] NATIONAL ANOMALY ARCHIVE</title>
-    <!-- 진짜 캡처 저장을 위한 라이브러리 추가 -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Noto+Sans+KR:wght@400;700&display=swap');
@@ -49,10 +48,11 @@
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 20px; }
 
         .action-group { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-        .action-btn { flex: 1 1 30%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; }
+        .action-btn { flex: 1 1 45%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 10px 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; transition: 0.2s; }
         .action-btn:hover { background: #00ff66; color: #000; }
         .action-btn.danger { background: rgba(50, 0, 0, 0.5); color: #ff8888; border-color: #ff3333; }
         .action-btn.safe { background: rgba(0, 50, 100, 0.5); color: #88ccff; border-color: #3388ff; }
+        .action-btn.vote { background: rgba(0, 204, 255, 0.2); color: #88eeff; border-color: #00ccff; }
         .action-btn.shop { background: rgba(153, 0, 255, 0.2); color: #eebbff; border-color: #9900ff; }
         .action-btn.shop:hover { background: #9900ff; color: #fff; }
 
@@ -74,7 +74,6 @@
         .badge-lv3 { background: #9900ff; color: #fff; }
         .badge-lvx { background: #000; color: #ff00ff; border: 1px solid #ff00ff; }
 
-        /* 위키 본문 디자인 */
         .wiki-infobox { border: 2px solid #00ff66; background: rgba(0, 15, 5, 0.85); margin: 12px 0 16px; font-size: 14px; }
         .wiki-infobox-title { background: #00ff66; color: #000; font-weight: bold; padding: 4px 8px; text-align: center; font-size: 16px; }
         .wiki-row { display: flex; border-bottom: 1px dashed rgba(0, 255, 102, 0.4); }
@@ -166,11 +165,10 @@
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
-<!-- 🔥 ID 프로필 모달 (백업/복구 추가) -->
+<!-- 🔥 ID 프로필 모달 -->
 <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('profileModal')">[X]</span>
-        
         <div class="id-card-wrapper" id="id-card-capture">
             <div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div>
             <div class="id-card-content">
@@ -188,7 +186,7 @@
         <button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button>
         <button class="btn-restore" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button>
         <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px; line-height: 1.4;">
-            ※ 위 ID 카드 이미지에 찍힌 해시코드를 복사/보관하십시오.<br>기기 변경이나 캐시 삭제 시 코드를 입력하면 크레딧과 데이터가 100% 복구됩니다.
+            ※ 위 [캡처 저장] 버튼을 누르면 <b>해시코드가 클립보드에 자동 복사</b>됩니다.<br>기기 변경/캐시 삭제 시 코드를 복구 창에 붙여넣으면 데이터가 100% 복구됩니다.
         </p>
 
         <h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-bottom:10px;">[획득한 기밀 배지]</h3>
@@ -204,35 +202,43 @@
         <span class="close-btn" style="color:#9900ff;" onclick="closeModal('shopModal')">[X]</span>
         <h2 style="color:#eebbff; border-bottom:2px dashed #9900ff; padding-bottom:6px; margin-bottom:15px;">[비인가 통신망 : 기밀 암시장]</h2>
         <p style="color:#ccc; font-size:14px; margin-bottom: 15px;">※ 획득한 크레딧(CR)을 소모하여 특수 권한을 해금하십시오.</p>
-        
         <div class="shop-item">
             <div class="shop-info">
-                <div style="color:#fff; font-weight:bold; font-size:16px;">[OVERRIDE] 비상 암호 해독기</div>
-                <div style="color:#aaa; font-size:12px;">잠긴 문서를 비밀번호 없이 강제 열람합니다.</div>
-            </div>
-            <button class="shop-buy" onclick="buyItem('ITEM_OVERRIDE', 300)">300 CR</button>
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[OVERRIDE] 비상 암호 해독기</div><div style="color:#aaa; font-size:12px;">잠긴 문서를 비밀번호 없이 강제 열람합니다.</div>
+            </div><button class="shop-buy" onclick="buyItem('ITEM_OVERRIDE', 300)">300 CR</button>
         </div>
         <div class="shop-item">
             <div class="shop-info">
-                <div style="color:#fff; font-weight:bold; font-size:16px;">[TIME-SYNC] 심야 파장 동기화</div>
-                <div style="color:#aaa; font-size:12px;">새벽 3~5시가 아니어도 CASE-3AM을 해금합니다.</div>
-            </div>
-            <button class="shop-buy" onclick="buyItem('ITEM_TIMESYNC', 500)">500 CR</button>
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[TIME-SYNC] 심야 파장 동기화</div><div style="color:#aaa; font-size:12px;">새벽 3~5시가 아니어도 CASE-3AM을 해금합니다.</div>
+            </div><button class="shop-buy" onclick="buyItem('ITEM_TIMESYNC', 500)">500 CR</button>
         </div>
         <div class="shop-item">
             <div class="shop-info">
-                <div style="color:#fff; font-weight:bold; font-size:16px;">[ID-CARD] 홀로그램 골드 요원증</div>
-                <div style="color:#aaa; font-size:12px;">ID 카드의 프레임이 영구적으로 골드로 변경됩니다.</div>
-            </div>
-            <button class="shop-buy" onclick="buyItem('ITEM_GOLD', 800)">800 CR</button>
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[ID-CARD] 홀로그램 골드 요원증</div><div style="color:#aaa; font-size:12px;">ID 카드의 프레임이 영구적으로 골드로 변경됩니다.</div>
+            </div><button class="shop-buy" onclick="buyItem('ITEM_GOLD', 800)">800 CR</button>
         </div>
         <div class="shop-item">
             <div class="shop-info">
-                <div style="color:#fff; font-weight:bold; font-size:16px;">[RANK] 특수 칭호 라이선스</div>
-                <div style="color:#aaa; font-size:12px;">ID 카드 계급이 '현장 정찰대장'으로 변경됩니다.</div>
-            </div>
-            <button class="shop-buy" onclick="buyItem('ITEM_TITLE', 400)">400 CR</button>
+                <div style="color:#fff; font-weight:bold; font-size:16px;">[RANK] 특수 칭호 라이선스</div><div style="color:#aaa; font-size:12px;">ID 카드 계급이 '현장 정찰대장'으로 변경됩니다.</div>
+            </div><button class="shop-buy" onclick="buyItem('ITEM_TITLE', 400)">400 CR</button>
         </div>
+    </div>
+</div>
+
+<!-- 🔥 변칙 심사소 (투표 모달) -->
+<div id="voteModal" class="modal" onclick="closeModal('voteModal')">
+    <div class="modal-content" style="border-color:#00ccff;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#00ccff;" onclick="closeModal('voteModal')">[X]</span>
+        <h2 style="color:#00ccff; margin-bottom:10px;">[익명 변칙 심사소]</h2>
+        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">시민들이 제보한 미확인 현상을 심사하여 격리 여부를 투표하십시오.</p>
+        <div id="vote-container" style="border:1px dashed #00ccff; padding:15px; background:rgba(0,204,255,0.05); margin-bottom:15px; line-height: 1.6;">
+            <!-- 제보 내용 출력 위치 -->
+        </div>
+        <div style="display:flex; gap:10px;" id="vote-btns">
+            <button class="tool-btn" style="flex:1; background:rgba(255,51,51,0.2); border-color:#ff3333; color:#ff8888;" onclick="castVote('isolate')">🚨 ZONE-1<br>격리 승인</button>
+            <button class="tool-btn" style="flex:1; background:rgba(136,204,255,0.2); border-color:#88ccff; color:#88ccff;" onclick="castVote('reject')">❌ ZONE-4<br>착란 기각</button>
+        </div>
+        <div id="vote-result" style="margin-top:15px; font-weight:bold; color:#00ff66; display:none; text-align:center; padding: 10px; border: 1px dashed #00ff66;"></div>
     </div>
 </div>
 
@@ -245,7 +251,7 @@
 </div>
 
 <div class="container" id="main-ui" style="opacity: 0;">
-    <!-- 🔥 언어 변경 버튼 복구 됨 -->
+    <!-- 🔥 언어 변경 버튼 및 상단 툴바 완벽 복구 -->
     <div class="top-toolbar">
         <button class="tool-btn" id="btn-profile" onclick="openProfile()">[📁 ID 정보/백업]</button>
         <div style="display:flex; gap:4px; align-items:center;">
@@ -262,7 +268,7 @@
 
     <div class="action-group">
         <button class="action-btn danger" id="btn-report" onclick="openModal('reportModal')">⚠️ 이상 현상 제보</button>
-        <button class="action-btn" id="btn-map" onclick="openMapModal()">🗺️ 3D 위성 관제 맵</button>
+        <button class="action-btn vote" id="btn-vote" onclick="openVoteModal()">🗳️ 변칙 심사소</button>
         <button class="action-btn safe" id="btn-quiz" onclick="openModal('quizModal')">🎓 승급 심사</button>
         <button class="action-btn shop" id="btn-shop" onclick="openModal('shopModal')">🛒 기밀 암시장</button>
     </div>
@@ -281,38 +287,7 @@
     </footer>
 </div>
 
-<!-- 🗺️ 3D 맵 모달 -->
-<div id="mapModal" class="modal" onclick="closeModal('mapModal')">
-    <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
-        <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
-        <div class="map-3d-container" id="map3dArea">
-            <div class="map-overlay">
-                > FACILITY: 청하공고<br>
-                > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
-                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
-            </div>
-            <div class="map-controls">
-                <button class="map-ctrl-btn" onclick="zoomMap(0.2); triggerHaptic('tap');">+</button>
-                <button class="map-ctrl-btn" onclick="zoomMap(-0.2); triggerHaptic('tap');">-</button>
-            </div>
-            <div class="building-3d" id="building3d">
-                <div class="floor f-b1">
-                    <span class="floor-label">B1: POOL</span>
-                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
-                <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
-                <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
-                <div class="floor f-3">
-                    <span class="floor-label">3F: CLASS</span>
-                    <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 🔥 제보 모달 (날짜 입력칸 복구됨) -->
+<!-- 🔥 제보 모달 (날짜 칸 및 100% 복구) -->
 <div id="reportModal" class="modal" onclick="closeModal('reportModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('reportModal')">[X]</span>
@@ -326,7 +301,7 @@
     </div>
 </div>
 
-<!-- 🔥 승급 심사 모달 (문제 4개 완벽 복구됨) -->
+<!-- 🔥 승급 심사 모달 (문제 4개 100% 복구) -->
 <div id="quizModal" class="modal" onclick="closeModal('quizModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('quizModal')">[X]</span>
@@ -380,7 +355,6 @@
     </div>
 </div>
 
-<!-- 🔥 문서 모달 (비디오 버튼 여러 개 지원) -->
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')">
     <div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');">
         <span class="close-btn" onclick="closeModal('archiveModal')">[X]</span>
@@ -403,7 +377,7 @@
     </div>
 </div>
 
-<!-- 서류 모달들 -->
+<!-- 서류 모달들 100% 복구 -->
 <div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
     <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
@@ -472,20 +446,50 @@
     </div>
 </div>
 
+<!-- 🗺️ 3D 맵 모달 -->
+<div id="mapModal" class="modal" onclick="closeModal('mapModal')">
+    <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
+        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
+        <div class="map-3d-container" id="map3dArea">
+            <div class="map-overlay">
+                > FACILITY: 청하공고<br>
+                > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
+                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
+            </div>
+            <div class="map-controls">
+                <button class="map-ctrl-btn" onclick="zoomMap(0.2); triggerHaptic('tap');">+</button>
+                <button class="map-ctrl-btn" onclick="zoomMap(-0.2); triggerHaptic('tap');">-</button>
+            </div>
+            <div class="building-3d" id="building3d">
+                <div class="floor f-b1">
+                    <span class="floor-label">B1: POOL</span>
+                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
+                </div>
+                <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
+                <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
+                <div class="floor f-3">
+                    <span class="floor-label">3F: CLASS</span>
+                    <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 /* =========================================================
-   1. 코어 시스템 (진동, 언어, 업적 전체 복구)
+   1. 코어 시스템 (진동, 언어, 크레딧, 업적 전체 복구)
    ========================================================= */
 let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
 let inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]');
 let currentZone = 'ALL', selectedItemIndex = -1;
 
-// 언어 변경 시스템 100% 복구
 const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
 const uiDict = {
-    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID 정보/백업]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", btnShop: "🛒 기밀 암시장", tabAll: "전체", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (일일)", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
-    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", btnShop: "🛒 BLACK MARKET", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (DAILY)", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", btnShop: "🛒 ブラックマーケット", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (日替)", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
+    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID 정보/백업]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", btnShop: "🛒 기밀 암시장", btnVote: "🗳️ 변칙 심사소", tabAll: "전체", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (일일)", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
+    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", btnShop: "🛒 BLACK MARKET", btnVote: "🗳️ ANOMALY VOTE", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (DAILY)", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", btnShop: "🛒 ブラックマーケット", btnVote: "🗳️ 異常審査所", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (日替)", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
 };
 
 function changeLanguage() {
@@ -494,6 +498,7 @@ function changeLanguage() {
     document.getElementById('btn-profile').innerText = dict.btnProfile; document.getElementById('lang-btn').innerText = dict.btnLang;
     document.getElementById('btn-report').innerText = dict.btnReport; document.getElementById('btn-map').innerText = dict.btnMap;
     document.getElementById('btn-quiz').innerText = dict.btnQuiz; document.getElementById('btn-shop').innerText = dict.btnShop;
+    document.getElementById('btn-vote').innerText = dict.btnVote;
     document.getElementById('tab-all').innerText = dict.tabAll; document.getElementById('tab-z0').innerText = dict.tabZ0;
     document.getElementById('tab-z1').innerText = dict.tabZ1; document.getElementById('tab-z2').innerText = dict.tabZ2;
     document.getElementById('tab-z3').innerText = dict.tabZ3; document.querySelector('footer').innerText = dict.footer;
@@ -501,7 +506,6 @@ function changeLanguage() {
     if(langs[langIdx] !== 'KR') { const sysStatus = document.getElementById('sys-status'); sysStatus.style.display = 'inline'; setTimeout(() => sysStatus.style.display = 'none', 3000); }
 }
 
-// 업적 15개 전체 복구
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
@@ -535,29 +539,18 @@ function unlockAchievement(achId) {
     setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
 }
 
-function updateCreditUI() {
-    document.getElementById('cr-val').innerText = userCredits;
-}
-
+function updateCreditUI() { document.getElementById('cr-val').innerText = userCredits; }
 function addCredits(amt, msg) {
-    userCredits += amt;
-    localStorage.setItem('agent_credits', userCredits);
-    updateCreditUI();
+    userCredits += amt; localStorage.setItem('agent_credits', userCredits); updateCreditUI();
     const toast = document.getElementById('achievement-toast');
-    document.getElementById('toast-title').innerText = `+${amt} CR`;
-    document.getElementById('toast-subtitle').innerText = `💰 [크레딧 획득] ${msg}`;
-    toast.style.borderColor = "#00ff66";
-    document.getElementById('toast-title').style.color = "#00ff66";
-    toast.style.bottom = "20px";
-    setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
+    document.getElementById('toast-title').innerText = `+${amt} CR`; document.getElementById('toast-subtitle').innerText = `💰 [크레딧 획득] ${msg}`;
+    toast.style.borderColor = "#00ff66"; document.getElementById('toast-title').style.color = "#00ff66";
+    toast.style.bottom = "20px"; setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
 }
 
 function checkDailyLogin() {
     const today = new Date().toISOString().split('T')[0];
-    if (localStorage.getItem('last_login') !== today) {
-        localStorage.setItem('last_login', today);
-        setTimeout(() => addCredits(50, "일일 보안망 접속 보상"), 1500);
-    }
+    if (localStorage.getItem('last_login') !== today) { localStorage.setItem('last_login', today); setTimeout(() => addCredits(50, "일일 보안망 접속 보상"), 1500); }
 }
 
 function triggerHaptic(type) {
@@ -573,8 +566,7 @@ function triggerHaptic(type) {
 }
 
 function startSystem() {
-    triggerHaptic('tap');
-    checkDailyLogin();
+    triggerHaptic('tap'); checkDailyLogin();
     if(new Date().getHours() >= 3 && new Date().getHours() < 5) unlockAchievement('ach_rare_2');
     const box = document.getElementById('intro-box');
     document.getElementById('intro-text').style.display = "none"; box.classList.add("expand-x");
@@ -591,7 +583,7 @@ function openModal(id) { triggerHaptic('tap'); document.getElementById(id).style
 function closeModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'none'; if(id === 'archiveModal') clearInterval(typeInterval); }
 
 /* =========================================================
-   2. 데이터베이스 전체 복구 (본문 100% 완전 복원)
+   2. 데이터베이스 및 요일 던전 (본문 100% 완전 복원)
    ========================================================= */
 const dailyThemes = [
     { title: "[공간 붕괴] 무한 확장 아파트", desc: "출구를 열어도 다른 층의 복도로 이어지는 현상. 구조대원 전원 실종." }, // 0 일
@@ -663,8 +655,6 @@ function renderList() {
         const originalIndex = caseDatabase.indexOf(item);
         const isCleared = localStorage.getItem('cleared_' + item.id) === 'true';
         let currentlyLocked = item.isLocked && !isCleared;
-        
-        // 아이템 적용: 오버라이드 샀으면 비번 무시
         if (item.id === "CASE-02" && inventory.includes('ITEM_OVERRIDE')) currentlyLocked = false;
 
         const lockIcon = currentlyLocked ? "🔒" : "📄";
@@ -688,7 +678,6 @@ function handleItemClick(index, isLocked) {
 
     if (item.id === "CASE-3AM") {
         const hour = new Date().getHours();
-        // 타임싱크 샀으면 무조건 통과
         if ((hour >= 3 && hour < 5) || inventory.includes('ITEM_TIMESYNC')) {
             triggerHaptic('horror_open'); openDocumentModal(index);
         } else {
@@ -708,38 +697,29 @@ function handleItemClick(index, isLocked) {
 function checkWitnessAchievement(caseId) {
     let opened = JSON.parse(localStorage.getItem('openedCases') || '[]');
     if (!opened.includes(caseId)) { opened.push(caseId); localStorage.setItem('openedCases', JSON.stringify(opened)); }
-    if (opened.includes('CASE-00') && opened.includes('CASE-01') && opened.includes('CASE-02')) {
-        unlockAchievement('ach_witness');
-    }
+    if (opened.includes('CASE-00') && opened.includes('CASE-01') && opened.includes('CASE-02')) unlockAchievement('ach_witness');
 }
 
 let typeInterval, fullModalHTML = "", isTyping = false;
 function openDocumentModal(index) {
     const item = caseDatabase[index];
     checkWitnessAchievement(item.id);
-    
-    // 문서 완독 보상 지급 (각 문서당 최초 1회)
     if (localStorage.getItem(`read_${item.id}`) !== 'true') {
-        localStorage.setItem(`read_${item.id}`, 'true');
-        setTimeout(() => addCredits(30, "기밀 문서 최초 열람 보상"), 1000);
+        localStorage.setItem(`read_${item.id}`, 'true'); setTimeout(() => addCredits(30, "문서 완독 보상"), 1000);
     }
 
     document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
     openModal('archiveModal');
     
-    const btnContainer = document.getElementById('videoBtnContainer');
-    btnContainer.innerHTML = '';
+    const btnContainer = document.getElementById('videoBtnContainer'); btnContainer.innerHTML = '';
     if(item.videos && item.videos.length > 0) {
         item.videos.forEach(v => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-video'; btn.innerText = v.title;
-            btn.onclick = () => openVideoPlayer(v.url);
-            btnContainer.appendChild(btn);
+            const btn = document.createElement('button'); btn.className = 'btn-video'; btn.innerText = v.title;
+            btn.onclick = () => openVideoPlayer(v.url); btnContainer.appendChild(btn);
         });
     }
 
-    fullModalHTML = item.content;
-    const bodyBox = document.getElementById('modalBody'); bodyBox.innerHTML = '';
+    fullModalHTML = item.content; const bodyBox = document.getElementById('modalBody'); bodyBox.innerHTML = '';
     clearInterval(typeInterval); isTyping = true; let i = 0, isTag = false, currentHTML = "";
 
     typeInterval = setInterval(() => {
@@ -756,78 +736,54 @@ function finishTyping() { clearInterval(typeInterval); document.getElementById('
 
 function checkPassword() {
     const input = document.getElementById('pw-input').value.toUpperCase().trim();
-    const item = caseDatabase[selectedItemIndex];
-
-    if (input === "HELP" || input === "SOS") {
-        unlockAchievement('ach_hidden_2'); triggerHaptic('error');
-        alert("[SYSTEM] 구조 신호가 차단되었습니다. 아무도 오지 않습니다."); document.getElementById('pw-input').value = ''; return; 
-    }
-
-    if (input === item.password) {
-        triggerHaptic('success'); unlockAchievement('ach_epic_1'); localStorage.setItem('cleared_' + item.id, 'true');
+    if (input === "HELP" || input === "SOS") { unlockAchievement('ach_hidden_2'); triggerHaptic('error'); alert("[SYSTEM] 구조 신호 차단."); document.getElementById('pw-input').value = ''; return; }
+    if (input === caseDatabase[selectedItemIndex].password) {
+        triggerHaptic('success'); unlockAchievement('ach_epic_1'); localStorage.setItem('cleared_' + caseDatabase[selectedItemIndex].id, 'true');
         closeModal('passwordModal'); renderList(); document.body.classList.add('glitch-effect');
         setTimeout(() => { document.body.classList.remove('glitch-effect'); openDocumentModal(selectedItemIndex); }, 200);
     } else {
         triggerHaptic('error'); pwFailCount++; 
-        if(pwFailCount === 5) unlockAchievement('ach_rare_1');
-        if(pwFailCount === 10) unlockAchievement('ach_paranoia');
+        if(pwFailCount === 5) unlockAchievement('ach_rare_1'); if(pwFailCount === 10) unlockAchievement('ach_paranoia');
         document.getElementById('pw-error').style.display = 'block'; document.getElementById('pw-input').value = '';
     }
 }
 
 let videoStartTime = 0;
-function openVideoPlayer(url) { 
-    triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = url + '?autoplay=1'; 
-    openModal('videoModal'); videoStartTime = Date.now();
-}
-function closeVideoPlayer() { 
-    triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; 
-    closeModal('videoModal'); 
-    if(videoStartTime > 0 && Date.now() - videoStartTime < 2000) unlockAchievement('ach_coward');
-    videoStartTime = 0;
-}
+function openVideoPlayer(url) { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = url + '?autoplay=1'; openModal('videoModal'); videoStartTime = Date.now(); }
+function closeVideoPlayer() { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; closeModal('videoModal'); if(videoStartTime > 0 && Date.now() - videoStartTime < 2000) unlockAchievement('ach_coward'); videoStartTime = 0; }
 
 /* =========================================================
    4. 상점 및 인벤토리 (백업 데이터 연동)
    ========================================================= */
 function applyInventoryEffects() {
     if (inventory.includes('ITEM_GOLD')) document.getElementById('id-card-capture').classList.add('gold-theme');
-    if (inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = "SPECIAL (정찰대장)";
+    if (inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = "SPECIAL (현장 정찰대장)";
 }
 
 function buyItem(itemId, price) {
     if (inventory.includes(itemId)) { alert("이미 보유한 권한입니다."); return; }
     if (userCredits < price) { triggerHaptic('error'); alert("크레딧이 부족합니다."); return; }
-    
     userCredits -= price; inventory.push(itemId);
     localStorage.setItem('agent_credits', userCredits); localStorage.setItem('agent_inventory', JSON.stringify(inventory));
     updateCreditUI(); applyInventoryEffects(); renderList();
-    
-    triggerHaptic('success'); alert(`[SYSTEM] 결제 완료. 권한이 성공적으로 해제되었습니다. (-${price} CR)`);
+    triggerHaptic('success'); alert(`[SYSTEM] 결제 완료. 권한 해제 (-${price} CR)`);
 }
 
 /* =========================================================
-   5. 완벽한 백업 & 복구 시스템 (해시코드)
+   5. 완벽한 백업 & 복구 (★ ID 저장 시 자동 복사 패치)
    ========================================================= */
 function getBackupHash() {
     const data = { c: userCredits, i: inventory, r: Object.keys(localStorage).filter(k => k.startsWith('read_') || k.startsWith('cleared_') || k.startsWith('ach_')) };
-    const jsonStr = JSON.stringify(data);
-    const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    const jsonStr = JSON.stringify(data); const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
     return `[ENC-256]\n${encoded}`;
 }
 
 let hashTaps = 0;
 function copyHash() {
     hashTaps++; triggerHaptic('tap');
-    if (hashTaps === 5) {
-        triggerHaptic('error'); unlockAchievement('ach_hidden_3');
-        document.getElementById('id-hash-code').innerHTML = `[SYS: WARN]<br><span style="font-size:14px; color:#ff3333; font-weight:bold;">[IDENTITY_FORGED]</span>`;
-        return;
-    }
+    if (hashTaps === 5) { triggerHaptic('error'); unlockAchievement('ach_hidden_3'); document.getElementById('id-hash-code').innerHTML = `[SYS: WARN]<br><span style="font-size:14px; color:#ff3333; font-weight:bold;">[IDENTITY_FORGED]</span>`; return; }
     const hashTxt = getBackupHash().split('\n')[1];
-    navigator.clipboard.writeText(hashTxt).then(() => {
-        alert("[SYSTEM] 백업 해시코드가 클립보드에 복사되었습니다.\n기기 변경 시 이 코드를 입력하면 데이터가 복원됩니다.");
-    });
+    navigator.clipboard.writeText(hashTxt).then(() => { alert("[SYSTEM] 복구 코드가 복사되었습니다."); }).catch(()=>{});
 }
 
 function openProfile() {
@@ -844,14 +800,12 @@ function openProfile() {
     document.getElementById('badge-count').innerText = unlockCount;
     if (!inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = localStorage.getItem('ach_quiz') === 'true' ? "LEVEL 2 (조사관)" : "LEVEL 1 (수습)";
     if(!document.getElementById('card-agent-id').innerText.startsWith('X-')) document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
-    if(hashTaps < 5) document.getElementById('id-hash-code').innerHTML = getBackupHash().replace('\n', '<br><span style="color:#88ffaa; font-size:11px;">') + '</span>';
+    if(hashTaps < 5) document.getElementById('id-hash-code').innerHTML = getBackupHash().replace('\n', '<br><span style="color:#88ffaa; font-size:11px; word-break:break-all;">') + '</span>';
     openModal('profileModal');
 }
 
 function openRestorePrompt() {
-    triggerHaptic('tap');
-    const input = prompt("발급받은 [데이터 복구 해시코드]를 붙여넣으십시오.");
-    if (!input) return;
+    triggerHaptic('tap'); const input = prompt("발급받은 [데이터 복구 해시코드]를 붙여넣으십시오."); if (!input) return;
     try {
         const decoded = decodeURIComponent(escape(atob(input.trim()))); const data = JSON.parse(decoded);
         if (data && data.c !== undefined) {
@@ -865,37 +819,80 @@ function openRestorePrompt() {
 function exportIDCard() {
     triggerHaptic('success'); const cardElement = document.getElementById('id-card-capture');
     cardElement.style.boxShadow = "0 0 30px #fff"; setTimeout(() => { cardElement.style.boxShadow = ""; }, 300);
+    
+    // ★ 캡처 시 클립보드에 코드 자동 복사
+    const pureCode = getBackupHash().split('\n')[1];
+    if (navigator.clipboard) { navigator.clipboard.writeText(pureCode).catch(()=>{}); }
+
     html2canvas(cardElement, { backgroundColor: "#05100a", scale: 2 }).then(canvas => {
-        let link = document.createElement('a'); link.download = 'AGENT_ID.png'; link.href = canvas.toDataURL(); link.click();
+        let link = document.createElement('a'); link.download = `AGENT_ID_${pureCode.substring(0,6)}.png`; link.href = canvas.toDataURL(); link.click();
+        alert("[SYSTEM] ID 카드 저장 완료!\n※ 복구 해시코드가 클립보드에 자동 복사되었습니다. (카톡/메모장 보관 권장)");
     });
 }
 
 /* =========================================================
-   6. 기타 기능 (제보, 퀴즈)
+   6. 기타 기능 (제보, 퀴즈, 투표 시스템)
    ========================================================= */
 function submitReport() {
-    triggerHaptic('tap');
-    const loc = document.getElementById('rep-loc').value; const desc = document.getElementById('rep-desc').value;
+    triggerHaptic('tap'); const loc = document.getElementById('rep-loc').value; const desc = document.getElementById('rep-desc').value;
     if(!loc || !desc) { unlockAchievement('ach_fake_report'); triggerHaptic('error'); alert("장난치지 마십시오. 시스템에 IP가 기록되었습니다."); return; }
-    
     document.getElementById('report-log').innerText = "> 데이터 전송 및 암호화 중...\n";
     setTimeout(() => { 
-        addCredits(10, "변칙 현상 제보 기여"); unlockAchievement('ach_report');
-        closeModal('reportModal');
-        document.getElementById('rep-loc').value = ''; document.getElementById('rep-desc').value = ''; document.getElementById('report-log').innerText = '';
+        addCredits(10, "변칙 현상 제보 기여"); unlockAchievement('ach_report'); closeModal('reportModal');
+        document.getElementById('rep-loc').value = ''; document.getElementById('rep-desc').value = ''; document.getElementById('rep-date').value = ''; document.getElementById('report-log').innerText = '';
     }, 1500);
 }
 
 function submitQuiz() {
     const q1 = document.querySelector('input[name="q1"]:checked'); const q2 = document.querySelector('input[name="q2"]:checked');
     const q3 = document.querySelector('input[name="q3"]:checked'); const q4 = document.querySelector('input[name="q4"]:checked');
-    
     if(q1?.value === "2" && q2?.value === "1" && q3?.value === "2" && q4?.value === "2") {
         triggerHaptic('success'); unlockAchievement('ach_quiz'); addCredits(100, "승급 심사 통과");
         document.getElementById('quiz-form').style.display = 'none'; document.getElementById('quiz-success').style.display = 'block'; renderList(); 
     } else {
         triggerHaptic('error'); document.getElementById('quiz-error').style.display = 'block';
     }
+}
+
+// 🔥 신규 투표 시스템 로직
+const voteCases = [
+    "[서울 마포구] 골목길 가로등 그림자가 사람을 덮침. 그림자가 사라지자 사람도 없어짐.",
+    "[강원 인제군] 매일 새벽 4시, 죽은 강아지가 문을 긁는 소리가 남. CCTV에는 안 찍힘.",
+    "[부산 해운대구] 화장실 세 번째 칸에서 물을 내리면 모르는 사람의 흐느끼는 소리가 들림.",
+    "[경기 성남시] 배달 앱으로 음식을 시켰는데 존재하지 않는 아파트 104동 1402호로 배달을 요구함.",
+    "[대전 유성구] 중고마켓에서 산 필름 카메라를 켜면 항상 똑같은 피투성이 방이 찍혀 있음."
+];
+let dailyVoteCount = parseInt(localStorage.getItem('daily_vote_count') || '0');
+
+function openVoteModal() {
+    triggerHaptic('tap');
+    document.getElementById('vote-result').style.display = 'none'; document.getElementById('vote-btns').style.display = 'flex';
+    const randomCase = voteCases[Math.floor(Math.random() * voteCases.length)];
+    document.getElementById('vote-container').innerHTML = `<span style="color:#00ff66; font-weight:bold;">[제보 원문]</span><br><br><span style="color:#ddd;">"${randomCase}"</span>`;
+    openModal('voteModal');
+}
+
+function castVote(type) {
+    triggerHaptic('tap');
+    document.getElementById('vote-btns').style.display = 'none';
+    const resultBox = document.getElementById('vote-result'); resultBox.style.display = 'block';
+    resultBox.innerHTML = "<span class='blink' style='color:#00ccff;'>네트워크 집계 중...</span>";
+    
+    setTimeout(() => {
+        const percent = Math.floor(Math.random() * 40) + 50; 
+        const action = type === 'isolate' ? "격리 승인" : "기각";
+        resultBox.innerHTML = `다수결 집계 완료: <span style="color:#ffcc00;">${percent}%</span> 동의로 <b>[${action}]</b> 처리됨.`;
+        
+        const today = new Date().toISOString().split('T')[0];
+        if (localStorage.getItem('vote_date') !== today) { localStorage.setItem('vote_date', today); dailyVoteCount = 0; }
+        
+        if (dailyVoteCount < 5) {
+            dailyVoteCount++; localStorage.setItem('daily_vote_count', dailyVoteCount);
+            setTimeout(() => addCredits(10, "변칙 심사 참여 보상"), 800);
+        } else {
+            setTimeout(() => alert("[SYSTEM] 일일 심사 보상 한도(5회)를 초과했습니다."), 800);
+        }
+    }, 1500);
 }
 
 /* =========================================================
@@ -917,7 +914,7 @@ mapContainer.addEventListener('touchmove', (e) => { e.preventDefault(); if (isDr
 document.addEventListener('touchend', (e) => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; } if(e.touches.length < 2) initialPinchDist = null; });
 
 document.getElementById('pw-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal'); closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal'); closeModal('shopModal'); } });
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal'); closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal'); closeModal('shopModal'); closeModal('voteModal'); } });
 let clickCount = 0; document.body.addEventListener('click', function(e) { if (e.target.tagName === 'BODY' || e.target.className === 'container') { clickCount++; if (clickCount >= 10) unlockAchievement('ach_hidden_1'); } });
 </script>
 </body>
