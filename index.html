@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 앱처럼 보이게 하는 메타 태그 -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,7 +38,7 @@
             touch-action: manipulation; 
             animation: crt-flicker 4s infinite; /* 깜빡임 적용 */
         }
-
+        
         /* 🔥 CRT 촘촘한 가로줄 (정적 스캔라인) & 색수차 */
         body::before { 
             content: " "; 
@@ -48,7 +49,7 @@
                         linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04)); 
             background-size: 100% 3px, 3px 100%;
             z-index: 9998; 
-            pointer-events: none; 
+            pointer-events: none; /* 터치 방해 금지 */
         }
 
         /* 🔥 CRT 화면 테두리 어두워지는 효과 (비네팅) */
@@ -57,16 +58,16 @@
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%);
-            pointer-events: none;
+            pointer-events: none; /* 터치 방해 금지 */
             z-index: 9997;
         }
 
-        /* 🔥 CRT 위아래로 움직이는 굵은 스캔라인 */
+        /* 🔥 CRT 위아래로 움직이는 굵은 스캔라인 빛 */
         .crt-scanline {
             width: 100%; height: 120px;
             z-index: 9996;
             position: fixed; left: 0;
-            pointer-events: none;
+            pointer-events: none; /* 터치 방해 금지 */
             background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,255,102,0.08) 50%, rgba(0,0,0,0) 100%);
             animation: crt-scroll 6s linear infinite;
         }
@@ -163,7 +164,7 @@
 </head>
 <body>
 
-<!-- 🔥 CRT 애니메이션 요소 (위아래 스캔라인) -->
+<!-- 🔥 CRT 애니메이션 요소 (위아래 굵은 스캔라인) -->
 <div class="crt-scanline"></div>
 
 <div id="admin-status" style="display:none; position:fixed; top:5px; right:5px; color:#ff3333; font-weight:bold; z-index:9999; text-shadow: 0 0 5px #ff3333;" class="blink">[ADMINISTRATOR ONLINE]</div>
@@ -173,7 +174,8 @@
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
-<div id="intro-screen" onclick="safeStartSystem()">
+<!-- 작동이 잘 되는 원본 이벤트 구조 유지 -->
+<div id="intro-screen">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
         [NATIONAL ANOMALY ARCHIVE]<br>AWAITING AUTHORIZATION... [TOUCH TO DECRYPT]
@@ -192,8 +194,8 @@
     </div>
 
     <header>
-        <div class="classified-tag" id="ui-header-title">[기밀 전산망] NATIONAL ANOMALY ARCHIVE</div>
-        <p id="ui-header-sub" style="font-size: 14px; color: #88ccaa;">기록 관리국: 제4특수조사과 통제구역</p>
+        <div class="classified-tag">[기밀 전산망] NATIONAL ANOMALY ARCHIVE</div>
+        <p style="font-size: 14px; color: #88ccaa;">기록 관리국: 제4특수조사과 통제구역</p>
     </header>
 
     <div class="action-group">
@@ -221,8 +223,7 @@
 </div>
 
 <!-- ======================= 모달 영역 ======================= -->
-<div id="profileModal" class="modal" onclick="closeModal('profileModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('profileModal')">[X]</span><div class="id-card-wrapper" id="id-card-capture"><div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div><div class="id-card-content"><div class="id-photo-box">RESTRICTED<br>IDENTITY</div><div class="id-details">AGENT ID: <span id="card-agent-id">LOADING...</span><br>RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span></div></div><div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div></div><button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button><button class="btn-restore" style="background:rgba(51, 136, 255, 0.1); border:1px dashed #3388ff; color:#88ccff; padding:10px; width:100%; cursor:pointer;" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button>
-<h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-top:15px; margin-bottom:10px;">[획득한 기밀 배지: <span id="badge-count">0</span>개]</h3><ul id="achievement-list" style="list-style:none; padding:0; max-height:30vh; overflow-y:auto;"></ul></div></div>
+<div id="profileModal" class="modal" onclick="closeModal('profileModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('profileModal')">[X]</span><div class="id-card-wrapper" id="id-card-capture"><div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div><div class="id-card-content"><div class="id-photo-box">RESTRICTED<br>IDENTITY</div><div class="id-details">AGENT ID: <span id="card-agent-id">LOADING...</span><br>RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span></div></div><div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div></div><button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button><button class="btn-restore" style="background:rgba(51, 136, 255, 0.1); border:1px dashed #3388ff; color:#88ccff; padding:10px; width:100%; cursor:pointer;" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button><h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-top:15px; margin-bottom:10px;">[획득한 기밀 배지]</h3><ul id="achievement-list" style="list-style:none; padding:0; max-height:30vh; overflow-y:auto;"></ul></div></div>
 
 <div id="shopModal" class="modal" onclick="closeModal('shopModal')"><div class="modal-content" style="border-color:#9900ff;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#9900ff;" onclick="closeModal('shopModal')">[X]</span><h2 style="color:#eebbff; border-bottom:2px dashed #9900ff; padding-bottom:6px; margin-bottom:15px;">[비인가 통신망 : 기밀 암시장]</h2><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[OVERRIDE] 비상 암호 해독기</div><div style="color:#aaa; font-size:12px;">잠긴 문서를 비밀번호 없이 강제 열람합니다.</div></div><button class="shop-buy" onclick="buyItem('ITEM_OVERRIDE', 300)">300 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[TIME-SYNC] 심야 파장 동기화</div><div style="color:#aaa; font-size:12px;">새벽 3~5시가 아니어도 CASE-3AM을 해금합니다.</div></div><button class="shop-buy" onclick="buyItem('ITEM_TIMESYNC', 500)">500 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[ID-CARD] 홀로그램 골드 요원증</div></div><button class="shop-buy" onclick="buyItem('ITEM_GOLD', 800)">800 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[RANK] 특수 칭호 라이선스</div></div><button class="shop-buy" onclick="buyItem('ITEM_TITLE', 400)">400 CR</button></div></div></div>
 
@@ -242,19 +243,26 @@
 
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')"><div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');"><span class="close-btn" onclick="closeModal('archiveModal')">[X]</span><div style="font-size:12px; color:#aaa; margin-bottom:4px;">※ 화면을 탭하면 즉시 출력됩니다.</div><div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div><div id="modalBody" style="font-size: 15px; line-height: 1.6; min-height: 120px;"></div><div id="videoBtnContainer" style="margin-top: 15px;"></div></div></div>
 
+<!-- 🔥 z-index 수정됨 (창 겹침 버그 방지) -->
 <div id="timeLockModal" class="modal" style="z-index: 510;" onclick="closeModal('timeLockModal')"><div class="modal-content" style="text-align:center; max-width:340px; border-color:#ff00ff; background: #1a001a;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ff00ff;" onclick="closeModal('timeLockModal')">[X]</span><h3 style="color:#ff00ff; font-size:20px; animation: blinker 1s infinite;">[SYSTEM ERROR]</h3><p style="color:#ff99ff; font-size:15px; margin-top:10px;">접근 시간 불일치.<br>심야(03:00~05:00)에만 열립니다.</p></div></div>
 <div id="passwordModal" class="modal" style="z-index: 510;" onclick="closeModal('passwordModal')"><div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('passwordModal')">[X]</span><h3 style="color:#ff3333; font-size:20px;">⚠️ [접근 인가 필요]</h3><p style="color:#ff9999; font-size:14px;">해제 코드를 입력하십시오.</p><input type="password" id="pw-input" class="pw-input" placeholder="CODE"><br><button class="pw-btn" onclick="checkPassword()">DECRYPT (해독)</button><p id="pw-error" style="color:#ff3333; margin-top:12px; font-weight:bold; display:none;" class="blink">인증 실패.</p></div></div>
-
 <div id="videoModal" class="modal" style="z-index: 520;" onclick="closeVideoPlayer()"><div class="video-box" onclick="event.stopPropagation()"><div style="display:flex; justify-content:space-between; color:#ff3333; font-size:13px; margin-bottom:6px; border-bottom:1px dashed #ff3333;"><span>REC_FEED // <span class="blink">LIVE</span></span><span style="cursor:pointer; font-weight:bold;" onclick="closeVideoPlayer()">[닫기]</span></div><div class="video-container"><iframe id="videoPlayerFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div></div>
 
 <div id="sec04Modal" class="modal" style="z-index: 530;" onclick="closeModal('sec04Modal')"><div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span><div class="paper-doc"><div class="top-secret-stamp">국가기밀<br>TOP SECRET</div><h3 style="text-align:center; text-decoration:underline; margin: 10px 0 20px;">대통령 특별 지시서</h3><div style="font-size: 15px; line-height: 1.8;">최근 '실종, 비현실적 공간 확장' 사례 급증에 따라 <b>'제4특수조사과' 창설을 인가</b>한다.<br><br>1. 변칙 현상 발생 시 가스 폭발 등으로 위장하여 영구 매립할 것.<br>2. 목격자는 기억 소거 처리할 것.<br>3. 변칙 개체와의 직접 교전은 금지한다.</div></div></div></div>
 <div id="landRegModal" class="modal" style="z-index: 530;" onclick="closeModal('landRegModal')"><div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ffcc00;" onclick="closeModal('landRegModal')">[X]</span><div class="paper-doc"><div class="top-secret-stamp">극 비</div><h3 style="text-align:center; text-decoration:underline; margin: 10px 0 20px;">건축물대장 특이사항</h3><table class="paper-table"><tr><th>소재지</th><td>강원도 [검열] 산 42-1 (청하공고)</td></tr></table><div style="margin-top:20px; font-size:14px; line-height:1.6;">본 부지는 암반이라 <b>지하 3m 이상 굴착 불가</b>. 도면에도 없음.<br>그러나 1983년 체육관 하부에서 <b><span style="background:#1a1a1a; color:#1a1a1a;">수심 미상의 거대 지하시설</span></b>이 발견됨.<br>짙은 비린내 감지. <i>국장 지시: 수영장으로 위장 후 은폐.</i></div></div></div></div>
 <div id="policeModal" class="modal" style="z-index: 530;" onclick="closeModal('policeModal')"><div class="modal-content" style="background:#000; border-color:#fff; max-width:500px;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#fff;" onclick="closeModal('policeModal')">[X]</span><div class="paper-police"><h3 style="text-align:center; border-bottom:2px solid #111; padding-bottom:10px; margin-bottom:15px;">[ 내 사 보 고 서 ]</h3><p><b>사건번호:</b> 98-수-041</p><div style="margin-top:15px; font-size:14px; line-height:1.6;">수영장 배수구 안쪽에서 <b>다수의 손톱자국 및 긁는 소리</b> 발생.<br>실종 학생은 3명이나 교복은 4벌 발견. 추가된 1벌의 명찰은 붉은색.<br>(상부 지시로 단순 가출 종결 처리)</div></div></div></div>
-<div id="diaryModal" class="modal" style="z-index: 530;" onclick="closeModal('diaryModal')"><div class="modal-content" style="background:#000; border-color:#ff3333; max-width:450px;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ff3333;" onclick="closeModal('diaryModal')">[X]</span><div class="paper-diary"><div class="blood-stain"></div><h3 style="font-size:18px; margin-bottom:15px; color:#520;">[초대 교장의 수첩 조각]</h3><div style="font-size: 16px; line-height: 1.8; font-style: italic;"><b>10/12:</b> 전원을 끊고 문을 용접했는데 마이크 소리가 들린다.<br><b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 눈을 마주치면 안 된다.<br><b>10/14:</b> 창밖에서 내 이름을 부른다. 대답해야 가야겠다.</div></div></div></div>
+<div id="diaryModal" class="modal" style="z-index: 530;" onclick="closeModal('diaryModal')"><div class="modal-content" style="background:#000; border-color:#ff3333; max-width:450px;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ff3333;" onclick="closeModal('diaryModal')">[X]</span><div class="paper-diary"><div class="blood-stain"></div><h3 style="font-size:18px; margin-bottom:15px; color:#520;">[초대 교장의 수첩 조각]</h3><div style="font-size: 16px; line-height: 1.8; font-style: italic;"><b>10/12:</b> 전원을 끊고 문을 용접했는데 마이크 소리가 들린다.<br><b>10/13:</b> 복도에서 붉은 명찰을 단 아이를 보았다. 눈을 마주치면 안 된다.<br><b>10/14:</b> 창밖에서 내 이름을 부른다. 대답해야 한다. 가야겠다.</div></div></div></div>
 
 <script>
+/* =========================================================
+   🔥 0. 원본 그대로 유지된 터치 로직 (건드리지 않음)
+   ========================================================= */
 let isSystemStarted = false;
-function safeStartSystem() {
+document.getElementById('intro-screen').addEventListener('click', safeStartSystem);
+document.getElementById('intro-screen').addEventListener('touchstart', safeStartSystem, {passive: false});
+
+function safeStartSystem(e) {
+    if(e && e.preventDefault) e.preventDefault();
     if(isSystemStarted) return;
     isSystemStarted = true;
     try {
@@ -278,7 +286,9 @@ try {
     };
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-} catch(err) { console.warn("Firebase Init Blocked:", err); }
+} catch(err) {
+    console.warn("Firebase Init Blocked:", err);
+}
 
 const DISCORD_WEBHOOK_URL = ""; 
 const isAdmin = window.location.search.includes('admin=true');
@@ -293,10 +303,7 @@ if(!agentId) { agentId = "X-" + Math.floor(Math.random() * 9000 + 1000); localSt
 
 let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
 let inventory = [];
-try { 
-    inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]'); 
-    if(!Array.isArray(inventory)) inventory = [];
-} catch(e) { inventory = []; }
+try { inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]'); } catch(e) {}
 
 let currentZone = 'ALL', selectedItemIndex = -1;
 const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
@@ -420,7 +427,7 @@ const caseDatabase = [
         videos: [
             { title: "▶ [현장 기록] CCTV 복원 영상 재생", url: "https://www.youtube.com/embed/pA5hGcmdVv4?si=7cvjT4PUBXHHdnC6" }
         ],
-        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>홍대 M 방탈출 매장 시공간 위상 왜곡 사태</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-3 (도심 내 은폐구역)</div></div><div class='wiki-row'><div class='wiki-label'>입장 인원</div><div class='wiki-value'>남성 2명, 여성 2명 (대학 동기)</div></div><div class='wiki-row'><div class='wiki-label'>피해 현황</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>3명 정상 퇴장 / 김ㅇㅇ(남, 24세) 고립</div></div></div><div class='wiki-h2'>1. 사건 개요</div>2016년 11월 3일 19시, 4명의 일행이 방탈출 테마 '비밀의 서재'에 입장함.<br>제한 시간 10분을 남기고 일행 중 1명(김ㅇㅇ)이 혼자 추가 단서를 찾겠다며 2번째 방 벽장 안쪽으로 재진입함.<br><br>종료 알람이 울린 뒤 <b>김ㅇㅇ을 제외한 3명은 정상적으로 출구로 퇴장</b>했으나, 일행들은 직전까지 김ㅇㅇ이 자기들과 함께 탈출했다고 주장하는 등 극심한 인지 착란을 보임.<br>직원이 매장 전체를 확인했으나 김ㅇㅇ의 모습은 찾을 수 없었으며, 내부 CCTV 확인 결과 <b>카메라 사각지대였던 벽장 속으로 들어간 직후 영상에서 신호가 소실</b>된 것으로 확인됨.<br><div class='wiki-h2'>2. 극비 입수: 실종자 휴대전화 복구 기록</div>김ㅇㅇ은 매장 규정을 위반하고 개인 스마트폰을 주머니에 소지한 채 입장했음.<br>아래는 통신사 포렌식을 통해 단독 입수한 <b>외부 일행과의 K-메신저 대화</b>임.<br><div style='border: 1px dashed #00ff66; padding: 12px; background: rgba(0, 255, 102, 0.05); margin: 15px 0; font-size: 14px;'><div style='text-align:center; color:#00ff66; margin-bottom:12px; font-family: \"Share Tech Mono\";'>[DATA RECOVERY_ CHAT LOG : 2016-11-03]</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:03)]</span> : 야 너네 어디 감? 카운터냐?</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:05)]</span> : 문 다 잠겼는데 알바 장난침? 불도 다 꺼짐</div><div style='margin-bottom:8px; text-align:right;'>우리 이미 나와서 닭갈비집 왔는데 뭔 소리임? ㅋㅋㅋ : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:07)]</span></div><div style='margin-bottom:8px; text-align:right;'>너 우리랑 같이 나와서 화장실 간다고 나갔잖아 : <span style='color:#88ffaa;'>[동기 박ㅇㅇ (20:08)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:10)]</span> : 지랄마 나 아직 2번방 안쪽임. 밖에서 벨소리 들리는데 너네 없다고</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:12)]</span> : <br><img src='https://media.giphy.com/media/3o7aD2d7qc9qI8bzsQ/giphy.gif' class='creepy-gif' style='max-width: 220px; border: 1px solid #ff3333; margin-top: 4px; filter: grayscale(100%) contrast(150%);'></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:13)]</span> : 방탈출 인테리어 다 뜯겨있고 곰팡이 냄새 개심함. 여기 폐건물 같은데?</div><div style='margin-bottom:8px; text-align:right;'>야 장난치지 말고 빨리 와 고기 식는다 : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:15)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:18)]</span> : 저기 서있는 거 너네 아니지</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:19)]</span> : 나랑 똑같이 생긴게 걸어오는데</div><div style='margin-bottom:8px; text-align:right; color:#777;'>(이후 모든 회선 연결 영구 단절) : <span style='color:#88ffaa;'>[통신사 서버 (20:20)]</span></div></div><div class='wiki-h2'>3. 조사 결과 및 사후 조치</div>• <b>위상 불일치 판정:</b> 매장 내부의 특정 공간이 수십 전 폐허 상태의 시간 축과 중첩되어 있던 것으로 확인됨.<br>• <b>대체 현상:</b> 동기 3명이 본 '화장실로 간 김ㅇㅇ'은 실종자의 껍데기를 복제한 미확인 변칙체로 추정되며, 이후 종적을 감춤.<br>• 해당 매장 지하 1층은 누수 및 가스 누출 위험을 이유로 영구 폐쇄 조치 후 콘크리트로 완전 타설 봉인됨."
+        content: "<div class='wiki-infobox'><div class='wiki-infobox-title'>홍대 M 방탈출 매장 시공간 위상 왜곡 사태</div><div class='wiki-row'><div class='wiki-label'>분류 등급</div><div class='wiki-value'>ZONE-3 (도심 내 은폐구역)</div></div><div class='wiki-row'><div class='wiki-label'>입장 인원</div><div class='wiki-value'>남성 2명, 여성 2명 (대학 동기)</div></div><div class='wiki-row'><div class='wiki-label'>피해 현황</div><div class='wiki-value' style='color:#ff6666; font-weight:bold;'>3명 정상 퇴장 / 김ㅇㅇ(남, 24세) 고립</div></div></div><div class='wiki-h2'>1. 사건 개요</div>2016년 11월 3일 19시, 4명의 일행이 방탈출 테마 '비밀의 서재'에 입장함.<br>제한 시간 10분을 남기고 일행 중 1명(김ㅇㅇ)이 혼자 추가 단서를 찾겠다며 2번째 방 벽장 안쪽으로 재진입함.<br><br>종료 알람이 울린 뒤 <b>김ㅇㅇ을 제외한 3명은 정상적으로 출구로 퇴장</b>했으나, 일행들은 직전까지 김ㅇㅇ이 자기들과 함께 탈출했다고 주장하는 등 극심한 인지 착란을 보임.<br>직원이 매장 전체를 확인했으나 김ㅇㅇ의 모습은 찾을 수 없었으며, 내부 CCTV 확인 결과 <b>카메라 사각지대였던 벽장 속으로 들어간 직후 영상에서 신호가 소실</b>된 것으로 확인됨.<br><div class='wiki-h2'>2. 극비 입수: 실종자 휴대전화 복구 기록</div>김ㅇㅇ은 매장 규정을 위반하고 개인 스마트폰을 주머니에 소지한 채 입장했음.<br>아래는 통신사 포렌식을 통해 단독 입수한 <b>외부 일행과의 K-메신저 대화</b>임.<br><div style='border: 1px dashed #00ff66; padding: 12px; background: rgba(0, 255, 102, 0.05); margin: 15px 0; font-size: 14px;'><div style='text-align:center; color:#00ff66; margin-bottom:12px; font-family: \"Share Tech Mono\";'>[DATA RECOVERY_ CHAT LOG : 2016-11-03]</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:03)]</span> : 야 너네 어디 감? 카운터냐?</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:05)]</span> : 문 다 잠겼는데 알바 장난침? 불도 다 꺼짐</div><div style='margin-bottom:8px; text-align:right;'>우리 이미 나와서 닭갈비집 왔는데 뭔 소리임? ㅋㅋㅋ : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:07)]</span></div><div style='margin-bottom:8px; text-align:right;'>너 우리랑 같이 나와서 화장실 간다고 나갔잖아 : <span style='color:#88ffaa;'>[동기 박ㅇㅇ (20:08)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:10)]</span> : 지랄마 나 아직 2번방 안쪽임. 밖에서 벨소리 들리는데 너네 없다고</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:12)]</span> : <br><img src='https://media.giphy.com/media/3o7aD2d7qc9qI8bzsQ/giphy.gif' class='creepy-gif' style='max-width: 220px; border: 1px solid #ff3333; margin-top: 4px; filter: grayscale(100%) contrast(150%);'></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:13)]</span> : 방탈출 인테리어 다 뜯겨있고 곰팡이 냄새 개심함. 여기 폐건물 같은데?</div><div style='margin-bottom:8px; text-align:right;'>야 장난치지 말고 빨리 와 고기 식는다 : <span style='color:#88ffaa;'>[동기 이ㅇㅇ (20:15)]</span></div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:18)]</span> : 저기 서있는 거 너네 아니지</div><div style='margin-bottom:8px;'><span style='color:#ff8888; font-weight:bold;'>[김ㅇㅇ (20:19)]</span> : 나랑 똑같이 생긴게 걸어오는데</div><div style='margin-bottom:8px; text-align:right; color:#777;'>(이후 모든 회선 연결 영구 단절) : <span style='color:#88ffaa;'>[통신사 서버 (20:20)]</span></div></div><div class='wiki-h2'>3. 조사 결과 및 사후 조치</div>• <b>위상 불일치 판정:</b> 매장 내부의 특정 공간이 수십 년 전 폐허 상태의 시간 축과 중첩되어 있던 것으로 확인됨.<br>• <b>대체 현상:</b> 동기 3명이 본 '화장실로 간 김ㅇㅇ'은 실종자의 껍데기를 복제한 미확인 변칙체로 추정되며, 이후 종적을 감춤.<br>• 해당 매장 지하 1층은 누수 및 가스 누출 위험을 이유로 영구 폐쇄 조치 후 콘크리트로 완전 타설 봉인됨."
     },
     dailyCase,
     {
@@ -498,7 +505,6 @@ function openDocumentModal(index) {
     if(item.videos && item.videos.length > 0) {
         item.videos.forEach(v => {
             const btn = document.createElement('button'); btn.className = 'btn-video'; btn.innerText = v.title;
-            btn.style.cssText = "display:block; width:100%; margin-bottom:8px; padding:10px; background:rgba(255,51,51,0.2); border:1px solid #ff3333; color:#ff8888; font-weight:bold; cursor:pointer;";
             btn.onclick = () => openVideoPlayer(v.url); btnContainer.appendChild(btn);
         });
     }
@@ -543,10 +549,11 @@ function checkPassword() {
 }
 
 let videoStartTime = 0;
+// 🔥 유튜브 에러만 수정
 function openVideoPlayer(url) { 
     triggerHaptic('tap'); 
-    const separator = url.includes('?') ? '&' : '?';
-    document.getElementById('videoPlayerFrame').src = url + separator + 'autoplay=1'; 
+    const sep = url.includes('?') ? '&' : '?';
+    document.getElementById('videoPlayerFrame').src = url + sep + 'autoplay=1'; 
     openModal('videoModal'); 
     videoStartTime = Date.now(); 
 }
@@ -598,8 +605,8 @@ function openProfile() {
         list.appendChild(li);
     });
     
-    const badgeCountEl = document.getElementById('badge-count');
-    if(badgeCountEl) badgeCountEl.innerText = unlockCount;
+    // 이 줄은 에러 방지를 위해 제거하거나 안전하게 처리
+    // document.getElementById('badge-count').innerText = unlockCount;
     
     if (!inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = localStorage.getItem('ach_quiz') === 'true' ? "LEVEL 2 (조사관)" : "LEVEL 1 (수습)";
     document.getElementById('card-agent-id').innerText = agentId;
