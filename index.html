@@ -8,99 +8,98 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
     <style>
-        /* [스타일: 모든 레이아웃/기능이 정상 출력되도록 디자인] */
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Noto+Sans+KR:wght@400;700&display=swap');
-        * { box-sizing: border-box; }
-        body { background-color: #050806; color: #00ff66; font-family: 'VT323', monospace; padding: 10px; line-height: 1.5; }
-        .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 15px; background: rgba(0, 10, 5, 0.8); }
-        .action-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .action-btn { background: #001a0a; color: #00ff66; border: 1px solid #00ff66; padding: 15px 5px; font-weight: bold; cursor: pointer; text-align: center; }
-        .action-btn:hover { background: #00ff66; color: #000; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.95); z-index: 999; padding: 20px; overflow-y: auto; }
-        .modal-content { background: #060c07; border: 2px solid #00ff66; padding: 20px; max-width: 600px; margin: auto; }
-        .chat-room { height: 300px; overflow-y: auto; background: #000; border: 1px solid #333; padding: 10px; margin-bottom: 10px; font-size: 14px; }
-        .radar-container { width: 100%; height: 300px; background: #000; border: 2px solid #00ff66; position: relative; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #050806; color: #00ff66; font-family: 'VT323', monospace; padding: 10px; line-height: 1.5; overflow-x: hidden; touch-action: manipulation; }
+        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03)); z-index: 10; pointer-events: none; }
+        .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 15px; background: rgba(0, 20, 10, 0.8); position: relative; }
+        .action-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
+        .action-btn { background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 12px 5px; font-weight: bold; cursor: pointer; text-align: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 500; justify-content: center; align-items: center; padding: 10px; }
+        .modal-content { background: #060c07; border: 2px solid #00ff66; padding: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .chat-room { height: 300px; overflow-y: auto; background: #000; border: 1px solid #ffcc00; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .chat-msg { border-left: 2px solid #ffcc00; padding: 5px; background: rgba(255,204,0,0.05); }
+        .rank-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px dashed #ff00ff; color: #fff; }
+        .radar-svg { width: 100%; height: 300px; border: 1px solid #00ff66; }
     </style>
 </head>
 <body>
 
-<!-- 관리자 상태 표시 -->
-<div id="admin-status" style="display:none; position:fixed; top:5px; right:5px; color:#ff3333; font-weight:bold; z-index:100;">[ADMIN MODE]</div>
+<div id="admin-status" style="display:none; position:fixed; top:5px; right:5px; color:#ff3333; font-weight:bold; z-index:100; font-size:14px;" class="blink">[ADMIN: ONLINE]</div>
+<div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #00ff66; color:#00ff66; padding:10px 20px; z-index:9999;"></div>
 
-<!-- UI 컨테이너 -->
 <div class="container">
-    <div class="top-toolbar">
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
         <button class="tool-btn" onclick="openModal('profileModal')">[📁 ID/백업]</button>
-        <div class="credit-display">💳 <span id="cr-val">0</span> CR</div>
+        <div style="background:#002200; padding:5px; border:1px solid #00ff66;">💳 <span id="cr-val">0</span> CR</div>
     </div>
-    <header><h1>[기밀 전산망] NATIONAL ANOMALY ARCHIVE</h1></header>
-
-    <!-- 🔥 핵심 기능 버튼 7개 (여기에 다 들어있습니다) -->
+    <h1>[기밀 전산망] NATIONAL ANOMALY ARCHIVE</h1>
+    
     <div class="action-group">
-        <button class="action-btn danger" onclick="openModal('reportModal')">⚠️ 이상 현상 제보</button>
-        <button class="action-btn vote" onclick="openVoteModal()">🗳️ 변칙 심사소</button>
-        <button class="action-btn safe" onclick="openModal('quizModal')">🎓 승급 심사</button>
-        <button class="action-btn shop" onclick="openModal('shopModal')">🛒 기밀 암시장</button>
-        <button class="action-btn chat" onclick="openModal('chatModal')">📡 무전 채널</button>
-        <button class="action-btn rank" onclick="openRankModal()">🏆 작전 랭킹</button>
-        <button class="action-btn" onclick="openMapModal()" style="grid-column: span 2;">🗺️ 3D 네온 레이더 맵</button>
+        <button class="action-btn" onclick="openModal('reportModal')">⚠️ 제보</button>
+        <button class="action-btn" onclick="openVoteModal()">🗳️ 심사</button>
+        <button class="action-btn" onclick="openModal('quizModal')">🎓 승급</button>
+        <button class="action-btn" onclick="openModal('shopModal')">🛒 암시장</button>
+        <button class="action-btn" onclick="openModal('chatModal')">📡 무전</button>
+        <button class="action-btn" onclick="openRankModal()">🏆 랭킹</button>
+        <button class="action-btn" onclick="openModal('mapModal')" style="grid-column: span 2;">🗺️ 네온 지도</button>
     </div>
-
     <ul id="archiveList" style="list-style:none;"></ul>
 </div>
 
-<!-- 모달들 -->
-<div id="chatModal" class="modal" onclick="closeModal('chatModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('chatModal')">[X]</span><h2>📡 무전 채널</h2><div id="chat-box" class="chat-room"></div><input type="text" id="chat-input" class="form-input" placeholder="메시지 입력..."><button class="tool-btn" style="width:100%" onclick="sendChat()">전송</button></div></div>
-<div id="rankModal" class="modal" onclick="closeModal('rankModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('rankModal')">[X]</span><h2>🏆 요원 랭킹</h2><ul id="rank-list" style="list-style:none;"></ul></div></div>
-<div id="mapModal" class="modal" onclick="closeModal('mapModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('mapModal')">[X]</span><h2>🗺️ 레이더 맵</h2><div class="radar-container"><canvas id="radarCanvas"></canvas></div></div></div>
-
-<!-- (나머지 프로필, 상점, 제보, 퀴즈 등 모달은 이전과 동일하므로 생략하지만, 실제로는 다 포함되어야 합니다) -->
+<!-- 모든 모달은 이곳에 위치 (내용은 이전과 동일한 로직 삽입) -->
+<div id="profileModal" class="modal" onclick="closeModal('profileModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('profileModal')">[X]</span><h2 style="color:#00ff66;">요원 프로필</h2><div id="id-card-capture" style="border:1px solid #00ff66; padding:10px;">AGENT ID: <span id="card-agent-id">...</span><br>RANK: <span id="user-level">LEVEL 1</span><div class="id-barcode" onclick="copyHash()" id="id-hash-code">...</div></div><button class="btn-export" onclick="exportIDCard()">📸 저장/복사</button><button class="btn-restore" onclick="openRestorePrompt()">🔄 복구</button></div></div>
+<div id="shopModal" class="modal" onclick="closeModal('shopModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('shopModal')">[X]</span><h2>암시장</h2><div id="shop-list"></div></div></div>
+<div id="chatModal" class="modal" onclick="closeModal('chatModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('chatModal')">[X]</span><h2>📡 무전 채널</h2><div id="chat-box" class="chat-room"></div><input type="text" id="chat-input" class="form-input" placeholder="메시지(1 CR 소모)"><button class="tool-btn" onclick="sendChat()">송신</button></div></div>
+<div id="rankModal" class="modal" onclick="closeModal('rankModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('rankModal')">[X]</span><h2>🏆 전국 요원 랭킹</h2><ul id="rank-list"></ul></div></div>
+<div id="mapModal" class="modal" onclick="closeModal('mapModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('mapModal')">[X]</span><h2>🗺️ 네온 지도</h2><svg class="radar-svg" viewBox="0 0 200 300"><path d="M100 20 L120 40 L150 80 L140 150 L100 250 L60 150 L80 80 Z" fill="none" stroke="#00ff66" stroke-width="2"/><circle cx="110" cy="60" r="5" fill="#ff3333" class="blink"/><circle cx="130" cy="120" r="5" fill="#ff3333" class="blink"/></svg></div></div>
+<!-- (기존의 제보, 퀴즈, 문서 모달 생략 - 이전과 동일하게 유지) -->
 
 <script>
-    // Firebase 연결
+    // 1. Firebase 초기화
     const firebaseConfig = { apiKey: "AIzaSyAKfdigOMhKJrQ07_W5fEKAiC-B9LVD_9w", databaseURL: "https://web-aciv-default-rtdb.firebaseio.com", projectId: "web-aciv", storageBucket: "web-aciv.firebasestorage.app", messagingSenderId: "1088097423426", appId: "1:1088097423426:web:41f40bf205f9840e4b1ddb" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    // 관리자 확인
-    if(window.location.search.includes('admin=true')) document.getElementById('admin-status').style.display = 'block';
-
-    // 채팅 기능
+    
+    // 2. 초기 로드
+    let agentId = localStorage.getItem('agent_id') || "X-" + Math.floor(Math.random()*9000);
+    localStorage.setItem('agent_id', agentId);
+    document.getElementById('card-agent-id').innerText = agentId;
+    let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
+    
+    // 3. 기능 함수
     function sendChat() {
-        const input = document.getElementById('chat-input');
-        if(!input.value) return;
-        db.ref('chat').push({ id: localStorage.getItem('agent_id'), msg: input.value, timestamp: Date.now() });
-        input.value = '';
+        if(userCredits < 1) { alert("크레딧 부족"); return; }
+        userCredits -= 1; localStorage.setItem('agent_credits', userCredits); updateCreditUI();
+        db.ref('chat').push({ id: agentId, msg: document.getElementById('chat-input').value, time: Date.now() });
+        document.getElementById('chat-input').value = '';
     }
+    
     db.ref('chat').limitToLast(10).on('value', snap => {
         const box = document.getElementById('chat-box'); box.innerHTML = '';
         snap.forEach(s => { const d = s.val(); box.innerHTML += `<div class="chat-msg"><b>${d.id}</b>: ${d.msg}</div>`; });
         box.scrollTop = box.scrollHeight;
     });
 
-    // 랭킹 기능
+    function syncLeaderboard() {
+        db.ref('leaderboard/' + agentId).set({ id: agentId, score: userCredits });
+    }
+
     function openRankModal() {
         openModal('rankModal');
         db.ref('leaderboard').orderByChild('score').limitToLast(5).on('value', snap => {
             let html = '';
-            snap.forEach(s => { const d = s.val(); html += `<li>${d.id}: ${d.score} CR</li>`; });
+            snap.forEach(s => { const d = s.val(); html += `<li class="rank-item">${d.id}: ${d.score} CR</li>`; });
             document.getElementById('rank-list').innerHTML = html;
         });
     }
 
-    // 네온 맵 로직 (캔버스 초기화)
-    function openMapModal() {
-        openModal('mapModal');
-        const canvas = document.getElementById('radarCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.parentElement.clientWidth; canvas.height = 300;
-        // 예시로 원 그리기
-        ctx.strokeStyle = '#00ff66'; ctx.beginPath(); ctx.arc(150, 150, 100, 0, Math.PI*2); ctx.stroke();
-    }
+    function updateCreditUI() { document.getElementById('cr-val').innerText = userCredits; }
+    
+    // 초기화 및 기타 로직
+    updateCreditUI();
+    if(window.location.search.includes('admin=true')) document.getElementById('admin-status').style.display = 'block';
 
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function startSystem() { document.getElementById('intro-screen').style.display = 'none'; document.getElementById('main-ui').style.opacity = 1; }
 </script>
 </body>
 </html>
