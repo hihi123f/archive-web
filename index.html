@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[RESTRICTED] NATIONAL ANOMALY ARCHIVE</title>
+    <!-- 캡처 라이브러리 -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    
-    <!-- 🔥 Firebase 실시간 DB 연동을 위한 라이브러리 추가 -->
+    <!-- Firebase 실시간 DB 라이브러리 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
@@ -43,7 +43,7 @@
         .container { max-width: 800px; margin: 0 auto; border: 2px solid #00ff66; padding: 14px; background: rgba(0, 20, 10, 0.6); box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); position: relative; }
 
         .top-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(0,255,102,0.4); padding-bottom: 8px; flex-wrap: wrap; gap: 4px; }
-        .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 15px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .tool-btn { background: rgba(0,20,10,0.8); color: #00ff66; border: 1px solid #00ff66; padding: 6px 10px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .tool-btn:hover { background: #00ff66; color: #000; }
         
         .credit-display { background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; padding: 4px 10px; font-weight: bold; color: #fff; text-shadow: 0 0 5px #00ff66; display: flex; align-items: center; gap: 5px; }
@@ -51,12 +51,14 @@
         header { border-bottom: 2px dashed #00ff66; padding-bottom: 10px; margin-bottom: 14px; }
         .classified-tag { color: #ff3333; text-shadow: 0 0 6px rgba(255, 51, 51, 0.8); font-weight: bold; font-size: 20px; }
 
-        .action-group { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-        .action-btn { flex: 1 1 45%; min-width: 110px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 10px 8px; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; transition: 0.2s; }
+        .action-group { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; justify-content: space-between; }
+        .action-btn { flex: 1 1 30%; min-width: 90px; background: rgba(0, 30, 10, 0.8); color: #00ff66; border: 1px solid #00ff66; padding: 10px 4px; font-family: inherit; font-size: 13px; cursor: pointer; font-weight: bold; text-align: center; transition: 0.2s; }
         .action-btn:hover { background: #00ff66; color: #000; }
         .action-btn.danger { background: rgba(50, 0, 0, 0.5); color: #ff8888; border-color: #ff3333; }
         .action-btn.safe { background: rgba(0, 50, 100, 0.5); color: #88ccff; border-color: #3388ff; }
         .action-btn.vote { background: rgba(0, 204, 255, 0.2); color: #88eeff; border-color: #00ccff; }
+        .action-btn.chat { background: rgba(255, 204, 0, 0.2); color: #ffee88; border-color: #ffcc00; }
+        .action-btn.rank { background: rgba(255, 0, 255, 0.2); color: #ffccff; border-color: #ff00ff; }
         .action-btn.shop { background: rgba(153, 0, 255, 0.2); color: #eebbff; border-color: #9900ff; }
         .action-btn.shop:hover { background: #9900ff; color: #fff; }
 
@@ -122,20 +124,6 @@
         .paper-diary { background: #dcd0b3; color: #222; font-family: 'Noto Serif KR', serif; padding: 20px; border-radius: 2px; box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.3); position: relative; overflow: hidden; }
         .blood-stain { position: absolute; top: 30%; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(150,0,0,0.4) 0%, transparent 70%); pointer-events: none; }
 
-        .map-3d-container { position: relative; width: 100%; height: 400px; margin-top: 10px; background: #020503; border: 1px solid #00ff66; box-shadow: inset 0 0 40px rgba(0,255,102,0.15); display: flex; justify-content: center; align-items: center; overflow: hidden; perspective: 1000px; cursor: grab; touch-action: none; }
-        .map-3d-container:active { cursor: grabbing; }
-        .map-overlay { position: absolute; top: 10px; left: 10px; z-index: 10; color: #00ff66; font-size: 13px; pointer-events: none; text-shadow: 0 0 5px #000; line-height: 1.4; }
-        .map-controls { position: absolute; bottom: 10px; right: 10px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
-        .map-ctrl-btn { background: rgba(0,255,102,0.2); border: 1px solid #00ff66; color: #00ff66; width: 35px; height: 35px; font-size: 20px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .building-3d { position: relative; width: 160px; height: 220px; transform-style: preserve-3d; transform: rotateX(65deg) rotateZ(45deg) scale(1); transition: transform 0.1s ease-out; }
-        .floor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid rgba(0, 255, 102, 0.7); background: repeating-linear-gradient(rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(0,255,102,0.2) 0, rgba(0,255,102,0.2) 1px, transparent 1px, transparent 20px); box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.2); transform-style: preserve-3d; pointer-events: none; }
-        .f-b1 { transform: translateZ(-70px); border-color: rgba(255, 51, 51, 0.6); background: rgba(255, 51, 51, 0.05); } 
-        .f-1 { transform: translateZ(0px); } .f-2 { transform: translateZ(70px); } .f-3 { transform: translateZ(140px); }  
-        .floor-label { position: absolute; top: 5px; left: 5px; color: #00ff66; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #000; pointer-events: none; }
-        .f-b1 .floor-label { color: #ff3333; }
-        .anomaly-node { position: absolute; width: 16px; height: 16px; background: #ff3333; border-radius: 50%; transform: translate(-50%, -50%) translateZ(1px); box-shadow: 0 0 15px #ff3333; cursor: pointer; pointer-events: auto; animation: pulseRed 1s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.8); } 70% { box-shadow: 0 0 0 20px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
-
         .form-input, .form-textarea { width: 100%; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; margin-bottom: 10px; font-family: inherit; font-size: 15px; }
         .form-textarea { height: 100px; resize: none; }
         .quiz-label { display: block; background: rgba(0,255,102,0.1); border: 1px dashed #00ff66; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 15px; }
@@ -153,12 +141,27 @@
         .pw-input { background: #000; border: 1px solid #ff3333; color: #ff3333; padding: 8px; text-align: center; font-size: 18px; width: 70%; margin: 10px 0; font-family: inherit; }
         .pw-btn { background: #ff3333; color: #000; border: none; padding: 10px 16px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 16px; }
 
+        /* 🔥 채팅 및 랭킹 전용 스타일 */
+        .chat-room { height: 350px; overflow-y: auto; background: rgba(0,0,0,0.5); border: 1px dashed #ffcc00; padding: 10px; margin-bottom: 10px; font-size: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .chat-msg { background: rgba(255, 204, 0, 0.1); border-left: 3px solid #ffcc00; padding: 6px; color: #ccc; word-break: break-all; }
+        .chat-name { color: #ffcc00; font-weight: bold; font-size: 12px; margin-bottom: 2px; }
+        .rank-list { list-style: none; padding: 0; margin-top: 15px; }
+        .rank-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px dashed #ff00ff; background: rgba(255, 0, 255, 0.05); margin-bottom: 5px; font-size: 15px; font-weight: bold; }
+        
+        /* 🔥 네온 레이더 맵 스타일 */
+        .radar-container { position: relative; width: 100%; height: 350px; background: #001100; border: 2px solid #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3) inset; overflow: hidden; margin-top: 10px; cursor: crosshair; }
+        #radarCanvas { width: 100%; height: 100%; display: block; }
+        .map-overlay { position: absolute; top: 10px; left: 10px; color: #00ff66; font-size: 13px; text-shadow: 0 0 5px #000; pointer-events: none; }
+
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
         .glitch-effect { filter: invert(1) hue-rotate(180deg) skewX(2deg); }
     </style>
 </head>
 <body>
+
+<!-- 🔥 관리자 접속 알림 -->
+<div id="admin-status" style="display:none; position:fixed; top:5px; right:5px; color:#ff3333; font-weight:bold; z-index:100; font-size:14px; text-shadow: 0 0 5px #ff3333;" class="blink">[ADMINISTRATOR ONLINE]</div>
 
 <div id="achievement-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:#000; border:2px solid #ffcc00; color:#ffcc00; padding:12px 24px; font-family:inherit; font-weight:bold; z-index:9999; transition:bottom 0.5s; text-align:center; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
     <div style="font-size:13px; color:#fff;" id="toast-subtitle">[SYSTEM: 권한 해제]</div>
@@ -174,12 +177,11 @@
             <div class="id-card-content">
                 <div class="id-photo-box">RESTRICTED<br>IDENTITY</div>
                 <div class="id-details">
-                    AGENT ID: <span id="card-agent-id">X-9982</span><br>
+                    AGENT ID: <span id="card-agent-id">LOADING...</span><br>
                     RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span><br>
                     DATA CLEAR: <span id="badge-count">0</span> FILES
                 </div>
             </div>
-            <!-- 실제 데이터가 담기는 백업용 해시코드 -->
             <div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div>
         </div>
         
@@ -188,7 +190,6 @@
         <p style="font-size:12px; color:#aaa; text-align:center; margin-bottom:15px; line-height: 1.4;">
             ※ 위 [캡처 저장] 버튼을 누르면 <b>해시코드가 클립보드에 자동 복사</b>됩니다.<br>기기 변경/캐시 삭제 시 코드를 복구 창에 붙여넣으면 데이터가 100% 복구됩니다.
         </p>
-
         <h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-bottom:10px;">[획득한 기밀 배지]</h3>
         <div style="max-height: 30vh; overflow-y: auto;">
             <ul id="achievement-list" style="list-style:none; padding:0;"></ul>
@@ -231,14 +232,40 @@
         <span class="close-btn" style="color:#00ccff;" onclick="closeModal('voteModal')">[X]</span>
         <h2 style="color:#00ccff; margin-bottom:10px;">[익명 변칙 심사소]</h2>
         <p style="color:#aaa; font-size:14px; margin-bottom:15px;">시민 제보를 심사하여 격리 여부를 결정하십시오. (비용: 10 CR)</p>
-        <div id="vote-container" style="border:1px dashed #00ccff; padding:15px; background:rgba(0,204,255,0.05); margin-bottom:15px; line-height: 1.6;">
-            <!-- 제보 내용 출력 위치 -->
-        </div>
+        <div id="vote-container" style="border:1px dashed #00ccff; padding:15px; background:rgba(0,204,255,0.05); margin-bottom:15px; line-height: 1.6;"></div>
         <div style="display:flex; gap:10px;" id="vote-btns">
             <button class="tool-btn" style="flex:1; background:rgba(255,51,51,0.2); border-color:#ff3333; color:#ff8888;" onclick="castVote('isolate')">🚨 ZONE-1 격리<br><span style="font-size:12px;">(-10 CR)</span></button>
             <button class="tool-btn" style="flex:1; background:rgba(136,204,255,0.2); border-color:#88ccff; color:#88ccff;" onclick="castVote('reject')">❌ 착란 기각<br><span style="font-size:12px;">(-10 CR)</span></button>
         </div>
         <div id="vote-result" style="margin-top:15px; display:none; padding: 10px; border: 1px dashed #00ccff; background:rgba(0,0,0,0.8);"></div>
+    </div>
+</div>
+
+<!-- 🔥 실시간 익명 채팅방 (무전 채널) -->
+<div id="chatModal" class="modal" onclick="closeModal('chatModal')">
+    <div class="modal-content" style="border-color:#ffcc00;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('chatModal')">[X]</span>
+        <h2 style="color:#ffcc00; margin-bottom:10px;">[비인가 통신망 : 무전 채널]</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:10px;">전 세계 요원들과 익명으로 교신합니다. (보안 프로토콜 적용 중)</p>
+        <div id="chat-box" class="chat-room">
+            <!-- 채팅 메시지 표시 영역 -->
+        </div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chat-input" class="form-input" style="margin:0; border-color:#ffcc00;" placeholder="[메시지 송신]" maxlength="60">
+            <button class="tool-btn" style="background:rgba(255,204,0,0.2); border-color:#ffcc00; color:#ffcc00; min-width:80px;" onclick="sendChat()">전송</button>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 작전 랭킹 모달 -->
+<div id="rankModal" class="modal" onclick="closeModal('rankModal')">
+    <div class="modal-content" style="border-color:#ff00ff;" onclick="event.stopPropagation()">
+        <span class="close-btn" style="color:#ff00ff;" onclick="closeModal('rankModal')">[X]</span>
+        <h2 style="color:#ffccff; border-bottom:2px dashed #ff00ff; padding-bottom:6px; margin-bottom:10px;">[전국 요원 기여도 랭킹]</h2>
+        <p style="color:#aaa; font-size:13px;">누적 크레딧(CR) 기준 상위 10명의 특무 요원 명단입니다.</p>
+        <ul id="rank-list" class="rank-list">
+            <div style="text-align:center; padding:20px; color:#ff00ff;" class="blink">동기화 중...</div>
+        </ul>
     </div>
 </div>
 
@@ -265,11 +292,17 @@
         <p style="font-size: 14px; color: #88ccaa;" id="ui-header-sub">기록 관리국: 제4특수조사과 통제구역</p>
     </header>
 
+    <!-- 🔥 추가된 7개의 핵심 버튼 액션 그룹 -->
     <div class="action-group">
         <button class="action-btn danger" id="btn-report" onclick="openModal('reportModal')">⚠️ 이상 현상 제보</button>
         <button class="action-btn vote" id="btn-vote" onclick="openVoteModal()">🗳️ 변칙 심사소</button>
         <button class="action-btn safe" id="btn-quiz" onclick="openModal('quizModal')">🎓 승급 심사</button>
+        
+        <button class="action-btn chat" onclick="openModal('chatModal')">📡 무전 채널</button>
+        <button class="action-btn rank" onclick="openRankModal()">🏆 작전 랭킹</button>
         <button class="action-btn shop" id="btn-shop" onclick="openModal('shopModal')">🛒 기밀 암시장</button>
+        
+        <button class="action-btn" id="btn-map" onclick="openMapModal()" style="flex:1 1 100%; padding:12px; font-size:15px;">🗺️ 3D 네온 레이더 맵 (전국 관제)</button>
     </div>
 
     <div class="zone-nav" id="zone-nav-container">
@@ -376,7 +409,7 @@
     </div>
 </div>
 
-<!-- 서류 모달들 -->
+<!-- 서류 모달들 100% 복구 -->
 <div id="sec04Modal" class="modal" style="z-index: 80;" onclick="closeModal('sec04Modal')">
     <div class="modal-content" style="background:#000; border-color:#ffcc00; max-width:500px;" onclick="event.stopPropagation()">
         <span class="close-btn" style="color:#ffcc00;" onclick="closeModal('sec04Modal')">[X]</span>
@@ -445,32 +478,17 @@
     </div>
 </div>
 
-<!-- 🗺️ 3D 맵 모달 -->
+<!-- 🔥 네온 와이어 고퀄리티 3D 맵 모달 (Canvas) -->
 <div id="mapModal" class="modal" onclick="closeModal('mapModal')">
-    <div class="modal-content" style="padding:10px; max-width:600px;" onclick="event.stopPropagation()">
+    <div class="modal-content" style="padding:10px; max-width:700px;" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal('mapModal')">[X]</span>
-        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[3D 관제: 청하구역]</h2>
-        <div class="map-3d-container" id="map3dArea">
-            <div class="map-overlay">
-                > FACILITY: 청하공고<br>
-                > CONTROLS: 드래그 회전 / 스크롤(핀치) 확대<br>
-                > <span class="blink" style="color:#ff3333;">ANOMALY DETECTED: 2</span>
-            </div>
-            <div class="map-controls">
-                <button class="map-ctrl-btn" onclick="zoomMap(0.2); triggerHaptic('tap');">+</button>
-                <button class="map-ctrl-btn" onclick="zoomMap(-0.2); triggerHaptic('tap');">-</button>
-            </div>
-            <div class="building-3d" id="building3d">
-                <div class="floor f-b1">
-                    <span class="floor-label">B1: POOL</span>
-                    <div class="anomaly-node" style="top: 70%; left: 80%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
-                <div class="floor f-1"><span class="floor-label">1F: LOBBY</span></div>
-                <div class="floor f-2"><span class="floor-label">2F: LAB</span></div>
-                <div class="floor f-3">
-                    <span class="floor-label">3F: CLASS</span>
-                    <div class="anomaly-node" style="top: 30%; left: 30%;" onclick="triggerHaptic('tap'); openSpecificDocument('CASE-01')"></div>
-                </div>
+        <h2 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:6px; margin: 5px 10px;">[전국 관제망 : 실시간 침식 레이더]</h2>
+        <div class="radar-container" id="radarContainer">
+            <canvas id="radarCanvas"></canvas>
+            <div class="map-overlay" id="mapInfo">
+                > FACILITY: NATIONAL GRID<br>
+                > STATUS: <span style="color:#ff3333;" class="blink">CRITICAL</span><br>
+                > CLICK ON RED NODES TO INSPECT
             </div>
         </div>
     </div>
@@ -478,7 +496,7 @@
 
 <script>
 /* =========================================================
-   🔥 Firebase 초기화 세팅
+   🔥 Firebase 초기화 및 관리자 확인
    ========================================================= */
 const firebaseConfig = {
     apiKey: "AIzaSyAKfdigOMhKJrQ07_W5fEKAiC-B9LVD_9w",
@@ -492,46 +510,48 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// 관리자 모드 확인 (?admin=true)
+const isAdmin = window.location.search.includes('admin=true');
+if(isAdmin) {
+    document.getElementById('admin-status').style.display = 'block';
+    document.body.style.border = "2px solid #ff3333";
+}
 
 /* =========================================================
-   1. 코어 시스템 (진동, 언어, 크레딧, 업적 전체 복구)
+   1. 코어 시스템 (고정 ID, 진동, 언어, 크레딧, 업적)
    ========================================================= */
+let agentId = localStorage.getItem('agent_id');
+if(!agentId) { agentId = "X-" + Math.floor(Math.random() * 9000 + 1000); localStorage.setItem('agent_id', agentId); }
+
 let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
 let inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]');
 let currentZone = 'ALL', selectedItemIndex = -1;
 
 const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
 const uiDict = {
-    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역", btnProfile: "[📁 ID 정보/백업]", btnLang: "[SYS: KR]", btnReport: "⚠️ 이상 현상 제보", btnMap: "🗺️ 3D 위성 관제 맵", btnQuiz: "🎓 승급 심사", btnShop: "🛒 기밀 암시장", btnVote: "🗳️ 변칙 심사소", tabAll: "전체", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (일일)", tabZ3: "ZONE-3", footer: "WARNING: 비인가 데이터 무단 반출 시 통제 조치됩니다." },
-    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: EN]", btnReport: "⚠️ REPORT ANOMALY", btnMap: "🗺️ 3D SATELLITE MAP", btnQuiz: "🎓 PROMOTION EXAM", btnShop: "🛒 BLACK MARKET", btnVote: "🗳️ ANOMALY VOTE", tabAll: "ALL", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (DAILY)", tabZ3: "ZONE-3", footer: "WARNING: UNAUTHORIZED LEAK PROHIBITED." },
-    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課", btnProfile: "[📁 ID/BACKUP]", btnLang: "[SYS: JP]", btnReport: "⚠️ 異常通報", btnMap: "🗺️ 3D衛星管制マップ", btnQuiz: "🎓 昇級審査", btnShop: "🛒 ブラックマーケット", btnVote: "🗳️ 異常審査所", tabAll: "全件", tabZ0: "ZONE-0", tabZ1: "ZONE-1", tabZ2: "ZONE-2 (日替)", tabZ3: "ZONE-3", footer: "WARNING: 無断流出禁止。違反者は統制措置の対象となります。" }
+    'KR': { title: "[기밀 전산망] NATIONAL ANOMALY ARCHIVE", sub: "기록 관리국: 제4특수조사과 통제구역" },
+    'EN': { title: "[RESTRICTED] NATIONAL ANOMALY ARCHIVE", sub: "RECORDS DEPT: SEC-04 SECURE ZONE" },
+    'JP': { title: "[機密電算網] NATIONAL ANOMALY ARCHIVE", sub: "記録管理局：第4特殊調査課" }
 };
 
 function changeLanguage() {
     triggerHaptic('tap'); unlockAchievement('ach_basic_2'); langIdx = (langIdx + 1) % langs.length; const dict = uiDict[langs[langIdx]];
     document.getElementById('ui-header-title').innerText = dict.title; document.getElementById('ui-header-sub').innerText = dict.sub;
-    document.getElementById('btn-profile').innerText = dict.btnProfile; document.getElementById('lang-btn').innerText = dict.btnLang;
-    document.getElementById('btn-report').innerText = dict.btnReport; document.getElementById('btn-map').innerText = dict.btnMap;
-    document.getElementById('btn-quiz').innerText = dict.btnQuiz; document.getElementById('btn-shop').innerText = dict.btnShop;
-    document.getElementById('btn-vote').innerText = dict.btnVote;
-    document.getElementById('tab-all').innerText = dict.tabAll; document.getElementById('tab-z0').innerText = dict.tabZ0;
-    document.getElementById('tab-z1').innerText = dict.tabZ1; document.getElementById('tab-z2').innerText = dict.tabZ2;
-    document.getElementById('tab-z3').innerText = dict.tabZ3; document.querySelector('footer').innerText = dict.footer;
+    document.getElementById('lang-btn').innerText = `[SYS: ${langs[langIdx]}]`;
     document.body.classList.add('glitch-effect'); setTimeout(() => document.body.classList.remove('glitch-effect'), 200);
-    if(langs[langIdx] !== 'KR') { const sysStatus = document.getElementById('sys-status'); sysStatus.style.display = 'inline'; setTimeout(() => sysStatus.style.display = 'none', 3000); }
 }
 
 const achievementsDB = [
     { id: "ach_basic_1", type: "기본", name: "[조사 시작] 첫 사건 열람", desc: "기밀 사건 보고서를 열람했습니다.", color: "#00ff66" },
     { id: "ach_basic_2", type: "기본", name: "[통신망 접속] 언어 변환", desc: "시스템 다국어 번역을 시도했습니다.", color: "#00ff66" },
-    { id: "ach_report", type: "활동", name: "[내부 고발자] 제보 완료", desc: "미확인 변칙 현상을 데이터베이스에 전송했습니다.", color: "#ffcc00" },
-    { id: "ach_quiz", type: "활동", name: "[현장 투입] 승급 심사 통과", desc: "특무 조사관으로 승급하여 일급 기밀을 해제했습니다.", color: "#3388ff" },
-    { id: "ach_recon", type: "활동", name: "[현장 정찰조] 구역 스캔", desc: "모든 통제 구역(ZONE) 탭을 확인했습니다.", color: "#3388ff" },
-    { id: "ach_fake_report", type: "경고", name: "[허위 신고] 데이터 낭비", desc: "내용이 없는 빈 보고서를 전송하려 했습니다.", color: "#ff8888" },
-    { id: "ach_coward", type: "경고", name: "[회피] 시선 돌리기", desc: "감시 영상을 2초 만에 꺼버렸습니다.", color: "#ff8888" },
+    { id: "ach_report", type: "활동", name: "[내부 고발자] 제보 완료", desc: "미확인 현상을 전송했습니다.", color: "#ffcc00" },
+    { id: "ach_quiz", type: "활동", name: "[현장 투입] 승급 심사 통과", desc: "일급 기밀을 해제했습니다.", color: "#3388ff" },
+    { id: "ach_recon", type: "활동", name: "[현장 정찰조] 구역 스캔", desc: "모든 통제 구역을 확인했습니다.", color: "#3388ff" },
+    { id: "ach_fake_report", type: "경고", name: "[허위 신고] 데이터 낭비", desc: "빈 보고서를 전송하려 했습니다.", color: "#ff8888" },
+    { id: "ach_coward", type: "경고", name: "[회피] 시선 돌리기", desc: "영상을 2초 만에 껐습니다.", color: "#ff8888" },
     { id: "ach_rare_1", type: "경고", name: "[과부하] 보안 경고 누적", desc: "비밀번호를 연속 5회 틀렸습니다.", color: "#ff8888" },
     { id: "ach_rare_2", type: "경고", name: "[올빼미] 심야의 목격자", desc: "새벽 3시~4시 사이에 접속했습니다.", color: "#ff8888" },
-    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "숨겨진 해제 코드로 봉인을 풀었습니다.", color: "#ff3333" },
+    { id: "ach_epic_1", type: "전설", name: "[오버라이드] 관리자 권한", desc: "해제 코드로 봉인을 풀었습니다.", color: "#ff3333" },
     { id: "ach_witness", type: "전설", name: "[진실의 목격자] 아카이브 완독", desc: "존재하는 모든 기밀 문서를 열람했습니다.", color: "#ffcc00" },
     { id: "ach_hidden_1", type: "히든", name: "공허 응시", desc: "빈 배경을 10번 연속 탭했습니다.", color: "#ff3333", isHidden: true },
     { id: "ach_hidden_2", type: "히든", name: "구조 거부", desc: "HELP 코드를 입력했으나 거절당했습니다.", color: "#ff3333", isHidden: true },
@@ -541,20 +561,19 @@ const achievementsDB = [
 
 let pwFailCount = 0;
 function unlockAchievement(achId) {
-    if (localStorage.getItem(achId) === 'true') return;
-    localStorage.setItem(achId, 'true');
-    const ach = achievementsDB.find(a => a.id === achId);
-    if (!ach) return;
+    if (localStorage.getItem(achId) === 'true') return; localStorage.setItem(achId, 'true');
+    const ach = achievementsDB.find(a => a.id === achId); if (!ach) return;
     const toast = document.getElementById('achievement-toast');
     document.getElementById('toast-title').innerText = `🏆 [${ach.type}] ${ach.name}`;
-    document.getElementById('toast-subtitle').innerText = "[SYSTEM: 권한 해제]";
-    toast.style.borderColor = ach.color;
-    document.getElementById('toast-title').style.color = ach.color;
-    toast.style.bottom = "20px";
-    setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
+    toast.style.borderColor = ach.color; document.getElementById('toast-title').style.color = ach.color;
+    toast.style.bottom = "20px"; setTimeout(() => { toast.style.bottom = "-100px"; }, 3500);
 }
 
-function updateCreditUI() { document.getElementById('cr-val').innerText = userCredits; }
+function updateCreditUI() { 
+    document.getElementById('cr-val').innerText = userCredits; 
+    syncLeaderboard(); // 크레딧 업데이트 시 랭킹 자동 갱신
+}
+
 function addCredits(amt, msg) {
     userCredits += amt; localStorage.setItem('agent_credits', userCredits); updateCreditUI();
     const toast = document.getElementById('achievement-toast');
@@ -571,11 +590,7 @@ function checkDailyLogin() {
 function triggerHaptic(type) {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
         try {
-            if (type === 'success') navigator.vibrate([30, 30, 30]); 
-            else if (type === 'error') navigator.vibrate([150]); 
-            else if (type === 'horror_denied') navigator.vibrate([30, 50, 30, 50, 30]); 
-            else if (type === 'horror_open') navigator.vibrate([100, 50, 150, 50, 300]); 
-            else if (type === 'tap') navigator.vibrate(15); 
+            if (type === 'success') navigator.vibrate([30, 30, 30]); else if (type === 'error') navigator.vibrate([150]); else if (type === 'horror_denied') navigator.vibrate([30, 50, 30, 50, 30]); else if (type === 'horror_open') navigator.vibrate([100, 50, 150, 50, 300]); else if (type === 'tap') navigator.vibrate(15); 
         } catch(e) {}
     }
 }
@@ -589,25 +604,33 @@ function startSystem() {
     setTimeout(() => { 
         document.getElementById('intro-screen').classList.add("fade-out"); 
         document.getElementById('main-ui').style.transition = "opacity 0.8s"; document.getElementById('main-ui').style.opacity = 1; 
-        updateCreditUI(); applyInventoryEffects(); renderList();
+        updateCreditUI(); applyInventoryEffects(); renderList(); startDummyUsers();
     }, 700);
     setTimeout(() => { document.getElementById('intro-screen').style.display = "none"; }, 1000);
 }
 
+function startDummyUsers() {
+    setInterval(() => {
+        const fakeUsers = Math.floor(Math.random() * 15) + 24;
+        document.getElementById('sys-status').innerText = `[LIVE: ${fakeUsers} 요원 관측 중]`;
+        document.getElementById('sys-status').style.display = 'inline';
+    }, 6000);
+}
+
 function openModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'none'; if(id === 'archiveModal') clearInterval(typeInterval); }
+function closeModal(id) { triggerHaptic('tap'); document.getElementById(id).style.display = 'none'; if(id === 'archiveModal') clearInterval(typeInterval); if(id === 'mapModal') cancelAnimationFrame(radarAnimId); }
 
 /* =========================================================
-   2. 데이터베이스 및 요일 던전 (본문 100% 완전 복원)
+   2. 데이터베이스 및 요일 던전
    ========================================================= */
 const dailyThemes = [
-    { title: "[공간 붕괴] 무한 확장 아파트", desc: "출구를 열어도 다른 층의 복도로 이어지는 현상. 구조대원 전원 실종." }, // 0 일
-    { title: "[수몰] 청하공고 지하 수영장", desc: "도면에 없는 수심 미상의 지하 시설. 짙은 비린내와 발광체 관측됨." }, // 1 월
-    { title: "[소실] 화재 및 존재 소멸", desc: "화재 진압 후, 거주자의 호적과 주변인의 기억까지 통째로 지워짐." }, // 2 화
-    { title: "[신체 변형] 마네킹 마을", desc: "마을 주민 40여 명의 신체가 서서히 플라스틱 재질로 석화 진행 중." }, // 3 수
-    { title: "[시간 왜곡] 영원한 방탈출", desc: "테마 룸 진입 후 현실 세계의 시간 축과 완전히 분리된 폐쇄 루프." }, // 4 목
-    { title: "[도플갱어] 신분 대체 구역", desc: "구조된 경비원의 거울 속 모습이 0.5초 늦게 움직임. 즉각 폐기 요망." }, // 5 금
-    { title: "[인지 오염] 라디오 착란", desc: "특정 주파수 청취 시 집단으로 자해 시도. 음성 파일 재생 절대 금지." }  // 6 토
+    { title: "[공간 붕괴] 무한 확장 아파트", desc: "출구를 열어도 다른 층의 복도로 이어지는 현상. 구조대원 전원 실종." }, // 일
+    { title: "[수몰] 청하공고 지하 수영장", desc: "도면에 없는 수심 미상의 지하 시설. 짙은 비린내와 발광체 관측됨." }, // 월
+    { title: "[소실] 화재 및 존재 소멸", desc: "화재 진압 후, 거주자의 호적과 주변인의 기억까지 통째로 지워짐." }, // 화
+    { title: "[신체 변형] 마네킹 마을", desc: "마을 주민 40여 명의 신체가 서서히 플라스틱 재질로 석화 진행 중." }, // 수
+    { title: "[시간 왜곡] 영원한 방탈출", desc: "테마 룸 진입 후 현실 세계의 시간 축과 완전히 분리된 폐쇄 루프." }, // 목
+    { title: "[도플갱어] 신분 대체 구역", desc: "구조된 경비원의 거울 속 모습이 0.5초 늦게 움직임. 즉각 폐기 요망." }, // 금
+    { title: "[인지 오염] 라디오 착란", desc: "특정 주파수 청취 시 집단으로 자해 시도. 음성 파일 재생 절대 금지." }  // 토
 ];
 
 const tIdx = new Date().getDay();
@@ -646,12 +669,9 @@ const caseDatabase = [
 /* =========================================================
    3. 렌더링 및 해금 로직
    ========================================================= */
-const clickedZones = new Set();
-clickedZones.add('ALL');
+const clickedZones = new Set(); clickedZones.add('ALL');
 function switchZone(zone, e) {
-    triggerHaptic('tap');
-    clickedZones.add(zone);
-    if(clickedZones.size >= 5) unlockAchievement('ach_recon');
+    triggerHaptic('tap'); clickedZones.add(zone); if(clickedZones.size >= 5) unlockAchievement('ach_recon');
     currentZone = zone; document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); renderList();
 }
 
@@ -688,19 +708,12 @@ function renderList() {
 }
 
 function handleItemClick(index, isLocked) {
-    selectedItemIndex = index;
-    const item = caseDatabase[index];
-
+    selectedItemIndex = index; const item = caseDatabase[index];
     if (item.id === "CASE-3AM") {
         const hour = new Date().getHours();
-        if ((hour >= 3 && hour < 5) || inventory.includes('ITEM_TIMESYNC')) {
-            triggerHaptic('horror_open'); openDocumentModal(index);
-        } else {
-            triggerHaptic('horror_denied'); openModal('timeLockModal');
-        }
+        if ((hour >= 3 && hour < 5) || inventory.includes('ITEM_TIMESYNC')) { triggerHaptic('horror_open'); openDocumentModal(index); } else { triggerHaptic('horror_denied'); openModal('timeLockModal'); }
         return;
     }
-
     if (isLocked) {
         document.getElementById('pw-error').style.display = 'none'; document.getElementById('pw-input').value = '';
         openModal('passwordModal'); setTimeout(() => document.getElementById('pw-input').focus(), 100);
@@ -709,19 +722,13 @@ function handleItemClick(index, isLocked) {
     }
 }
 
-function checkWitnessAchievement(caseId) {
-    let opened = JSON.parse(localStorage.getItem('openedCases') || '[]');
-    if (!opened.includes(caseId)) { opened.push(caseId); localStorage.setItem('openedCases', JSON.stringify(opened)); }
-    if (opened.includes('CASE-00') && opened.includes('CASE-01') && opened.includes('CASE-02')) unlockAchievement('ach_witness');
-}
-
 let typeInterval, fullModalHTML = "", isTyping = false;
 function openDocumentModal(index) {
     const item = caseDatabase[index];
-    checkWitnessAchievement(item.id);
-    if (localStorage.getItem(`read_${item.id}`) !== 'true') {
-        localStorage.setItem(`read_${item.id}`, 'true'); setTimeout(() => addCredits(30, "문서 완독 보상"), 1000);
-    }
+    let opened = JSON.parse(localStorage.getItem('openedCases') || '[]');
+    if (!opened.includes(item.id)) { opened.push(item.id); localStorage.setItem('openedCases', JSON.stringify(opened)); }
+    if (opened.includes('CASE-00') && opened.includes('CASE-01') && opened.includes('CASE-02')) unlockAchievement('ach_witness');
+    if (localStorage.getItem(`read_${item.id}`) !== 'true') { localStorage.setItem(`read_${item.id}`, 'true'); setTimeout(() => addCredits(30, "문서 완독 보상"), 1000); }
 
     document.getElementById('modalTitle').innerHTML = `[${item.id}] ${item.title}`;
     openModal('archiveModal');
@@ -768,7 +775,7 @@ function openVideoPlayer(url) { triggerHaptic('tap'); document.getElementById('v
 function closeVideoPlayer() { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; closeModal('videoModal'); if(videoStartTime > 0 && Date.now() - videoStartTime < 2000) unlockAchievement('ach_coward'); videoStartTime = 0; }
 
 /* =========================================================
-   4. 상점 및 인벤토리 (백업 데이터 연동)
+   4. 상점 및 인벤토리 
    ========================================================= */
 function applyInventoryEffects() {
     if (inventory.includes('ITEM_GOLD')) document.getElementById('id-card-capture').classList.add('gold-theme');
@@ -785,7 +792,7 @@ function buyItem(itemId, price) {
 }
 
 /* =========================================================
-   5. 완벽한 백업 & 복구 (★ ID 저장 시 자동 복사 패치)
+   5. 완벽한 백업 & 복구 (해시코드)
    ========================================================= */
 function getBackupHash() {
     const data = { c: userCredits, i: inventory, r: Object.keys(localStorage).filter(k => k.startsWith('read_') || k.startsWith('cleared_') || k.startsWith('ach_')) };
@@ -814,7 +821,7 @@ function openProfile() {
     });
     document.getElementById('badge-count').innerText = unlockCount;
     if (!inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = localStorage.getItem('ach_quiz') === 'true' ? "LEVEL 2 (조사관)" : "LEVEL 1 (수습)";
-    if(!document.getElementById('card-agent-id').innerText.startsWith('X-')) document.getElementById('card-agent-id').innerText = "X-" + Math.floor(Math.random() * 9000 + 1000);
+    document.getElementById('card-agent-id').innerText = agentId;
     if(hashTaps < 5) document.getElementById('id-hash-code').innerHTML = getBackupHash().replace('\n', '<br><span style="color:#88ffaa; font-size:11px; word-break:break-all;">') + '</span>';
     openModal('profileModal');
 }
@@ -834,14 +841,11 @@ function openRestorePrompt() {
 function exportIDCard() {
     triggerHaptic('success'); const cardElement = document.getElementById('id-card-capture');
     cardElement.style.boxShadow = "0 0 30px #fff"; setTimeout(() => { cardElement.style.boxShadow = ""; }, 300);
-    
-    // ★ 캡처 시 클립보드에 코드 자동 복사
     const pureCode = getBackupHash().split('\n')[1];
     if (navigator.clipboard) { navigator.clipboard.writeText(pureCode).catch(()=>{}); }
-
     html2canvas(cardElement, { backgroundColor: "#05100a", scale: 2 }).then(canvas => {
         let link = document.createElement('a'); link.download = `AGENT_ID_${pureCode.substring(0,6)}.png`; link.href = canvas.toDataURL(); link.click();
-        alert("[SYSTEM] ID 카드 저장 완료!\n※ 복구 해시코드가 클립보드에 자동 복사되었습니다. (카톡/메모장 보관 권장)");
+        alert("[SYSTEM] ID 카드 저장 완료!\n※ 복구 해시코드가 클립보드에 자동 복사되었습니다.");
     });
 }
 
@@ -864,12 +868,9 @@ function submitQuiz() {
     if(q1?.value === "2" && q2?.value === "1" && q3?.value === "2" && q4?.value === "2") {
         triggerHaptic('success'); unlockAchievement('ach_quiz'); addCredits(100, "승급 심사 통과");
         document.getElementById('quiz-form').style.display = 'none'; document.getElementById('quiz-success').style.display = 'block'; renderList(); 
-    } else {
-        triggerHaptic('error'); document.getElementById('quiz-error').style.display = 'block';
-    }
+    } else { triggerHaptic('error'); document.getElementById('quiz-error').style.display = 'block'; }
 }
 
-// 🔥 Firebase 기반 진짜 실시간 멀티 투표 시스템
 const voteCases = [
     "[서울 마포구] 골목길 가로등 그림자가 사람을 덮침. 그림자가 사라지자 사람도 없어짐.",
     "[강원 인제군] 매일 새벽 4시, 죽은 강아지가 문을 긁는 소리가 남. CCTV에는 안 찍힘.",
@@ -885,49 +886,33 @@ function getDailyVoteCase() {
 }
 
 function openVoteModal() {
-    triggerHaptic('tap');
-    document.getElementById('vote-result').style.display = 'none'; document.getElementById('vote-btns').style.display = 'flex';
+    triggerHaptic('tap'); document.getElementById('vote-result').style.display = 'none'; document.getElementById('vote-btns').style.display = 'flex';
     document.getElementById('vote-container').innerHTML = `<span style="color:#00ff66; font-weight:bold;">[오늘의 심사 안건]</span><br><br><span style="color:#ddd;">"${getDailyVoteCase()}"</span>`;
     openModal('voteModal');
 }
 
 function castVote(type) {
     triggerHaptic('tap');
-
-    // 투표 시 크레딧 10 차감 (어뷰징 방지)
-    if (userCredits < 10) {
-        triggerHaptic('error'); alert("[SYSTEM] 심사 권한이 없습니다. (10 CR 필요)"); return;
-    }
+    if (userCredits < 10) { triggerHaptic('error'); alert("[SYSTEM] 심사 권한이 없습니다. (10 CR 필요)"); return; }
     userCredits -= 10; localStorage.setItem('agent_credits', userCredits); updateCreditUI();
 
     document.getElementById('vote-btns').style.display = 'none';
     const resultBox = document.getElementById('vote-result'); resultBox.style.display = 'block';
     resultBox.innerHTML = "<span class='blink' style='color:#00ccff;'>전국 요원 투표망 동기화 중...</span>";
 
-    // Firebase 연동 (오늘 날짜 기준으로 전세계 유저 누적)
     const todayStr = new Date().toISOString().split('T')[0];
     const voteRef = db.ref('daily_votes/' + todayStr);
 
-    // Firebase 트랜잭션으로 안전하게 +1
     voteRef.transaction((currentData) => {
-        if (currentData === null) {
-            return { isolate: type === 'isolate' ? 1 : 0, reject: type === 'reject' ? 1 : 0 };
-        }
-        if (type === 'isolate') currentData.isolate = (currentData.isolate || 0) + 1;
-        else currentData.reject = (currentData.reject || 0) + 1;
+        if (currentData === null) return { isolate: type === 'isolate' ? 1 : 0, reject: type === 'reject' ? 1 : 0 };
+        if (type === 'isolate') currentData.isolate = (currentData.isolate || 0) + 1; else currentData.reject = (currentData.reject || 0) + 1;
         return currentData;
     }).then(() => {
-        // 투표 완료 후 실시간 리스너 달기 (다른 사람이 투표해도 바가 움직임!)
         voteRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if(!data) return;
-            const isolateCnt = data.isolate || 0;
-            const rejectCnt = data.reject || 0;
-            const total = isolateCnt + rejectCnt;
-            const isoPercent = total === 0 ? 0 : Math.round((isolateCnt / total) * 100);
-            const rejPercent = total === 0 ? 0 : 100 - isoPercent;
-            const isDanger = isoPercent > 50;
-            const action = isDanger ? "격리 승인" : "착란 기각";
+            const data = snapshot.val(); if(!data) return;
+            const isolateCnt = data.isolate || 0; const rejectCnt = data.reject || 0; const total = isolateCnt + rejectCnt;
+            const isoPercent = total === 0 ? 0 : Math.round((isolateCnt / total) * 100); const rejPercent = total === 0 ? 0 : 100 - isoPercent;
+            const isDanger = isoPercent > 50; const action = isDanger ? "격리 승인" : "착란 기각";
 
             resultBox.innerHTML = `
                 <div style="font-size:13px; color:#aaa; margin-bottom:8px; text-align:center;">[실시간 전국 요원 투표율 - 총 ${total}명 참여]</div>
@@ -935,37 +920,184 @@ function castVote(type) {
                     <div style="width:${isoPercent}%; background:${isDanger ? '#ff3333' : '#00ccff'}; height:100%; transition: width 0.5s ease-out;"></div>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px; color:#ddd; margin-bottom:15px;">
-                    <span>🚨 격리: ${isoPercent}%</span>
-                    <span>❌ 기각: ${rejPercent}%</span>
+                    <span>🚨 격리: ${isoPercent}%</span><span>❌ 기각: ${rejPercent}%</span>
                 </div>
-                <div style="text-align:center; font-size:14px; color:${isDanger ? '#ff3333' : '#00ccff'}; font-weight:bold;">
-                    현재 <b>[${action}]</b> 우세
-                </div>
+                <div style="text-align:center; font-size:14px; color:${isDanger ? '#ff3333' : '#00ccff'}; font-weight:bold;">현재 <b>[${action}]</b> 우세</div>
             `;
         });
     });
 }
 
 /* =========================================================
-   7. 3D 맵 이벤트 등록
+   🔥 7. 신규 기능 : 실시간 익명 채팅 (무전 채널)
    ========================================================= */
-let mapRotX = 65, mapRotZ = 45, mapScale = 1, isDraggingMap = false, startMouseX = 0, startMouseY = 0, initialPinchDist = null;
-const mapContainer = document.getElementById('map3dArea'), building = document.getElementById('building3d');
-function updateMapTransform() { building.style.transform = `rotateX(${mapRotX}deg) rotateZ(${mapRotZ}deg) scale(${mapScale})`; }
-function zoomMap(delta) { mapScale += delta; mapScale = Math.max(0.5, Math.min(mapScale, 2.5)); updateMapTransform(); }
-function openMapModal() { triggerHaptic('tap'); openModal('mapModal'); mapRotX = 65; mapRotZ = 45; mapScale = 1; updateMapTransform(); }
-function openSpecificDocument(caseId) { closeModal('mapModal'); const idx = caseDatabase.findIndex(c => c.id === caseId); if(idx !== -1) handleItemClick(idx, false); }
+function sendChat() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if(!msg) return;
+    
+    // 관리자 명령어 숨김처리
+    let displayName = agentId;
+    if(isAdmin) displayName = "🚨[ADMIN]";
 
-mapContainer.addEventListener('mousedown', (e) => { isDraggingMap = true; startMouseX = e.clientX; startMouseY = e.clientY; building.style.transition = 'none'; });
-document.addEventListener('mousemove', (e) => { if (!isDraggingMap) return; mapRotZ -= (e.clientX - startMouseX) * 0.6; mapRotX -= (e.clientY - startMouseY) * 0.6; mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.clientX; startMouseY = e.clientY; updateMapTransform(); });
-document.addEventListener('mouseup', () => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; }});
-mapContainer.addEventListener('wheel', (e) => { e.preventDefault(); zoomMap(e.deltaY * -0.001); }, {passive: false});
-mapContainer.addEventListener('touchstart', (e) => { if(e.touches.length === 1) { isDraggingMap = true; startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; building.style.transition = 'none'; } else if (e.touches.length === 2) { isDraggingMap = false; initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); } });
-mapContainer.addEventListener('touchmove', (e) => { e.preventDefault(); if (isDraggingMap && e.touches.length === 1) { mapRotZ -= (e.touches[0].clientX - startMouseX) * 0.8; mapRotX -= (e.touches[0].clientY - startMouseY) * 0.8; mapRotX = Math.max(10, Math.min(mapRotX, 85)); startMouseX = e.touches[0].clientX; startMouseY = e.touches[0].clientY; updateMapTransform(); } else if (e.touches.length === 2 && initialPinchDist !== null) { const currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); zoomMap((currentDist - initialPinchDist) * 0.005); initialPinchDist = currentDist; } }, {passive: false});
-document.addEventListener('touchend', (e) => { if(isDraggingMap) { isDraggingMap = false; building.style.transition = 'transform 0.1s ease-out'; } if(e.touches.length < 2) initialPinchDist = null; });
+    db.ref('chat').push({ id: displayName, msg: msg, timestamp: Date.now() });
+    input.value = '';
+}
 
+// 실시간 채팅 수신
+db.ref('chat').limitToLast(20).on('value', snap => {
+    const box = document.getElementById('chat-box');
+    box.innerHTML = '';
+    snap.forEach(child => {
+        const data = child.val();
+        let nameColor = data.id.includes('ADMIN') ? '#ff3333' : '#ffcc00';
+        box.innerHTML += `
+            <div class="chat-msg">
+                <div class="chat-name" style="color:${nameColor};">${data.id}</div>
+                <div style="color:#eee;">${data.msg}</div>
+            </div>`;
+    });
+    box.scrollTop = box.scrollHeight; // 스크롤 하단 고정
+});
+
+/* =========================================================
+   🔥 8. 신규 기능 : 실시간 요원 랭킹 (리더보드)
+   ========================================================= */
+function syncLeaderboard() {
+    if(userCredits <= 0) return;
+    db.ref('leaderboard/' + agentId).set({ id: agentId, score: userCredits, timestamp: Date.now() });
+}
+
+function openRankModal() {
+    triggerHaptic('tap');
+    openModal('rankModal');
+    // 점수 오름차순으로 10명 가져와서 뒤집음 (내림차순)
+    db.ref('leaderboard').orderByChild('score').limitToLast(10).on('value', snap => {
+        const list = [];
+        snap.forEach(child => { list.push(child.val()); });
+        list.reverse();
+        
+        let html = '';
+        list.forEach((item, idx) => {
+            let color = idx === 0 ? '#ffcc00' : (idx < 3 ? '#eebbff' : '#00ff66');
+            let highlight = item.id === agentId ? 'background:rgba(255,255,255,0.1);' : '';
+            html += `<li class="rank-item" style="color:${color}; border-color:${color}; ${highlight}">
+                <span>#${idx+1} ${item.id}</span>
+                <span>${item.score} CR</span>
+            </li>`;
+        });
+        document.getElementById('rank-list').innerHTML = html;
+    });
+}
+
+/* =========================================================
+   🔥 9. 신규 기능 : 고퀄리티 3D 네온 레이더 맵 (Canvas)
+   ========================================================= */
+const canvas = document.getElementById('radarCanvas');
+const ctx = canvas.getContext('2d');
+let radarAnimId;
+let radarAngle = 0;
+let anomalies = [];
+
+function initRadar() {
+    canvas.width = document.getElementById('radarContainer').clientWidth;
+    canvas.height = document.getElementById('radarContainer').clientHeight;
+    // 변칙 좌표 난수 생성
+    anomalies = [];
+    for(let i=0; i<5; i++) {
+        anomalies.push({
+            x: Math.random() * canvas.width, 
+            y: Math.random() * canvas.height, 
+            alpha: 0
+        });
+    }
+}
+
+function drawRadar() {
+    ctx.fillStyle = 'rgba(0, 10, 0, 0.15)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    const cx = canvas.width / 2; const cy = canvas.height / 2;
+    const maxRadius = Math.max(cx, cy) * 1.2;
+
+    // 네온 그리드
+    ctx.strokeStyle = 'rgba(0, 255, 102, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(let i=0; i<canvas.width; i+=40) { ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); }
+    for(let j=0; j<canvas.height; j+=40) { ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); }
+    ctx.stroke();
+
+    // 동심원
+    ctx.strokeStyle = 'rgba(0, 255, 102, 0.4)';
+    for(let r=50; r<maxRadius; r+=60) {
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+    }
+
+    // 레이더 스윕 (Sweep)
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(radarAngle);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, maxRadius, 0, 0.2);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, maxRadius, 0);
+    grad.addColorStop(0, 'rgba(0, 255, 102, 0.5)');
+    grad.addColorStop(1, 'rgba(0, 255, 102, 0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+    
+    // 선
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(maxRadius, 0); 
+    ctx.strokeStyle = 'rgba(0, 255, 102, 0.8)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.restore();
+
+    // 변칙 개체 (빨간 점) 렌더링
+    anomalies.forEach(a => {
+        // 레이더 선이 지나갈 때 밝아짐
+        let dx = a.x - cx; let dy = a.y - cy;
+        let pointAngle = Math.atan2(dy, dx);
+        if(pointAngle < 0) pointAngle += Math.PI*2;
+        let normalizedRadar = radarAngle % (Math.PI*2);
+        
+        if (Math.abs(normalizedRadar - pointAngle) < 0.2) a.alpha = 1;
+        if (a.alpha > 0.05) a.alpha -= 0.02;
+
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 4, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255, 51, 51, ${a.alpha})`;
+        ctx.shadowBlur = 10; ctx.shadowColor = '#ff3333';
+        ctx.fill();
+        ctx.shadowBlur = 0; // 리셋
+    });
+
+    radarAngle += 0.03;
+    radarAnimId = requestAnimationFrame(drawRadar);
+}
+
+function openMapModal() {
+    triggerHaptic('tap');
+    openModal('mapModal');
+    initRadar();
+    drawRadar();
+}
+
+// 맵 클릭 시 CASE-01 오픈
+canvas.addEventListener('click', () => {
+    triggerHaptic('horror_open');
+    closeModal('mapModal');
+    const idx = caseDatabase.findIndex(c => c.id === 'CASE-01');
+    if(idx !== -1) handleItemClick(idx, false);
+});
+
+/* =========================================================
+   10. 기타 글로벌 리스너
+   ========================================================= */
 document.getElementById('pw-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal'); closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal'); closeModal('shopModal'); closeModal('voteModal'); } });
+document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendChat(); });
+
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoPlayer(); closeModal('archiveModal'); closeModal('passwordModal'); closeModal('profileModal'); closeModal('reportModal'); closeModal('quizModal'); closeModal('mapModal'); closeModal('sec04Modal'); closeModal('landRegModal'); closeModal('policeModal'); closeModal('diaryModal'); closeModal('timeLockModal'); closeModal('shopModal'); closeModal('voteModal'); closeModal('chatModal'); closeModal('rankModal'); } });
 let clickCount = 0; document.body.addEventListener('click', function(e) { if (e.target.tagName === 'BODY' || e.target.className === 'container') { clickCount++; if (clickCount >= 10) unlockAchievement('ach_hidden_1'); } });
 </script>
 </body>
