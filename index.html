@@ -26,55 +26,17 @@
             100% { opacity: 1; }
         }
 
-        body { 
-            background-color: #050806; 
-            color: #00ff66; 
-            font-family: 'VT323', 'Share Tech Mono', 'Noto Sans KR', monospace; 
-            padding: 10px; 
-            font-size: 16px; 
-            text-shadow: 0 0 4px rgba(0, 255, 102, 0.6); 
-            line-height: 1.5; 
-            overflow-x: hidden; 
-            touch-action: manipulation; 
-            animation: crt-flicker 4s infinite; /* 깜빡임 적용 */
-        }
+        body { background-color: #050806; color: #00ff66; font-family: 'VT323', 'Share Tech Mono', 'Noto Sans KR', monospace; padding: 10px; font-size: 16px; text-shadow: 0 0 4px rgba(0, 255, 102, 0.6); line-height: 1.5; overflow-x: hidden; touch-action: manipulation; animation: crt-flicker 4s infinite; }
         
         /* 🔥 CRT 촘촘한 가로줄 (정적 스캔라인) & 색수차 */
-        body::before { 
-            content: " "; 
-            display: block; 
-            position: fixed; 
-            top: 0; left: 0; bottom: 0; right: 0; 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04)); 
-            background-size: 100% 3px, 3px 100%;
-            z-index: 9998; 
-            pointer-events: none; /* 터치 방해 금지 */
-        }
-
+        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04)); background-size: 100% 3px, 3px 100%; z-index: 9998; pointer-events: none; }
+        
         /* 🔥 CRT 화면 테두리 어두워지는 효과 (비네팅) */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%);
-            pointer-events: none; /* 터치 방해 금지 */
-            z-index: 9997;
-        }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%); pointer-events: none; z-index: 9997; }
 
         /* 🔥 CRT 위아래로 움직이는 굵은 스캔라인 빛 */
-        .crt-scanline {
-            width: 100%; height: 120px;
-            z-index: 9996;
-            position: fixed; left: 0;
-            pointer-events: none; /* 터치 방해 금지 */
-            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,255,102,0.08) 50%, rgba(0,0,0,0) 100%);
-            animation: crt-scroll 6s linear infinite;
-        }
-        @keyframes crt-scroll {
-            0% { top: -150px; }
-            100% { top: 110vh; }
-        }
+        .crt-scanline { width: 100%; height: 120px; z-index: 9996; position: fixed; left: 0; pointer-events: none; background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,255,102,0.08) 50%, rgba(0,0,0,0) 100%); animation: crt-scroll 6s linear infinite; }
+        @keyframes crt-scroll { 0% { top: -150px; } 100% { top: 110vh; } }
         
         #intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; cursor: pointer; text-align: center; }
         .intro-box { width: 20px; height: 20px; background: #00ff66; box-shadow: 0 0 15px #00ff66; transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1); }
@@ -174,8 +136,8 @@
     <div id="toast-title" style="font-size:16px;">업적 이름</div>
 </div>
 
-<!-- 작동이 잘 되는 원본 이벤트 구조 유지 -->
-<div id="intro-screen">
+<!-- 🔥 모바일 터치 문제 해결 (onclick 이벤트 추가) -->
+<div id="intro-screen" onclick="safeStartSystem()">
     <div id="intro-box" class="intro-box"></div>
     <div id="intro-text" class="intro-text blink">
         [NATIONAL ANOMALY ARCHIVE]<br>AWAITING AUTHORIZATION... [TOUCH TO DECRYPT]
@@ -222,8 +184,10 @@
     </footer>
 </div>
 
-<!-- ======================= 모달 영역 ======================= -->
-<div id="profileModal" class="modal" onclick="closeModal('profileModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('profileModal')">[X]</span><div class="id-card-wrapper" id="id-card-capture"><div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div><div class="id-card-content"><div class="id-photo-box">RESTRICTED<br>IDENTITY</div><div class="id-details">AGENT ID: <span id="card-agent-id">LOADING...</span><br>RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span></div></div><div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div></div><button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button><button class="btn-restore" style="background:rgba(51, 136, 255, 0.1); border:1px dashed #3388ff; color:#88ccff; padding:10px; width:100%; cursor:pointer;" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button><h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-top:15px; margin-bottom:10px;">[획득한 기밀 배지]</h3><ul id="achievement-list" style="list-style:none; padding:0; max-height:30vh; overflow-y:auto;"></ul></div></div>
+<!-- ======================= 모달 영역 (전체 포함) ======================= -->
+<div id="profileModal" class="modal" onclick="closeModal('profileModal')"><div class="modal-content" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('profileModal')">[X]</span><div class="id-card-wrapper" id="id-card-capture"><div class="id-card-header">NATIONAL ANOMALY ARCHIVE</div><div class="id-card-content"><div class="id-photo-box">RESTRICTED<br>IDENTITY</div><div class="id-details">AGENT ID: <span id="card-agent-id">LOADING...</span><br>RANK: <span id="user-level" style="color:#ffcc00;">LEVEL 1 (수습)</span></div></div><div class="id-barcode" id="id-hash-code" onclick="copyHash()">[ENC:AES-256]<br><span>LOADING...</span></div></div><button class="btn-export" onclick="exportIDCard()">📸 [캡처 저장] 홀로그램 ID 발급</button><button class="btn-restore" style="background:rgba(51, 136, 255, 0.1); border:1px dashed #3388ff; color:#88ccff; padding:10px; width:100%; cursor:pointer;" onclick="openRestorePrompt()">🔄 [데이터 복구] 해시코드 입력</button>
+<!-- 🔥 배지 카운트 에러 방지용 아이디 추가 -->
+<h3 style="color:#00ff66; border-bottom:1px solid #00ff66; padding-bottom:4px; margin-top:15px; margin-bottom:10px;">[획득한 기밀 배지: <span id="badge-count">0</span>개]</h3><ul id="achievement-list" style="list-style:none; padding:0; max-height:30vh; overflow-y:auto;"></ul></div></div>
 
 <div id="shopModal" class="modal" onclick="closeModal('shopModal')"><div class="modal-content" style="border-color:#9900ff;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#9900ff;" onclick="closeModal('shopModal')">[X]</span><h2 style="color:#eebbff; border-bottom:2px dashed #9900ff; padding-bottom:6px; margin-bottom:15px;">[비인가 통신망 : 기밀 암시장]</h2><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[OVERRIDE] 비상 암호 해독기</div><div style="color:#aaa; font-size:12px;">잠긴 문서를 비밀번호 없이 강제 열람합니다.</div></div><button class="shop-buy" onclick="buyItem('ITEM_OVERRIDE', 300)">300 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[TIME-SYNC] 심야 파장 동기화</div><div style="color:#aaa; font-size:12px;">새벽 3~5시가 아니어도 CASE-3AM을 해금합니다.</div></div><button class="shop-buy" onclick="buyItem('ITEM_TIMESYNC', 500)">500 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[ID-CARD] 홀로그램 골드 요원증</div></div><button class="shop-buy" onclick="buyItem('ITEM_GOLD', 800)">800 CR</button></div><div class="shop-item"><div class="shop-info"><div style="color:#fff; font-weight:bold;">[RANK] 특수 칭호 라이선스</div></div><button class="shop-buy" onclick="buyItem('ITEM_TITLE', 400)">400 CR</button></div></div></div>
 
@@ -243,7 +207,7 @@
 
 <div id="archiveModal" class="modal" onclick="closeModal('archiveModal')"><div class="modal-content" onclick="event.stopPropagation(); skipTyping(); triggerHaptic('tap');"><span class="close-btn" onclick="closeModal('archiveModal')">[X]</span><div style="font-size:12px; color:#aaa; margin-bottom:4px;">※ 화면을 탭하면 즉시 출력됩니다.</div><div id="modalTitle" style="color:#ff3333; font-size:20px; border-bottom:1px solid #ff3333; padding-bottom:4px; margin-bottom:10px; font-weight:bold;"></div><div id="modalBody" style="font-size: 15px; line-height: 1.6; min-height: 120px;"></div><div id="videoBtnContainer" style="margin-top: 15px;"></div></div></div>
 
-<!-- 🔥 z-index 수정됨 (창 겹침 버그 방지) -->
+<!-- 🔥 z-index 오류 해결 (510~530으로 상향) -->
 <div id="timeLockModal" class="modal" style="z-index: 510;" onclick="closeModal('timeLockModal')"><div class="modal-content" style="text-align:center; max-width:340px; border-color:#ff00ff; background: #1a001a;" onclick="event.stopPropagation()"><span class="close-btn" style="color:#ff00ff;" onclick="closeModal('timeLockModal')">[X]</span><h3 style="color:#ff00ff; font-size:20px; animation: blinker 1s infinite;">[SYSTEM ERROR]</h3><p style="color:#ff99ff; font-size:15px; margin-top:10px;">접근 시간 불일치.<br>심야(03:00~05:00)에만 열립니다.</p></div></div>
 <div id="passwordModal" class="modal" style="z-index: 510;" onclick="closeModal('passwordModal')"><div class="modal-content" style="text-align:center; max-width:320px; border-color:#ff3333; background: #1a0505;" onclick="event.stopPropagation()"><span class="close-btn" onclick="closeModal('passwordModal')">[X]</span><h3 style="color:#ff3333; font-size:20px;">⚠️ [접근 인가 필요]</h3><p style="color:#ff9999; font-size:14px;">해제 코드를 입력하십시오.</p><input type="password" id="pw-input" class="pw-input" placeholder="CODE"><br><button class="pw-btn" onclick="checkPassword()">DECRYPT (해독)</button><p id="pw-error" style="color:#ff3333; margin-top:12px; font-weight:bold; display:none;" class="blink">인증 실패.</p></div></div>
 <div id="videoModal" class="modal" style="z-index: 520;" onclick="closeVideoPlayer()"><div class="video-box" onclick="event.stopPropagation()"><div style="display:flex; justify-content:space-between; color:#ff3333; font-size:13px; margin-bottom:6px; border-bottom:1px dashed #ff3333;"><span>REC_FEED // <span class="blink">LIVE</span></span><span style="cursor:pointer; font-weight:bold;" onclick="closeVideoPlayer()">[닫기]</span></div><div class="video-container"><iframe id="videoPlayerFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div></div>
@@ -255,14 +219,11 @@
 
 <script>
 /* =========================================================
-   🔥 0. 원본 그대로 유지된 터치 로직 (건드리지 않음)
+   🔥 터치 에러의 주범이었던 방해 로직 완전 제거됨
    ========================================================= */
 let isSystemStarted = false;
-document.getElementById('intro-screen').addEventListener('click', safeStartSystem);
-document.getElementById('intro-screen').addEventListener('touchstart', safeStartSystem, {passive: false});
 
-function safeStartSystem(e) {
-    if(e && e.preventDefault) e.preventDefault();
+function safeStartSystem() {
     if(isSystemStarted) return;
     isSystemStarted = true;
     try {
@@ -303,7 +264,11 @@ if(!agentId) { agentId = "X-" + Math.floor(Math.random() * 9000 + 1000); localSt
 
 let userCredits = parseInt(localStorage.getItem('agent_credits') || '0');
 let inventory = [];
-try { inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]'); } catch(e) {}
+try { 
+    // JSON 에러 방지 안전코드 추가
+    inventory = JSON.parse(localStorage.getItem('agent_inventory') || '[]'); 
+    if(!Array.isArray(inventory)) inventory = [];
+} catch(e) { inventory = []; }
 
 let currentZone = 'ALL', selectedItemIndex = -1;
 const langs = ['KR', 'EN', 'JP']; let langIdx = 0;
@@ -409,6 +374,7 @@ const dailyCase = {
     content: `<div class='wiki-infobox' style='border-color:#00ccff;'><div class='wiki-infobox-title' style='background:#00ccff; color:#000;'>일일 관측 레이더 (ZONE-2)</div><div class='wiki-row'><div class='wiki-label' style='color:#00ccff;'>관측 대상</div><div class='wiki-value'>${dailyThemes[tIdx].title}</div></div></div><div class='wiki-h2'>현장 요약</div>${dailyThemes[tIdx].desc}<br><br><span style='color:#88ccff;'>※ 해당 구역은 오늘 자정까지만 관측 가능하며, 이후 시공간이 재배열됩니다. (완독 시 30 CR 지급)</span>`
 };
 
+/* 원본 그대로 유지된 케이스 데이터베이스 */
 const caseDatabase = [
     {
         id: "CASE-00", zone: "ZONE-0", level: "국장급 기밀", title: "[열람 인가됨] 제4특수조사과 창설 및 운영 강령", date: "1972-04-01", isLocked: false, videos: [],
@@ -549,7 +515,8 @@ function checkPassword() {
 }
 
 let videoStartTime = 0;
-// 🔥 유튜브 에러만 수정
+
+/* 🔥 유튜브 파라미터 에러 수정 */
 function openVideoPlayer(url) { 
     triggerHaptic('tap'); 
     const sep = url.includes('?') ? '&' : '?';
@@ -605,9 +572,10 @@ function openProfile() {
         list.appendChild(li);
     });
     
-    // 이 줄은 에러 방지를 위해 제거하거나 안전하게 처리
-    // document.getElementById('badge-count').innerText = unlockCount;
-    
+    // 에러 방지용으로 span 태그가 있는지 확인
+    const badgeEl = document.getElementById('badge-count');
+    if(badgeEl) badgeEl.innerText = unlockCount;
+
     if (!inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = localStorage.getItem('ach_quiz') === 'true' ? "LEVEL 2 (조사관)" : "LEVEL 1 (수습)";
     document.getElementById('card-agent-id').innerText = agentId;
     if(hashTaps < 5) document.getElementById('id-hash-code').innerHTML = getBackupHash().replace('\n', '<br><span style="color:#88ffaa; font-size:11px; word-break:break-all;">') + '</span>';
