@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- PWA 웹앱 아이콘 지원 -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -95,10 +94,10 @@
 
         .id-card-wrapper { background: linear-gradient(135deg, #05100a, #0a2014); border: 2px solid #00ff66; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; }
         .id-photo-box { width: 80px; height: 100px; background: rgba(0,255,102,0.1); border: 1px solid #00ff66; display: flex; justify-content: center; align-items: center; text-align: center; color: #00ff66; font-size: 12px; }
-        .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #00ff66; margin-top: 15px; text-align: center; word-break: break-all; padding: 8px; border: 1px dashed rgba(0,255,102,0.3); background: rgba(0,255,102,0.05); }
+        .id-barcode { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #00ff66; margin-top: 15px; text-align: center; word-break: break-all; padding: 8px; border: 1px dashed rgba(0,255,102,0.3); background: rgba(0,255,102,0.05); cursor: pointer; }
         .btn-export { background: rgba(0, 255, 102, 0.1); border: 1px dashed #00ff66; color: #00ff66; padding: 10px; width: 100%; font-weight: bold; margin-bottom: 6px; cursor:pointer;}
         .gold-theme { background: linear-gradient(135deg, #1a1500, #332a00) !important; border-color: #ffcc00 !important; }
-        .gold-theme .id-photo-box, .gold-theme .id-barcode { color: #ffcc00 !important; border-color: #ffcc00 !important; }
+        .gold-theme .id-card-header, .gold-theme .id-photo-box, .gold-theme .id-barcode { color: #ffcc00 !important; border-color: #ffcc00 !important; }
 
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
@@ -221,7 +220,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 디스코드 웹훅 주소 (원하시는 주소로 교체하세요)
+// 디스코드 웹훅 주소 (★ 본인 주소로 교체)
 const DISCORD_WEBHOOK_URL = "여기에_디스코드_웹훅_URL_입력";
 
 // 관리자 접속 체크 (?admin=true)
@@ -444,7 +443,6 @@ function openDocumentModal(index) {
     
     const btnContainer = document.getElementById('videoBtnContainer'); btnContainer.innerHTML = '';
     
-    // 비디오 버튼
     if(item.videos && item.videos.length > 0) {
         item.videos.forEach(v => {
             const btn = document.createElement('button'); btn.className = 'btn-video'; btn.innerText = v.title;
@@ -452,7 +450,7 @@ function openDocumentModal(index) {
         });
     }
 
-    // 작성자/관리자 전용 수정 버튼
+    // 작성자 또는 관리자 전용 수정 버튼 (신규 채택 제보 문서용)
     const isOwner = item.author && item.author === agentId;
     if (isOwner || isAdmin) {
         const editBtn = document.createElement('button');
@@ -497,11 +495,17 @@ function openVideoPlayer(url) { triggerHaptic('tap'); document.getElementById('v
 function closeVideoPlayer() { triggerHaptic('tap'); document.getElementById('videoPlayerFrame').src = ''; closeModal('videoModal'); if(videoStartTime > 0 && Date.now() - videoStartTime < 2000) unlockAchievement('ach_coward'); videoStartTime = 0; }
 
 /* =========================================================
-   4. 상점 및 인벤토리 
+   🔥 4. 상점 및 인벤토리 (누락되었던 중요 파트 복원 완료)
    ========================================================= */
 function applyInventoryEffects() {
-    if (inventory.includes('ITEM_GOLD')) document.getElementById('id-card-capture').classList.add('gold-theme');
-    if (inventory.includes('ITEM_TITLE')) document.getElementById('user-level').innerText = "SPECIAL (현장 정찰대장)";
+    if (inventory.includes('ITEM_GOLD')) {
+        const card = document.getElementById('id-card-capture');
+        if(card) card.classList.add('gold-theme');
+    }
+    if (inventory.includes('ITEM_TITLE')) {
+        const levelText = document.getElementById('user-level');
+        if(levelText) levelText.innerText = "SPECIAL (현장 정찰대장)";
+    }
 }
 
 function buyItem(itemId, price) {
@@ -514,7 +518,7 @@ function buyItem(itemId, price) {
 }
 
 /* =========================================================
-   5. 완벽한 백업 & 복구 (해시코드)
+   🔥 5. 완벽한 백업 & 복구 (해시코드) (누락되었던 중요 파트 복원 완료)
    ========================================================= */
 function getBackupHash() {
     const data = { c: userCredits, i: inventory, r: Object.keys(localStorage).filter(k => k.startsWith('read_') || k.startsWith('cleared_') || k.startsWith('ach_')) };
@@ -574,8 +578,6 @@ function exportIDCard() {
 /* =========================================================
    🔥 6. 제보 시스템 (디스코드, Firebase, 관리자 채택, 공동관리자)
    ========================================================= */
-const DISCORD_WEBHOOK_URL = "여기에_디스코드_웹훅_URL_입력"; // ★ 관리자님, 이 부분을 본인의 디스코드 웹훅 주소로 바꾸세요!
-
 function submitReport() {
     triggerHaptic('tap'); const loc = document.getElementById('rep-loc').value.trim();
     const date = document.getElementById('rep-date').value; const desc = document.getElementById('rep-desc').value.trim();
@@ -583,10 +585,8 @@ function submitReport() {
     
     document.getElementById('report-log').innerText = "> 데이터 전송 및 암호화 중...\n";
 
-    // Firebase 대기열 저장
     db.ref('pending_reports').push({ location: loc, date: date || "UNKNOWN", desc: desc, author: agentId, timestamp: Date.now() });
 
-    // 디스코드 알림
     if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes("여기에")) {
         fetch(DISCORD_WEBHOOK_URL, {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -607,7 +607,6 @@ function submitReport() {
     }, 1500);
 }
 
-// 관리자: 대기열 목록 불러오기
 function openAdminReports() {
     triggerHaptic('tap'); openModal('adminReportModal');
     const listContainer = document.getElementById('admin-report-list');
@@ -624,7 +623,6 @@ function openAdminReports() {
     });
 }
 
-// 관리자: 정식 채택
 function approveReport(key, encodedData) {
     triggerHaptic('success'); const data = JSON.parse(decodeURIComponent(encodedData));
     const newCaseId = "CASE-U" + Math.floor(Math.random() * 900 + 100);
@@ -638,10 +636,8 @@ function approveReport(key, encodedData) {
     });
 }
 
-// 관리자: 제보 기각
 function deleteReport(key) { if (confirm("이 제보를 파기하시겠습니까?")) db.ref('pending_reports/' + key).remove(); }
 
-// 공동관리자: 기밀 갱신
 function openEditCasePrompt(caseId, currentText) {
     triggerHaptic('tap');
     const newText = prompt("[공동 관리자 권한]\n업데이트할 현상 서술/기밀 내용을 입력하십시오:", currentText);
@@ -652,13 +648,12 @@ function openEditCasePrompt(caseId, currentText) {
     ).then(() => { alert("[SUCCESS] 기밀 문서가 성공적으로 업데이트되었습니다."); closeModal('archiveModal'); });
 }
 
-// 모든 접속자가 채택된 기밀문서 실시간으로 렌더링
 db.ref('approved_cases').on('value', snap => {
     if (snap.exists()) {
         snap.forEach(child => {
             const approvedItem = child.val();
             if (!caseDatabase.some(c => c.id === approvedItem.id)) caseDatabase.push(approvedItem);
-            else { const idx = caseDatabase.findIndex(c => c.id === approvedItem.id); caseDatabase[idx] = approvedItem; } // 수정 반영
+            else { const idx = caseDatabase.findIndex(c => c.id === approvedItem.id); caseDatabase[idx] = approvedItem; }
         });
         renderList();
     }
